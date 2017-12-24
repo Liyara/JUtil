@@ -8,3 +8,6 @@ That being said, this library is open source, under the MIT license (see LICENSE
 ## Dependencies
 The C standard Library  
 <initializer_list> when building under C++11 (recommended)  
+
+## Dependees
+JML https://github.com/Liyara/jml
