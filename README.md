@@ -6,5 +6,5 @@ All of my personal programming projects, written in C++, will depend on this lib
 That being said, this library is open source, under the MIT license (see LICENSE), and therefore is free of use, under the conditions specified by LICENSE, to anybody who would want to use it.
 
 ## Dependencies
-The C standard Library
-<initializer_list> when building under C++11 (recommended)
+The C standard Library  
+<initializer_list> when building under C++11 (recommended)  
