@@ -4,3 +4,7 @@ JUtil is written to be a replacement for the standard C++ library, built on top 
 All of my personal programming projects, written in C++, will depend on this library. The purpose of this is to give me the ability to give my C++ code a foundation which I understand more deeply, and therefire, hopefully, increase code efficiancy and decrease bugs. 
 
 That being said, this library is open source, under the MIT license (see LICENSE), and therefore is free of use, under the conditions specified by LICENSE, to anybody who would want to use it.
+
+## Dependencies
+The C standard Library
+<initializer_list> when building under C++11 (recommended)
