@@ -90,12 +90,16 @@ namespace jutil JUTIL_PUBLIC_ {
 
         JUTIL_CX_ static bool validCharacter(char) JUTIL_N_;
 
-        const String substr(int, int) JUTIL_CN_;
-        const String substr(int) JUTIL_CN_;
+        String substr(int, int) JUTIL_CN_;
+        String substr(int) JUTIL_CN_;
 
-        String& ltrim();
-        String& rtrim();
-        String& trim();
+        String &ltrim();
+        String &rtrim();
+        String &trim();
+
+        String upperCase();
+        String lowerCase();
+        String toggleCase();
 
         JUTIL_C_ List<size_t> replace(const String&, const String&);
 

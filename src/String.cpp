@@ -48,6 +48,35 @@ namespace jutil JUTIL_PRIVATE_ {
     String &String::trim() {
         return rtrim().ltrim();
     }
+    String String::upperCase() {
+        String str = *this;
+        for (auto &i: str) {
+            if (i >= 97 && i <= 122) {
+                i -= 32;
+            }
+        }
+        return str;
+    }
+    String String::lowerCase() {
+        String str = *this;
+        for (auto &i: str) {
+            if (i >= 65 && i <= 90) {
+                i += 32;
+            }
+        }
+        return str;
+    }
+    String String::toggleCase() {
+        String str = *this;
+        for (auto &i: str) {
+            if (i >= 65 && i <= 90) {
+                i += 32;
+            } else if (i >= 97 && i <= 122) {
+                i -= 32;
+            }
+        }
+        return str;
+    }
     JUTIL_C_ List<size_t> String::replace(const String &a, const String &b) {
         size_t interval = a.size();
         for (JUTIL_INIT(size_t i, 0); i < size() - interval; ++i) {
@@ -87,7 +116,7 @@ namespace jutil JUTIL_PRIVATE_ {
         return *this;
     }
 
-    const String String::substr(int s, int e) JUTIL_CN_ {
+    String String::substr(int s, int e) JUTIL_CN_ {
         String str;
         for (size_t i = (s >= 0? s : this->size() + s); i <= (e >= 0? e : this->size() + e); ++i) {
             str += (*this)[i];
@@ -95,7 +124,7 @@ namespace jutil JUTIL_PRIVATE_ {
         return str;
     }
 
-    const String String::substr(int s) JUTIL_CN_ {
+    String String::substr(int s) JUTIL_CN_ {
         return substr(s, length - 1);
     }
 
