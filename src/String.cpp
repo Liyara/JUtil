@@ -48,7 +48,7 @@ namespace jutil JUTIL_PRIVATE_ {
     String &String::trim() {
         return rtrim().ltrim();
     }
-    String String::upperCase() {
+    String String::upperCase() JUTIL_CN_ {
         String str = *this;
         for (auto &i: str) {
             if (i >= 97 && i <= 122) {
@@ -57,7 +57,7 @@ namespace jutil JUTIL_PRIVATE_ {
         }
         return str;
     }
-    String String::lowerCase() {
+    String String::lowerCase() JUTIL_CN_ {
         String str = *this;
         for (auto &i: str) {
             if (i >= 65 && i <= 90) {
@@ -66,7 +66,7 @@ namespace jutil JUTIL_PRIVATE_ {
         }
         return str;
     }
-    String String::toggleCase() {
+    String String::toggleCase() JUTIL_CN_ {
         String str = *this;
         for (auto &i: str) {
             if (i >= 65 && i <= 90) {

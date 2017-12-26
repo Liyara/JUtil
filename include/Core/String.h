@@ -97,9 +97,9 @@ namespace jutil JUTIL_PUBLIC_ {
         String &rtrim();
         String &trim();
 
-        String upperCase();
-        String lowerCase();
-        String toggleCase();
+        String upperCase() JUTIL_CN_;
+        String lowerCase() JUTIL_CN_;
+        String toggleCase() JUTIL_CN_;
 
         JUTIL_C_ List<size_t> replace(const String&, const String&);
 
