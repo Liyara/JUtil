@@ -65,6 +65,7 @@ namespace jutil JUTIL_PUBLIC_ {
     class JUTIL_PUBLIC_ String : public List<char> {
     public:
         String(const char*);
+        String(const List<char>&);
         JUTIL_CALL_UNROLL(
             JUTIL_STRING_DC,
             long long,
@@ -90,6 +91,13 @@ namespace jutil JUTIL_PUBLIC_ {
         JUTIL_CX_ static bool validCharacter(char) JUTIL_N_;
 
         const String substr(int, int) JUTIL_CN_;
+        const String substr(int) JUTIL_CN_;
+
+        String& ltrim();
+        String& rtrim();
+        String& trim();
+
+        JUTIL_C_ List<size_t> replace(const String&, const String&);
 
         virtual ~String() JUTIL_N_;
 

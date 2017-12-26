@@ -51,12 +51,13 @@ namespace jutil JUTIL_PUBLIC_ {
         typedef K KeyType;
         typedef T ValueType;
 
-        JUTIL_CX_ JUTIL_NCCIN(ContainerType * const c, Type *p, Type *n, const ValueType &v, const KeyType &k) JUTIL_N_ :
+        JUTIL_CX_ JUTIL_NCCIN(ContainerType * const c, Type *p, Type *n, const ValueType &v, const KeyType &k, unsigned char &&f  = 0x00) JUTIL_N_ :
             JUTIL_INIT(container, c),
             JUTIL_INIT(next, n),
             JUTIL_INIT(previous, p),
             JUTIL_INIT(key, k),
-            JUTIL_INIT(value, v) {}
+            JUTIL_INIT(value, v),
+            JUTIL_INIT(flags, f) {}
         #ifdef JUTIL_CPP11
             JUTIL_CX_ JUTIL_NCCIN(Type &&n) JUTIL_N_ = delete;
             JUTIL_CX_ JUTIL_NCCIN(const Type &n) JUTIL_N_ = delete;
@@ -67,6 +68,7 @@ namespace jutil JUTIL_PUBLIC_ {
         Type *next, *previous;
         KeyType key;
         ValueType value;
+        unsigned char flags;
 
         virtual ~JUTIL_NCCIN() JUTIL_N_ {JUTIL_CALL_UNROLL(JUTIL_NULL_, previous, next, container)}
     };
@@ -92,8 +94,8 @@ namespace jutil JUTIL_PUBLIC_ {
         typedef NonContiguousContainer<KeyType, ValueType, DerivedType, Iterator> Type;
 
         NonContiguousContainer() :
-            JUTIL_INIT(head, JUTIL_NULLPTR),
-            JUTIL_INIT(endNode, new Node(this, JUTIL_NULLPTR, JUTIL_NULLPTR, JUTIL_DEFAULT(ValueType), JUTIL_DEFAULT(KeyType))),
+            JUTIL_INIT(head, new Node(this, JUTIL_NULLPTR, JUTIL_NULLPTR, JUTIL_DEFAULT(ValueType), JUTIL_DEFAULT(KeyType), 0x02)),
+            JUTIL_INIT(endNode, head),
             JUTIL_INIT(length, 0) {}
 
         JUTIL_CX_ virtual const size_t size() JUTIL_CO_ {
@@ -108,11 +110,13 @@ namespace jutil JUTIL_PUBLIC_ {
             if (seek(key)) {
                 NCCERR_DUPLICATE_INVOKE;
             } else {
-                if (head) {
-                    seek(end() - 1);
-                    head->next = new Node(this, head, JUTIL_NULLPTR, value, key);
+                if (length == 0) {
+                    seekToFirst();
+                    head->previous = new Node(this, JUTIL_NULLPTR, head, value, key);
                 } else {
-                    head = new Node(this, JUTIL_NULLPTR, JUTIL_NULLPTR, value, key);
+                    seek(end() - 1);
+                    head->next = new Node(this, head, endNode, value, key);
+                    endNode->previous = head->next;
                 }
                 ++length;
             }
@@ -141,18 +145,6 @@ namespace jutil JUTIL_PUBLIC_ {
             return *JUTIL_CAST_DERIVED;
         }
 
-        virtual const KeyType find(const ValueType &value) JUTIL_CO_ {
-            Node *n = head;
-            while (n && n->previous) {n = n->previous;}
-            while (n && n->next) {
-                if (n->value == value) {
-                    return n->key;
-                }
-                n = n->next;
-            }
-            return JUTIL_DEFAULT(KeyType);
-        }
-
         virtual DerivedType &fillArray(ValueType arr[]) JUTIL_CO_ {
             ValueType c[length];
             Node *n = head;
@@ -170,7 +162,7 @@ namespace jutil JUTIL_PUBLIC_ {
             while (head && head->next) {
                 Node *n = head;
                 head = head->next;
-                if (n) {
+                if (n && !(n->flags & 0x02)) {
                     delete n;
                     n = JUTIL_NULLPTR;
                 }
@@ -208,7 +200,7 @@ namespace jutil JUTIL_PUBLIC_ {
     protected:
 
         inline void seekToLast() {
-            while (head && head->next) head = head->next;
+            while (head && head->next && !(head->next->flags & 0x02)) head = head->next;
         }
 
         inline void seekToFirst() {
@@ -217,7 +209,7 @@ namespace jutil JUTIL_PUBLIC_ {
 
         Node *lastNode() JUTIL_C_ {
             Node *e = head;
-            while (e && e->next) e = e->next;
+            while (e && e->next && !(e->next->flags & 0x02)) e = e->next;
             return e;
         }
 
@@ -244,10 +236,10 @@ namespace jutil JUTIL_PUBLIC_ {
 
         bool seek(const KeyType &key) {
             Node *n = at(key);
-            if (n) {
+            if (n && !(n->flags & 0x02)) {
                 return (head = n);
             } else {
-                return n;
+                return JUTIL_NULLPTR;
             }
         }
 
@@ -264,7 +256,8 @@ namespace jutil JUTIL_PUBLIC_ {
             return (it.element && it.element->container && it.element->container == this && at(it.element->key));
         }
 
-        Node *head, *endNode;
+        Node *head;
+        Node *endNode;
         size_t length;
 
         friend class JUTIL_NCCII<K, T, D, I>;
@@ -280,9 +273,11 @@ namespace jutil JUTIL_PUBLIC_ {
 
         typedef D DerivedType;
         typedef JUTIL_NCCII<K, T, CD, DerivedType> Type;
-        typedef JUTIL_NCCIN<K, T, CD, D> Node;
+
 
         public:
+
+            typedef JUTIL_NCCIN<K, T, CD, D> Node;
 
         JUTIL_NCCII() : element(JUTIL_NULLPTR) {}
         JUTIL_NCCII(Node *n) : element(n) {}
@@ -291,14 +286,10 @@ namespace jutil JUTIL_PUBLIC_ {
         virtual DerivedType &operator++() JUTIL_OVERRIDE_ {
             if (element) {
                 Node *temp = element;
-                if (element->next) {
+                if (!(element->flags & 0x02)) {
                     element = element->next;
-                } else if (element->container) {
-                    element = element->container->endNode;
-                } else {
-                    element = JUTIL_NULLPTR;
                 }
-                if (!(temp->container)) {
+                if (temp->flags & 0x01) {
                     JUTIL_FREE_(temp);
                 }
             }
@@ -307,15 +298,17 @@ namespace jutil JUTIL_PUBLIC_ {
 
         virtual DerivedType &operator--() JUTIL_OVERRIDE_ {
             if (element) {
-                if (element->container && element == element->container->endNode) {
+                if (element->flags & 0x02) {
                     element = element->container->lastNode();
                 } else {
                     Node *temp = element;
                     element = element->previous;
-                    if (!(temp->container)) {
+                    if (temp->flags & 0x01) {
                         JUTIL_FREE_(temp);
                     }
                 }
+            } else {
+
             }
             return *JUTIL_CAST_DERIVED;
         }

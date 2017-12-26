@@ -16,6 +16,44 @@ namespace jutil JUTIL_PRIVATE_ {
             }
         }
     }
+    String::String(const List<char> &lc) {
+        for (JUTIL_INIT(unsigned i, 0); i < lc.size(); ++i) {
+            if (validCharacter(lc[i])) {insert(lc[i]);}
+            else {
+                STRINGERR_CHARACTER_INVOKE;
+                break;
+            }
+        }
+    }
+    String& String::ltrim() {
+        for (String::Iterator i = begin(); i != end(); ++i) {
+            if (*i == ' ' || *i == '\t') {
+                erase(i);
+            } else {
+                break;
+            }
+        }
+        return *this;
+    }
+    String& String::rtrim() {
+        for (String::Iterator i = end() - 1; i.get(); --i) {
+            if (*i == ' ' || *i == '\t') {
+                erase(i);
+            } else {
+                break;
+            }
+        }
+        return *this;
+    }
+    String &String::trim() {
+        return rtrim().ltrim();
+    }
+    JUTIL_C_ List<size_t> String::replace(const String &a, const String &b) {
+        size_t interval = a.size();
+        for (JUTIL_INIT(size_t i, 0); i < size() - interval; ++i) {
+            String s = substr(i, i + interval);
+        }
+    }
     String String::operator+(const String &str) JUTIL_CN_ {
         JUTIL_INIT(String cpy, *this);
         cpy += str;
@@ -55,6 +93,10 @@ namespace jutil JUTIL_PRIVATE_ {
             str += (*this)[i];
         }
         return str;
+    }
+
+    const String String::substr(int s) JUTIL_CN_ {
+        return substr(s, length - 1);
     }
 
     bool String::operator!=(const String &str) JUTIL_CN_ {return !((*this) == (str));}

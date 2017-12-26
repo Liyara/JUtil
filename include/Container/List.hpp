@@ -29,7 +29,7 @@
 
 #ifdef JUTIL_CPP11
     #define JUTIL_FOREACH(a, b)             for (auto (a) = (b).begin(); (a) != (b).end(); ++(a))
-    #define JUTIL_REVERSE_FOREACH(a, b)     for (auto (a) = (b).begin() + ((b).size() - 1); (a) != (b).end(); --(a))
+    #define JUTIL_REVERSE_FOREACH(a, b)     for (auto (a) = (b).begin() + ((b).size() - 1); (a).get(); --(a))
     #define JUTIL_FOREACH_(a, b)            JUTIL_FOREACH(a, b)
     #define JUTIL_REVERSE_FOREACH_(a, b)    JUTIL_REVERSE_FOREACH(a, b)
 #else
@@ -43,17 +43,6 @@
     #define JLIC(a)                                     JUTIL_CX_ bool operator a(const Iterator &it) JUTIL_CN_ {return sameList(it.node) && (node->index a it.index);}
     #define JUTIL_LIST_GENERATE_ITERATOR_COMPARATORS    JUTIL_CALL_UNROLL(JLIC, >, <, >=, <=)
 #endif
-
-#define JUTIL_LIST_INITIALIZER(a) {\
-    for (JUTIL_INIT(size_t i, 0); i < BaseType::length; ++i) {\
-        if (BaseType::head) {\
-            BaseType::head->next = new jutil::__NonContiguousContainerInternalNode<size_t, T, List<T>, Iterator>(this, head, JUTIL_NULLPTR, (a), i);\
-            BaseType::head = BaseType::head->next;\
-        } else {\
-            BaseType::head = new jutil::__NonContiguousContainerInternalNode<size_t, T, List<T>, Iterator>(this, JUTIL_NULLPTR, JUTIL_NULLPTR, (a), i);\
-        }\
-    }\
-}
 
 namespace jutil JUTIL_PUBLIC_ {
 
@@ -87,6 +76,10 @@ namespace jutil JUTIL_PUBLIC_ {
             return &(element->value);
         }
 
+        typename __NonContiguousContainerInternalIterator<size_t, T, List<T>, __ListInternalIterator<T> >::Node *get() {
+            return element;
+        }
+
     private:
 
     };
@@ -115,6 +108,8 @@ namespace jutil JUTIL_PUBLIC_ {
         using BaseType::seek;
         using BaseType::size;
         using BaseType::validIterator;
+        using BaseType::seekToFirst;
+        using BaseType::end;
 
         /** =========================================================================================================================================
         */
@@ -142,30 +137,19 @@ namespace jutil JUTIL_PUBLIC_ {
                     */
         /** =========================================================================================================================================
         */
-
+        JUTIL_CX_ List() JUTIL_N_ : BaseType() {}
         List(size_t n, const_Reference dat) JUTIL_N_ : BaseType() {
-            for (JUTIL_INIT(size_t i, 0); i < length; ++i) {
-                if (head) {
-                    head->next = new Node(this, head, JUTIL_NULLPTR, (dat), i);
-                    head = head->next;
-                } else {
-                    head = new Node(this, JUTIL_NULLPTR, JUTIL_NULLPTR, (dat), i);
-                }
+            for (JUTIL_INIT(size_t i, 0); i < n; ++i) {
+                this->insert(dat);
             }
         }
         #ifdef JUTIL_CPP11
             JUTIL_CX_ List(size_t n) JUTIL_N_ : List{n, {}} {}
-        #else
-            List(size_t n) JUTIL_N_ : BaseType() {
-                length = n;
-                JUTIL_LIST_INITIALIZER(Type())
-            }
-        #endif
-        JUTIL_CX_ List() JUTIL_N_ : BaseType() {}
-        #ifdef JUTIL_CPP11
+
             List(Literal &&init) JUTIL_N_ : BaseType() {
-                length = init.size();
-                JUTIL_LIST_INITIALIZER(*(init.begin() + i));
+                for (auto &i: init) {
+                    this->insert(i);
+                }
             }
             List(Literal2d &&init) JUTIL_N_ : BaseType() {
                 JUTIL_FOREACH_(it, init) {
@@ -188,23 +172,33 @@ namespace jutil JUTIL_PUBLIC_ {
                     }
                 }
             }
+            List(List<Type> &&list) JUTIL_N_ : BaseType() {
+                length = list.size();
+                head = list.head;
+                endNode = list.endNode;
+                list.head = JUTIL_NULLPTR;
+                list.length = 0;
+                list.endNode = JUTIL_NULLPTR;
+            }
+        #else
+            List(size_t n) JUTIL_N_ : BaseType() {
+                length = n;
+                for (JUTIL_INIT(size_t i, 0); i < n; ++i) {
+                    insert(Type());
+                }
+            }
         #endif
         template<size_t size>
         List(const Type (&arr)[size]) : BaseType() {
-            length = size;
-            JUTIL_LIST_INITIALIZER(arr[i])
+            for (JUTIL_INIT(size_t i, 0); i < size; ++i) {
+                insert(arr[i]);
+            }
         }
         List(const List<Type> &list) JUTIL_N_ : BaseType() {
-            length = list.size();
-            JUTIL_LIST_INITIALIZER(list[i]);
-        }
-        #ifdef JUTIL_CPP11
-            List(List<Type> &&list) JUTIL_N_ : BaseType() {
-                length = list.size();
-                list.head = JUTIL_NULLPTR;
-                list.length = 0;
+            for (auto &i: list) {
+                insert(i);
             }
-        #endif
+        }
 
         /** =========================================================================================================================================
         */
@@ -254,8 +248,9 @@ namespace jutil JUTIL_PUBLIC_ {
         }
         virtual List<Type> &operator=(const List<Type> &list) JUTIL_N_ {
             this->clear();
-            length = list.size();
-            JUTIL_LIST_INITIALIZER(list[i]);
+            for (auto &i: list) {
+                insert(i);
+            }
             return *this;
         }
 
@@ -264,7 +259,9 @@ namespace jutil JUTIL_PUBLIC_ {
                 if (this != &list) {
                     this->clear();
                     length = list.size();
-                    JUTIL_LIST_INITIALIZER(list[i]);
+                    for (auto &i: list) {
+                        insert(i);
+                    }
                     list.clear();
                 }
                 return *this;
@@ -312,10 +309,12 @@ namespace jutil JUTIL_PUBLIC_ {
         }
         List<Type> &insert(const_Reference t) JUTIL_N_ {
             if (length == 0) {
-                head = new Node(this, JUTIL_NULLPTR, JUTIL_NULLPTR, t, 0);
+                head = new Node(this, JUTIL_NULLPTR, endNode, t, 0);
             } else if (seek(length - 1)) {
-                head->next = new Node(this, head, JUTIL_NULLPTR, t, head->key + 1);
+                head->next = new Node(this, head, endNode, t, head->key + 1);
+                head = head->next;
             }
+            endNode->previous = head;
             ++length;
             return *this;
         }
@@ -384,7 +383,7 @@ namespace jutil JUTIL_PUBLIC_ {
         List<T> &erase(const Iterator &it) {
             if (validIterator(it)) {
                 if (Element d = deattach(it.element->key)) {
-                    d->container = JUTIL_NULLPTR;
+                    d->flags |= 0x01;
                 }
             } else {
                 LISTERR_ITERATOR_INVOKE;
@@ -431,6 +430,12 @@ namespace jutil JUTIL_PUBLIC_ {
             }
             return *this;
         }
+        List<Type> &truncate(size_t p) {
+            while (p + 1 < length) {
+                erase(p + 1);
+            }
+            return *this;
+        }
         /** =========================================================================================================================================
         */
                     /** @section FIND
@@ -447,7 +452,7 @@ namespace jutil JUTIL_PUBLIC_ {
                     */
         /** =========================================================================================================================================
         */
-        JUTIL_CX_ bool find(const_Reference t, size_t *p = JUTIL_NULLPTR) JUTIL_CN_ {
+        JUTIL_CX_ bool find(const_Reference t, size_t *p) JUTIL_CN_ {
             for (JUTIL_INIT(size_t i, 0); i < length; ++i) {
                 if ((*this)[i] == t) {
                     if (p) {
@@ -461,6 +466,7 @@ namespace jutil JUTIL_PUBLIC_ {
             }
             return false;
         }
+
         JUTIL_CX_ bool findLast(const_Reference t, size_t *p) JUTIL_CN_ {
             JUTIL_INIT(long long lp, -1);
             for (JUTIL_INIT(size_t i, 0); i < length; ++i) {
@@ -510,6 +516,16 @@ namespace jutil JUTIL_PUBLIC_ {
                 LISTERR_ITERATOR_INVOKE;
                 return false;
             }
+        }
+        JUTIL_C_ jutil::List<size_t> replace(const_Reference a, const_Reference b) {
+            jutil::List<size_t> r;
+            for (JUTIL_INIT(size_t i, 0); i < length; ++i) {
+                if ((*this)[i] == a) {
+                    (*this)[i] = b;
+                    r.insert(i);
+                }
+            }
+            return r;
         }
         /** =========================================================================================================================================
         */
@@ -575,13 +591,13 @@ namespace jutil JUTIL_PUBLIC_ {
             }
             return *this;
         }
-        /*List<Type> &clear() JUTIL_N_ {
-            for (Iterator it = this->begin(); it != this->end() && length != 0; ++it) {
+        List<Type> &clear() JUTIL_N_ {
+            for (Iterator it = this->begin(); it != this->end(); ++it) {
                 erase(it);
             }
-            head = JUTIL_NULLPTR;
+            head = endNode;
             return *this;
-        }*/
+        }
         JUTIL_CX_ List<Type> reverse() JUTIL_CN_ {
             List<Type> list;
             size_t i = 0;
@@ -590,6 +606,25 @@ namespace jutil JUTIL_PUBLIC_ {
                 --it;
             }
             return list;
+        }
+        List<List<Type> > explode(const_Reference val) {
+            List<List<Type> > r;
+            r.insert(*this);
+            size_t rep = 0;
+            while (r.last().find(val, JUTIL_NULLPTR)) {
+                for (unsigned i = 0; i < r[rep].length; ++i) {
+                    if (r[rep][i] == val) {
+                        r.insert(List<Type>());
+                        for (unsigned ii = i + 1; ii < r[rep].length; ++ii) {
+                            r[rep + 1].insert(r[rep][ii]);
+                        }
+                        r[rep].truncate(i - 1);
+                        ++rep;
+                        break;
+                    }
+                }
+            }
+            return r;
         }
         /** =========================================================================================================================================
         */
@@ -613,7 +648,7 @@ namespace jutil JUTIL_PUBLIC_ {
                 }
 
                 --length;
-                if (length == 0) head = JUTIL_NULLPTR;
+                if (length == 0) head = endNode;
 
                 seek(0);
 

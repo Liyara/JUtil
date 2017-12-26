@@ -160,7 +160,7 @@ namespace jutil JUTIL_PUBLIC_ {
             return !((*this) == other);
         }
 
-        const size_t find(const ValueType &value) JUTIL_CO_ {
+        const size_t find(const ValueType &value) JUTIL_C_ {
             /*for (size_t i = 0; i < this->count; ++i) {
                 if ((*this)[i] == value) {
                     return i;

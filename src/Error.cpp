@@ -18,7 +18,7 @@ namespace jutil JUTIL_PRIVATE_ {
         return stack.size();
     }
     bool Error::has(Error *e) JUTIL_N_ {
-        return stack.find(e);
+        return stack.find(e, JUTIL_NULLPTR);
     }
     void Error::handle() JUTIL_N_ {
         if (!silenced) {
