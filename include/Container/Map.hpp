@@ -86,6 +86,39 @@ namespace jutil JUTIL_PUBLIC_ {
             return *this;
         }
 
+        bool find(K k, T v) JUTIL_C_ {
+            for (auto &it: *this) {
+                if ((&it == k) && (*it == v)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        bool findByKey(K k, T *t = JUTIL_NULLPTR) JUTIL_C_ {
+            for (auto &it: *this) {
+                if (&it == k) {
+                    if (t) {
+                        t = *it;
+                    }
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        bool findByValue(T v, K *k = JUTIL_NULLPTR) JUTIL_C_ {
+            for (auto &it: *this) {
+                if (*it == v) {
+                    if (k) {
+                        k = &it;
+                    }
+                    return true;
+                }
+            }
+            return false;
+        }
+
         #ifdef JUTIL_CPP11
             Map(Map<K, T> &&m) {
                 for (auto it = m.begin(); it != m.end(); ++it) {
@@ -122,12 +155,11 @@ namespace jutil JUTIL_PUBLIC_ {
             return true;
         }
 
-        Type reverse() const {
-            Type r;
-            for (Iterator i = this->end(); i != this->begin(); --i) {
-                r.insert(&i, *i);
+        Map<T, K> reverse() const {
+            Map<T, K> r;
+            for (auto &i: *this) {
+                r.insert(*i, &i);
             }
-            r.insert(&(this->begin()), *(this->begin()));
             return r;
         }
 

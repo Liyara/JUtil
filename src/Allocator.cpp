@@ -1,3 +1,6 @@
-#include "Core/Error.h"
-#include "Core/MemoryBlock.h"
-#include <cstdlib>
+#ifndef JUTIL_ALLOCATOR_H
+#define JUTIL_ALLOCATOR_H
+
+
+
+#endif // JUTIL_ALLOCATOR_H

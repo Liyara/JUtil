@@ -343,7 +343,6 @@ namespace jutil JUTIL_PUBLIC_ {
         List<Type> &insert(const List<Type> &list, size_t p) {
             JUTIL_INIT(List<Type> l, list.reverse());
             JUTIL_FOREACH_(it, l) {
-
                 insert(*it, p);
             }
             return *this;
@@ -523,6 +522,15 @@ namespace jutil JUTIL_PUBLIC_ {
                 if ((*this)[i] == a) {
                     (*this)[i] = b;
                     r.insert(i);
+                }
+            }
+            return r;
+        }
+        JUTIL_CX_ size_t count(const_Reference v) JUTIL_C_ {
+            size_t r = 0;
+            for (auto &it: *this) {
+                if (*it == v) {
+                    ++r;
                 }
             }
             return r;

@@ -145,7 +145,7 @@ namespace jutil JUTIL_PUBLIC_ {
             return *JUTIL_CAST_DERIVED;
         }
 
-        virtual DerivedType &fillArray(ValueType arr[]) JUTIL_CO_ {
+        virtual DerivedType &fillArray(ValueType arr[]) JUTIL_C_ {
             ValueType c[length];
             Node *n = head;
             while (n && n->previous) n = n->previous;

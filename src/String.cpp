@@ -17,6 +17,7 @@ namespace jutil JUTIL_PRIVATE_ {
         }
     }
     String::String(const List<char> &lc) {
+        jutil::out << "test" << jutil::endl;
         for (JUTIL_INIT(unsigned i, 0); i < lc.size(); ++i) {
             if (validCharacter(lc[i])) {insert(lc[i]);}
             else {
@@ -111,7 +112,7 @@ namespace jutil JUTIL_PRIVATE_ {
         str.insert(c);
         return str;
     }
-    String String::operator+=(const char &c) JUTIL_N_ {
+    String &String::operator+=(const char &c) JUTIL_N_ {
         *this = *this + c;
         return *this;
     }
@@ -131,8 +132,10 @@ namespace jutil JUTIL_PRIVATE_ {
     bool String::operator!=(const String &str) JUTIL_CN_ {return !((*this) == (str));}
     JUTIL_CX_ bool String::validCharacter(char c) JUTIL_N_ {return ((c >= 0x00) && (c <= 0x7f));}
     void String::array(char arr[]) JUTIL_CN_ {
-        for (JUTIL_INIT(size_t i, 0); i < size(); ++i) {
-            arr[i] = (*this)[i];
+        size_t i = 0;
+        for (auto &it: *this) {
+            arr[i] = it;
+            ++i;
         }
         arr[size()] = '\0';
     }

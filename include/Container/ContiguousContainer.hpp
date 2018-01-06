@@ -21,7 +21,7 @@ namespace jutil JUTIL_PUBLIC_ {
 
         JUTIL_CX_ ContiguousContainer() JUTIL_N_ : block(JUTIL_NULLPTR), count(0) {}
 
-        virtual DerivedType &fillArray(ValueType arr[]) JUTIL_CO_ {
+        virtual DerivedType &fillArray(ValueType arr[]) JUTIL_C_ {
             for (size_t i = 0; i < count; ++i) {
                 arr[i] = block[i];
             }

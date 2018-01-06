@@ -160,13 +160,14 @@ namespace jutil JUTIL_PUBLIC_ {
             return !((*this) == other);
         }
 
-        const size_t find(const ValueType &value) JUTIL_C_ {
-            /*for (size_t i = 0; i < this->count; ++i) {
+        JUTIL_CX_ bool find(const ValueType &value, size_t *p = JUTIL_NULLPTR) JUTIL_C_ {
+            for (JUTIL_INIT(size_t i, 0); i < this->count; ++i) {
                 if ((*this)[i] == value) {
-                    return i;
+                    *p = i;
+                    return true;
                 }
-            }*/
-            return this->size();
+            }
+            return false;
         }
 
         Queue<size_t> findAll(const ValueType &value) {
@@ -179,7 +180,7 @@ namespace jutil JUTIL_PUBLIC_ {
             return r;
         }
 
-        Queue<T> reverse() JUTIL_CO_ {
+        Queue<T> reverse() JUTIL_C_ {
             Queue<T> r;
             for (Iterator i = this->end() - 1; i != this->begin() - 1; --i) {
                 r.insert(*i);

@@ -81,7 +81,7 @@ namespace jutil JUTIL_PUBLIC_ {
         String operator+(const String&) JUTIL_CN_;
         String operator+(const char&) JUTIL_CN_;
         String &operator+=(const String&) JUTIL_N_;
-        String operator+=(const char&) JUTIL_N_;
+        String &operator+=(const char&) JUTIL_N_;
         bool operator==(const String&) JUTIL_CN_;
         bool operator!=(const String&) JUTIL_CN_;
         JUTIL_EXPL_ operator float() JUTIL_CN_;

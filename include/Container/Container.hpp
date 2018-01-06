@@ -39,15 +39,12 @@ namespace jutil JUTIL_PUBLIC_ {
         virtual ValueType &operator[](const KeyType&) = 0;
         virtual const ValueType &operator[](const KeyType&) JUTIL_C_ = 0;
         virtual DerivedType &erase(const KeyType&) = 0;
-        //virtual const KeyType find(const ValueType&) JUTIL_C_ = 0;
-        virtual DerivedType &fillArray(ValueType[]) JUTIL_C_ = 0;
         virtual const size_t size() JUTIL_C_ = 0;
         virtual const bool empty() JUTIL_C_ = 0;
         virtual DerivedIterator begin() = 0;
         virtual DerivedIterator end() = 0;
         virtual const DerivedIterator begin() JUTIL_C_ = 0;
         virtual const DerivedIterator end() JUTIL_C_ = 0;
-        virtual DerivedType reverse() JUTIL_C_ = 0;
         virtual DerivedType &clear() = 0;
     };
 }
