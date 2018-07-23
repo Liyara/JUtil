@@ -1,6 +1,8 @@
 #ifndef JUTIL_DECLVAL_H
 #define JUTIL_DECLVAL_H
 
+#include "Traits/TypeManipulators.hpp"
+
 namespace jutil {
     template <typename T>
     struct JUTIL_PRIVATE_ JUTIL_Declval_ final {

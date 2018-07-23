@@ -1,5 +1,6 @@
 #include "Core/Error.h"
 #include "IO/IO.h"
+#include "Container/List.hpp"
 #include <cstdlib>
 
 namespace jutil JUTIL_PRIVATE_ {

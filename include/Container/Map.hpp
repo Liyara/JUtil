@@ -52,6 +52,9 @@ namespace jutil JUTIL_PUBLIC_ {
         virtual ~__MapInternalIterator() {}
     };
 
+    /**
+        @class Map<K, T>    An associative container.
+    */
     template<
         typename K,
         typename T
@@ -59,19 +62,45 @@ namespace jutil JUTIL_PUBLIC_ {
     class JUTIL_PUBLIC_ Map : public NonContiguousContainer<K, T, Map<K, T>, __MapInternalIterator<K, T> > {
     public:
 
+        /** =========================================================================================================================================
+
+                TYPES
+
+         ** =========================================================================================================================================
+        */
+
         typedef  __MapInternalIterator<K, T> Iterator;
         typedef NonContiguousContainer<K, T, Map<K, T>, Iterator> BaseType;
         typedef Map<K, T> Type;
         typedef std::initializer_list<Pair<K, T> > Literal;
 
+        /** =========================================================================================================================================
+
+                CONSTRUCTORS
+
+         ** =========================================================================================================================================
+        */
+
+        /**
+            Default constrctor.
+        */
         Map() : BaseType() {}
 
+        /**
+            Copy constructor.
+
+            @param m    Map to copy.
+        */
         Map(const Map<K, T> &m) {
             for (auto it = m.begin(); it != m.end(); ++it) {
                 insert(&it, *it);
             }
         }
+        /**
+            Move constructor
 
+            @param dat  Map to move.
+        */
         Map(Literal &&dat) {
             for (jutil::Pair<K, T> i: dat) {
                 insert(i.first(), i.second());
@@ -96,10 +125,10 @@ namespace jutil JUTIL_PUBLIC_ {
         }
 
         bool findByKey(K k, T *t = JUTIL_NULLPTR) JUTIL_C_ {
-            for (auto &it: *this) {
+            for (auto it = this->begin(); it != this->end(); ++it) {
                 if (&it == k) {
                     if (t) {
-                        t = *it;
+                        t = &(*it);
                     }
                     return true;
                 }

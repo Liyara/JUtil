@@ -1,5 +1,5 @@
-#ifndef JUTIL_MACRO
-#define JUTIL_MACRO
+#ifndef JUTIL_MACRO_H
+#define JUTIL_MACRO_H
 
 /**
     @section DESCRIPTION
@@ -25,11 +25,36 @@
 #define JUTIL_INTERNAL_  JUTIL__ __
 
 namespace jutil JUTIL_PUBLIC_ {
+
+    #ifndef JUTIL_CONTAINER_H
+        template <typename>
+        class JUTIL_PUBLIC_ Iterator;
+        template <typename, typename, typename, typename>
+        class JUTIL_PUBLIC_ Container;
+    #endif
+    #ifndef JUTIL_CONTIGUOUS_CONTAINER_H
+        template<typename, typename, typename>
+        class JUTIL_PUBLIC_ ContiguousContainer;
+    #endif
+    #ifndef JUTIL_NON_CONTIGUOUS_CONTAINER_H
+        template <typename, typename, typename, typename>
+        class JUTIL_PRIVATE_ __NonContiguousContainerInternalIterator;
+        template <typename, typename, typename, typename>
+        struct JUTIL_PRIVATE_ __NonContiguousContainerInternalNode;
+    #endif
     #ifndef JUTIL_QUEUE_H
         template <typename>
         class JUTIL_PUBLIC_ Queue;
     #endif
+    #ifndef JUTIL_LIST_H
+        template <typename>
+        class JUTIL_PRIVATE_ __ListInternalIterator;
+        template <typename>
+        class JUTIL_PUBLIC_ List;
+    #endif
     #ifndef JUTIL_MAP_H
+        template<typename, typename>
+        class JUTIL_PRIVATE_ __MapInternalIterator;
         template <typename, typename>
         class JUTIL_PUBLIC_ Map;
     #endif
@@ -43,10 +68,6 @@ namespace jutil JUTIL_PUBLIC_ {
             class JUTIL_PUBLIC_ Tuple;
         #endif
     #endif
-    #ifndef JUTIL_LIST_HPP
-        template <typename>
-        class JUTIL_PUBLIC_ List;
-    #endif
     #ifndef JUTIL_NON_COPYABLE_H
         class JUTIL_PUBLIC_ NonCopyable;
     #endif
@@ -56,6 +77,15 @@ namespace jutil JUTIL_PUBLIC_ {
     #endif
     #ifndef JUTIL_ERROR_H
         class JUTIL_PUBLIC_ Error;
+    #endif
+    #ifndef JUTIL_TIMER_H
+        class JUTIL_PUBLIC_ Timer;
+    #endif
+    #ifndef JUTIL_THREAD_H
+        class JUTIL_PUBLIC_ Thread;
+    #endif
+    #ifndef JUTIL_RNG_H
+        class JUTIL_PUBLIC_ RNG;
     #endif
     #ifndef JUTIL_IO_H
         namespace io_base JUTIL_PRIVATE_ {
@@ -162,6 +192,12 @@ namespace jutil JUTIL_PUBLIC_ {
     #define JUTIL_DEFAULT(T) T()
 #endif
 
+#ifdef JUTIL_CPP17
+    #define JUTIL_IFCX_ if constexpr
+#else
+#define JUTIL_IFCX_ if
+#endif
+
 #define JUTIL_GENERATE_TEMPLATE_ALIASES(T) JUTIL_GENERATE_TEMPLATE_ALIASES_(T)\
     typedef T           Type;\
     typedef T&          Reference;\
@@ -191,4 +227,16 @@ namespace jutil JUTIL_PUBLIC_ {
 #define JUTIL_FORWARD_TEMPLATE_4  template<typename, typename, typename, typename>
 #define JUTIL_FORWARD_TEMPLATE_5  template<typename, typename, typename, typename, typename>
 
-#endif // JUTIL_MACRO
+
+//placement-new defined here to avoid including <new>
+#ifndef _NEW
+#define _NEW
+    inline void* operator new(size_t, void* dat) JUTIL_N_ {
+        return dat;
+    }
+    inline void* operator new[](size_t, void* dat) JUTIL_N_ {
+        return dat;
+    }
+#endif
+
+#endif // JUTIL_MACRO_H

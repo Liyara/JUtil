@@ -2,7 +2,6 @@
 #define JUTILIS_ARITHMATIC_H
 
 #include "Validator.hpp"
-#include "Core/Array.hpp"
 #include "Convert.hpp"
 #include "declval.hpp"
 

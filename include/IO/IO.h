@@ -83,7 +83,7 @@ namespace jutil JUTIL_PUBLIC_ {
     /**
         @namespace io_interface
 
-        These classes inherit classes defines in io_base.
+        These classes inherit classes defined in io_base.
 
         Objects of these classes are used for basic console IO,
         and will be declared later.
@@ -124,7 +124,12 @@ namespace jutil JUTIL_PUBLIC_ {
             OVERWRITE
         };
 
-        File(const String&, Mode = READ_WRITE) JUTIL_N_;
+        enum JUTIL_PUBLIC_ DataType {
+            TEXT,
+            BINARY
+        };
+
+        File(const String&, Mode = READ_WRITE, DataType = TEXT) JUTIL_N_;
         File(const File&) JUTIL_N_;
         #ifdef JUTIL_CPP11
             File(File&&) noexcept;
@@ -141,6 +146,7 @@ namespace jutil JUTIL_PUBLIC_ {
     private:
         String filePath;
         Mode mode;
+        DataType dataType;
         _iobuf *file;
         bool fileEnd;
         void put(const String&) JUTIL_CN_ JUTIL_OVERRIDE_;

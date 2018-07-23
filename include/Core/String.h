@@ -1,21 +1,11 @@
 #ifndef JUTIL_STRING_H
 #define JUTIL_STRING_H
 
-#include "Container/List.hpp"
+#include "Container/Queue.hpp"
 
 #ifdef JUTIL_CPP11
     #include "Traits/Traits.hpp"
 #endif
-
-/**
-    @section DESCRIPTION
-
-    @class jutil::String is a a wrapper for C char arrays.
-
-    It is implemented by inheriting a char List. @see List.hpp
-
-    jutil::String can be be 2-way cast with every primitive type.
-*/
 
 #ifdef JUTIL_ERR
 
@@ -60,35 +50,90 @@
     JUTIL_EXPL_ operator signed a() JUTIL_CN_;\
     JUTIL_EXPL_ operator unsigned a() JUTIL_CN_;
 
-namespace jutil JUTIL_PUBLIC_ {
+#define ENOUGH ((8 * sizeof(long long) - 1) / 3 + 2)
 
-    class JUTIL_PUBLIC_ String : public List<char> {
-    public:
-        String(const char*);
-        String(const List<char>&);
-        JUTIL_CALL_UNROLL(
-            JUTIL_STRING_DC,
-            long long,
-            long,
-            int,
-            short
-        )
-        JUTIL_EXPL_ String(double) JUTIL_N_;
-        JUTIL_EXPL_ String(float) JUTIL_N_;
-        JUTIL_EXPL_ String(long double) JUTIL_N_;
-        JUTIL_EXPL_ String(bool) JUTIL_N_;
-        JUTIL_CX_ String() JUTIL_N_ : List() {}
-        String operator+(const String&) JUTIL_CN_;
-        String operator+(const char&) JUTIL_CN_;
-        String &operator+=(const String&) JUTIL_N_;
-        String &operator+=(const char&) JUTIL_N_;
-        bool operator==(const String&) JUTIL_CN_;
-        bool operator!=(const String&) JUTIL_CN_;
-        JUTIL_EXPL_ operator float() JUTIL_CN_;
+
+namespace jutil JUTIL_PUBLIC_ {
+    class String : public jutil::Queue<char> {
+        public:
+        template <size_t l>
+        String(const char (&c)[l]) {
+            this->reserve(l);
+            for (JUTIL_INIT(const char *i, c); (*i) && (*i != '\0'); ++i) {
+                if (validCharacter(*i)) {
+                    insert(*i);
+                } else {
+                    STRINGERR_CHARACTER_INVOKE;
+                    break;
+                }
+            }
+        }
+
+        String(const char *c, size_t l = 0) {
+            this->reserve(l);
+            for (JUTIL_INIT(const char *i, c); (*i) && (*i != '\0'); ++i) {
+                if (validCharacter(*i)) {
+                    insert(*i);
+                } else {
+                    STRINGERR_CHARACTER_INVOKE;
+                    break;
+                }
+            }
+        }
+
+        String(const Queue<char>&);
+        String(const String&);
+        String(char);
+
+        int toCString(char*, size_t, const char*, ...);
+
+        template <typename T>
+        String convert(T t, const char *p) {
+            char cstr[ENOUGH];
+            toCString(cstr, sizeof(cstr), p, t);
+            String str(cstr);
+            return str;
+        }
+
+        JUTIL_EXPL_ operator bool() JUTIL_CN_;
+        JUTIL_EXPL_ operator signed long long() JUTIL_CN_;
+        JUTIL_EXPL_ operator unsigned long long() JUTIL_CN_;
+        JUTIL_EXPL_ operator signed long() JUTIL_CN_;
+        JUTIL_EXPL_ operator unsigned long() JUTIL_CN_;
+        JUTIL_EXPL_ operator signed int() JUTIL_CN_;
+        JUTIL_EXPL_ operator unsigned int() JUTIL_CN_;
+        JUTIL_EXPL_ operator signed short() JUTIL_CN_;
+        JUTIL_EXPL_ operator unsigned short() JUTIL_CN_;
         JUTIL_EXPL_ operator double() JUTIL_CN_;
         JUTIL_EXPL_ operator long double() JUTIL_CN_;
+        JUTIL_EXPL_ operator float() JUTIL_CN_;
 
-        JUTIL_CX_ static bool validCharacter(char) JUTIL_N_;
+        JUTIL_EXPL_ String(bool) JUTIL_N_;
+        JUTIL_EXPL_ String(signed long long) JUTIL_N_;
+        JUTIL_EXPL_ String(unsigned long long) JUTIL_N_;
+        JUTIL_EXPL_ String(signed long) JUTIL_N_;
+        JUTIL_EXPL_ String(unsigned long) JUTIL_N_;
+        JUTIL_EXPL_ String(signed int) JUTIL_N_;
+        JUTIL_EXPL_ String(unsigned int) JUTIL_N_;
+        JUTIL_EXPL_ String(signed short) JUTIL_N_;
+        JUTIL_EXPL_ String(unsigned short) JUTIL_N_;
+        JUTIL_EXPL_ String(double) JUTIL_N_;
+        JUTIL_EXPL_ String(long double) JUTIL_N_;
+        JUTIL_EXPL_ String(float) JUTIL_N_;
+
+        String &operator=(const String&);
+
+        JUTIL_CX_ String() JUTIL_N_ : jutil::Queue<char>() {}
+        String operator+(const String&) JUTIL_CN_;
+
+        String &operator+=(const String&) JUTIL_N_;
+        bool operator==(const String&) JUTIL_CN_;
+
+        bool operator!=(const String&) JUTIL_CN_;
+
+        JUTIL_CX_ inline static bool validCharacter(char c) JUTIL_N_ {
+            return ((c >= 0x00) && (c <= 0x7f));
+        }
 
         String substr(int, int) JUTIL_CN_;
         String substr(int) JUTIL_CN_;
@@ -101,8 +146,6 @@ namespace jutil JUTIL_PUBLIC_ {
         String lowerCase() JUTIL_CN_;
         String toggleCase() JUTIL_CN_;
 
-        JUTIL_C_ List<size_t> replace(const String&, const String&);
-
         virtual ~String() JUTIL_N_;
 
         /**
@@ -113,7 +156,7 @@ namespace jutil JUTIL_PUBLIC_ {
             The array passed in should be 1 longer than the string's length,
             because array() will automatically null-terminate the array.
         */
-        void array(char[]) JUTIL_CN_ JUTIL_OVERRIDE_;
+        void array(char[]) JUTIL_CN_;
 
         /**
             @section TEMPLATED CONVERTERS
@@ -162,46 +205,45 @@ namespace jutil JUTIL_PUBLIC_ {
                 STRINGERR_CONVERSION_INVOKE;
             }
         #endif
-
-        /*#ifdef JUTIL_TRAITS_ENABLED
-            static String toString(...) {
-                STRINGERR_CONVERSION_INVOKE;
-                return String();
-            }
-            template <typename T>
-            static T fromStringTo(...) {
-                STRINGERR_CONVERSION_INVOKE;
-                return {};
-            }
-        #endif*/
     };
 
-    struct StringInterface {
-        virtual operator String() = 0;
-        virtual operator const String() const = 0;
-    };
-
-}
-
-template <typename T>
-jutil::List<T>::operator const jutil::String() const {
-    String s = "{";
-    for (Iterator i = this->begin(); i != this->end(); ++i) {
-        s += String::toString(i) + String(", ");
+    template <typename T>
+    const String qAsString(const Queue<T> &q)  {
+        String s = "{";
+        s.reserve(q.size());
+        for (typename Queue<T>::Iterator i = q.begin(); i != q.end(); ++i) {
+            s += String::toString(*i) + ((i + 1 == q.end())? "" : ", ");
+        }
+        s += "}";
+        return s;
     }
-    s = s.substr(0, -3);
-    s += "}";
-    return s;
+
+    template <typename T>
+    jutil::Queue<T>::operator const jutil::String() const {
+        return qAsString(*this);
+    }
+
+    template <typename T>
+    jutil::Queue<T>::operator jutil::String() {
+        return qAsString(*this);
+    }
 }
 
 inline jutil::String operator+(const char *c, const jutil::String &s) {
     return jutil::String(c) + s;
 }
 
-inline jutil::String operator+(const jutil::String &s, const char *c) {
-    jutil::String cstr(c);
+/*inline jutil::String operator+(const jutil::String &s, const char *c) {
     return s + jutil::String(c);
 }
+
+inline jutil::String operator+(const jutil::String &s, char c) {
+    return s + jutil::String::toString(c);
+}
+
+inline jutil::String operator+(char c, const jutil::String &s) {
+    return jutil::String::toString(c) + s;
+}*/
 
 #ifdef STRINGERR
     #undef STRINGERR

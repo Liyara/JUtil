@@ -30,20 +30,12 @@ typedef unsigned long long   uint_fast64_t;
 
 #ifndef _INTPTR_T_DEFINED
     #define _INTPTR_T_DEFINED
-    #ifdef _WIN64
-        typedef __int64 intptr_t;
-    #else
-        typedef int intptr_t;
-    #endif
+    typedef int intptr_t;
 #endif
 
 #ifndef _UINTPTR_T_DEFINED
     #define _UINTPTR_T_DEFINED
-    #ifdef _WIN64
-        typedef unsigned __int64 uintptr_t;
-    #else
-        typedef unsigned int uintptr_t;
-    #endif
+    typedef unsigned int uintptr_t;
 #endif
 
 typedef long long  intmax_t;

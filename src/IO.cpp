@@ -54,7 +54,7 @@ namespace jutil JUTIL_PRIVATE_ {
             ");
         }
     }
-    File::File(const String &path, Mode m) JUTIL_N_ : JUTIL_INIT(filePath, path), JUTIL_INIT(mode, m), JUTIL_INIT(fileEnd, false) {
+    File::File(const String &path, Mode m, DataType dt) JUTIL_N_ : JUTIL_INIT(filePath, path), JUTIL_INIT(mode, m), JUTIL_INIT(dataType, dt), JUTIL_INIT(fileEnd, false) {
         String modeStr;
         switch(mode) {
             case READ: {

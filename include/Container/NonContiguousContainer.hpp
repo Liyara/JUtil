@@ -1,7 +1,8 @@
-#ifndef NON_CONTIGUOUS_CONTAINER_H
-#define NON_CONTIGUOUS_CONTAINER_H
+#ifndef JUTIL_NON_CONTIGUOUS_CONTAINER_H
+#define JUTIL_NON_CONTIGUOUS_CONTAINER_H
 
 #include "Container.hpp"
+#include "Core/Error.h"
 
 #ifdef JUTIL_ERR
 
@@ -20,9 +21,6 @@
 #define JUTIL_NCCIN __NonContiguousContainerInternalNode
 
 namespace jutil JUTIL_PUBLIC_ {
-
-    JUTIL_FORWARD_TEMPLATE_4
-    class JUTIL_PRIVATE_ JUTIL_NCCII;
 
     template<
         typename K,
@@ -98,11 +96,11 @@ namespace jutil JUTIL_PUBLIC_ {
             JUTIL_INIT(endNode, head),
             JUTIL_INIT(length, 0) {}
 
-        JUTIL_CX_ virtual const size_t size() JUTIL_CO_ {
+        virtual const size_t size() JUTIL_CO_ {
             return length;
         }
 
-        JUTIL_CX_ virtual const bool empty() JUTIL_CO_ {
+        virtual const bool empty() JUTIL_CO_ {
             return length == 0;
         }
 
@@ -112,11 +110,13 @@ namespace jutil JUTIL_PUBLIC_ {
             } else {
                 if (length == 0) {
                     seekToFirst();
-                    head->previous = new Node(this, JUTIL_NULLPTR, head, value, key);
+                    head = new Node(this, JUTIL_NULLPTR, endNode, value, key);
                 } else {
                     seek(end() - 1);
                     head->next = new Node(this, head, endNode, value, key);
-                    endNode->previous = head->next;
+                    head = head->next;
+                    endNode->previous = head;
+
                 }
                 ++length;
             }
@@ -234,7 +234,7 @@ namespace jutil JUTIL_PUBLIC_ {
             }
         }
 
-        bool seek(const KeyType &key) {
+        Node *seek(const KeyType &key) {
             Node *n = at(key);
             if (n && !(n->flags & 0x02)) {
                 return (head = n);
@@ -341,4 +341,4 @@ namespace jutil JUTIL_PUBLIC_ {
 #undef JUTIL_NCCII
 #undef JUTIL_NCCIN
 
-#endif // NON_CONTIGUOUS_CONTAINER_H
+#endif // JUTIL_NON_CONTIGUOUS_CONTAINER_H

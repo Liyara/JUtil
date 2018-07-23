@@ -9,7 +9,7 @@
 namespace jutil JUTIL_PUBLIC_ {
 
     template <typename D>
-    class Iterator {
+    class JUTIL_PUBLIC_ Iterator {
     public:
 
         typedef D DerivedType;
@@ -26,7 +26,7 @@ namespace jutil JUTIL_PUBLIC_ {
         typename D,
         typename I
     >
-    class Container {
+    class JUTIL_PUBLIC_ Container {
     public:
 
         typedef K KeyType;

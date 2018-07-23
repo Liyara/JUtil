@@ -46,6 +46,14 @@ namespace jutil JUTIL_PUBLIC_ {
             return "(" + String(first()) + ", " + String(second()) + ")";
         }
 
+        bool operator==(const Pair<A, B> &p) const {
+            return (get<0>(*this) == get<0>(p) && get<1>(*this) == get<1>(p));
+        }
+
+        bool operator!=(const Pair<A, B> &p) const {
+            return !((*this) == p);
+        }
+
         virtual ~Pair() {}
     };
 }

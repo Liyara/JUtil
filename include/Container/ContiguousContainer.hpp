@@ -1,5 +1,5 @@
-#ifndef CONTIGUOUS_CONTAINER_H
-#define CONTIGUOUS_CONTAINER_H
+#ifndef JUTIL_CONTIGUOUS_CONTAINER_H
+#define JUTIL_CONTIGUOUS_CONTAINER_H
 
 #include "Container.hpp"
 
@@ -10,7 +10,7 @@ namespace jutil JUTIL_PUBLIC_ {
         typename T,
         typename D
     >
-    class ContiguousContainer : public Container<K, T, D, T*> {
+    class JUTIL_PUBLIC_ ContiguousContainer : public Container<K, T, D, T*> {
     public:
 
         typedef K KeyType;
@@ -65,11 +65,14 @@ namespace jutil JUTIL_PUBLIC_ {
         }
         void free() {
             if (block) {
-                delete [] block;
+                for (size_t i = 0; i < size(); ++i) {
+                    block[i].~T();
+                }
+                ::operator delete[](block);
                 block = JUTIL_NULLPTR;
             }
         }
     };
 }
 
-#endif // CONTIGUOUS_CONTAINER_H
+#endif // JUTIL_CONTIGUOUS_CONTAINER_H

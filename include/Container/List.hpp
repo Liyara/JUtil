@@ -1,7 +1,8 @@
-#ifndef JUTIL_LIST_HPP
-#define JUTIL_LIST_HPP
+#ifndef JUTIL_LIST_H
+#define JUTIL_LIST_H
 
 #include "Core/Macro.h"
+#include "Core/String.h"
 
 #ifdef JUTIL_CPP11
     #include <initializer_list>
@@ -46,11 +47,6 @@
 
 namespace jutil JUTIL_PUBLIC_ {
 
-    class String;
-
-    JUTIL_FORWARD_TEMPLATE_1
-    class JUTIL_PUBLIC_ List;
-
     template <typename T>
     class JUTIL_PRIVATE_ __ListInternalIterator : public __NonContiguousContainerInternalIterator<size_t, T, List<T>, __ListInternalIterator<T> > {
     public:
@@ -85,7 +81,7 @@ namespace jutil JUTIL_PUBLIC_ {
     };
 
     template <typename T>
-    class JUTIL_PUBLIC_ List : public NonContiguousContainer<size_t, T, List<T>, __ListInternalIterator<T> > {
+    class JUTIL_PUBLIC_ List : public NonContiguousContainer<size_t, T, List<T>, __ListInternalIterator<T> >, public StringInterface {
     public:
 
         typedef NonContiguousContainer<size_t, T, List<T>, __ListInternalIterator<T> > BaseType;
@@ -276,7 +272,25 @@ namespace jutil JUTIL_PUBLIC_ {
             return result;
         }
 
-        operator const String() const;
+        operator String() {
+            String s = "{";
+            for (Iterator i = this->begin(); i != this->end(); ++i) {
+                s += String::toString(*i) + ", ";
+            }
+            s = s.substr(0, -3);
+            s += "}";
+            return s;
+        }
+
+        operator const String() const {
+            String s = "{";
+            for (Iterator i = this->begin(); i != this->end(); ++i) {
+                s += String::toString(*i) + ", ";
+            }
+            s = s.substr(0, -3);
+            s += "}";
+            return s;
+        }
 
         /** =========================================================================================================================================
         */

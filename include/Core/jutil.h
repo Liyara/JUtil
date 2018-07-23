@@ -1,3 +1,6 @@
+#ifndef JUTIL_H
+#define JUTIL_H
+
 /**
     @author Jarrett "Liyara" Kastler.
     @version 1.0
@@ -35,8 +38,16 @@
 #include "IO/IO.h"
 #ifdef JUTIL_CPP11
     #include "Container/Map.hpp"
+    #include "Core/Thread.h"
+    #include "Core/RNG.h"
 #endif
+#include "Container/List.hpp"
+#include "Core/Timer.h"
 
 namespace jutil JUTIL_PUBLIC_ {
     char readCharacter();
+    void cls(size_t  = 1);
+    void sleep(size_t);
 }
+
+#endif // JUTIL_H

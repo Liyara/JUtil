@@ -1,33 +1,15 @@
 #ifndef JUTIL_TUPLE_H
 #define JUTIL_TUPLE_H
 
+#include "Core/Macro.h"
+#include "Traits/Traits.hpp"
+
 #ifndef JUTIL_CPP11
     #error The "Tuple.hpp" file in the JUtil library requires C++11 to operate.\
     Please enable C++11 in your compilers settings, or uninclude "Tuple.hpp".
 #endif
 
 namespace jutil JUTIL_PUBLIC_ {
-
-    template <size_t... indices>
-    struct IndexSet {typedef IndexSet<indices...> Type;};
-
-    template <size_t index, typename>
-    struct AppendSet;
-
-    template <size_t index, size_t... indices>
-    struct AppendSet<index, IndexSet<indices...> > : IndexSet<indices..., index> {};
-
-    template <size_t count>
-    struct IndexSetGenerator : AppendSet<count - 1, typename IndexSetGenerator<count - 1>::Type>::Type {};
-
-    template<>
-    struct IndexSetGenerator<1> : IndexSet<0> {};
-
-    template <size_t index, typename Head, typename... Tail>
-    struct TypeAtIndex {typedef typename TypeAtIndex<index - 1, Tail...>::Type Type;};
-
-    template<typename Head, typename... Tail>
-    struct TypeAtIndex<0, Head, Tail...> {typedef Head Type;};
 
     template <size_t index, typename... Types>
     using IndexedType = typename TypeAtIndex<index, Types...>::Type;
@@ -66,6 +48,8 @@ namespace jutil JUTIL_PUBLIC_ {
 
     public:
 
+        typedef Tuple<Types...> Type;
+
         JUTIL_GENERATE_METHODS(Tuple, default)
 
         template <
@@ -79,8 +63,16 @@ namespace jutil JUTIL_PUBLIC_ {
         virtual ~Tuple() {}
     };
 
+    template <size_t i, typename ...>
+    struct GetType;
+
+    template<size_t i, typename... N>
+    struct GetType<i, Tuple<N...> > {
+        using Type = typename TypeAtIndex<i, N...>::Type;
+    };
+
     template <size_t index, typename... Types>
-    constexpr IndexedType<index, Types...> &get(const Tuple<Types...> &t) noexcept {
+    const IndexedType<index, Types...> &get(const Tuple<Types...> &t) noexcept {
         const tuple_base::TupleElement<index, IndexedType<index, Types...> > &ele = t;
         return ele.Value;
     }
@@ -95,6 +87,18 @@ namespace jutil JUTIL_PUBLIC_ {
     typename RemoveReference<IndexedType<index, Types...> >::Type &get(Tuple<Types...> &&t) noexcept {
         tuple_base::TupleElement<index, typename RemoveReference<IndexedType<index, Types...> >::Type> &ele = t;
         return ele.Value;
+    }
+
+    namespace {
+        template <typename T, typename F, size_t... n>
+        inline void _forEach(T &t, F f, IndexSet<n...>) {
+            JUTIL_FUNC_EXPAND(f, get<n>(t), n);
+        }
+    }
+
+    template <typename... N, typename F>
+    inline void forEach(Tuple<N...> &t, F f) {
+        _forEach(t, f, IndexSetGenerator<sizeof...(N)>());
     }
 }
 
