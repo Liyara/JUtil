@@ -52,26 +52,13 @@ namespace jutil JUTIL_PUBLIC_ {
             return block + count;
         }
 
-        virtual ~ContiguousContainer() {
-            free();
-        }
-
     protected:
         ValueType *block;
         size_t count;
         void reset() {
             free();
-            count = 0;
         }
-        void free() {
-            if (block) {
-                for (size_t i = 0; i < size(); ++i) {
-                    block[i].~T();
-                }
-                ::operator delete[](block);
-                block = JUTIL_NULLPTR;
-            }
-        }
+        virtual void free() = 0;
     };
 }
 
