@@ -123,7 +123,7 @@ namespace jutil JUTIL_PUBLIC_ {
 
         String &operator=(const String&);
 
-        JUTIL_CX_ String() JUTIL_N_ : jutil::Queue<char>() {}
+        String() JUTIL_N_ : jutil::Queue<char>() {}
         String operator+(const String&) JUTIL_CN_;
 
         String &operator+=(const String&) JUTIL_N_;
