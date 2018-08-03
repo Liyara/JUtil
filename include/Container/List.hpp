@@ -273,13 +273,7 @@ namespace jutil JUTIL_PUBLIC_ {
         }
 
         operator String() {
-            String s = "{";
-            for (Iterator i = this->begin(); i != this->end(); ++i) {
-                s += String::toString(*i) + ", ";
-            }
-            s = s.substr(0, -3);
-            s += "}";
-            return s;
+            return static_cast<String>(*(const_cast<const List<T>*>(this)));
         }
 
         operator const String() const {
@@ -287,7 +281,7 @@ namespace jutil JUTIL_PUBLIC_ {
             for (Iterator i = this->begin(); i != this->end(); ++i) {
                 s += String::toString(*i) + ", ";
             }
-            s = s.substr(0, -3);
+            if (size() > 0 )s = s.substr(0, -3);
             s += "}";
             return s;
         }

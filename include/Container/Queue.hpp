@@ -20,10 +20,6 @@
     #define QUEUEERR_ITERATOR_INVOKE
 #endif
 
-#include <cstring>
-#include <stdlib.h>
-#include <iostream>
-
 namespace jutil JUTIL_PUBLIC_ {
 
     extern "C" {
@@ -74,16 +70,8 @@ namespace jutil JUTIL_PUBLIC_ {
 
             @param q    The Queue to copy.
         */
-        Queue(const Type &q) : Type() {
-            reserve(q.size());
-            for (unsigned i = 0; i < q.size(); ++i) {
-                new (this->block + i) ValueType(q[i]);
-            }
-            this->count = q.size();
-        }
-
-        Queue(const ValueType &v) {
-            insert(v);
+        Queue(const Queue<T> &q) : Type() {
+            insert(q);
         }
 
         Queue(const ValueType &v, size_t num) : Type() {
@@ -104,7 +92,7 @@ namespace jutil JUTIL_PUBLIC_ {
             @param c    Number of elements to reserve.
             @return     Reference to calling object.
         */
-        Queue<T> &reserve(size_t c) {
+        Type &reserve(size_t c) {
             if (c > allocated) {
                 reallocate(c);
             }
@@ -118,16 +106,28 @@ namespace jutil JUTIL_PUBLIC_ {
             @return     Reference to calling object.
         */
         Type &erase(const size_t &n) JUTIL_OVERRIDE_ {
-            __jutil__queue__move(this->block + (n), this->block + n + 1, sizeof(ValueType) * (this->count - n));
-            --this->count;
+            if ((n + 1) < allocated) {
+                 __jutil__queue__move(this->block + (n), this->block + n + 1, sizeof(ValueType) * (this->count - n));
+            }
+            --(this->count);
+            return *this;
+        }
+
+        Type &trimAllocation() {
+            reallocate(this->count);
             return *this;
         }
 
 
-        Type &erase(Iterator it) {
+        template <
+            typename X,
+            typename = typename jutil::Enable<jutil::IsSame<X, T>::Value>::Type
+        >
+        Type &erase(X *it) {
             for (size_t i = 0; i < this->count; ++i) {
                 if (it == (this->block + i)) {
                     erase(i);
+                    --it;
                     break;
                 }
             }
@@ -141,11 +141,12 @@ namespace jutil JUTIL_PUBLIC_ {
             @return         Reference to calling object.
         */
         Type &insert(const ValueType &value) {
+            ValueType vC(value);
             if (allocated <= this->count) {
                 reallocate(this->count + 1);
             }
             ++(this->count);
-            new (this->block + (this->count - 1)) ValueType(value);
+            new (this->block + (this->count - 1)) ValueType(vC);
             return *this;
         }
 
@@ -160,11 +161,12 @@ namespace jutil JUTIL_PUBLIC_ {
             if (n == this->size()) {
                 return insert(value);
             } else {
+                ValueType vC(value);
                 if (allocated <= this->count) {
                     reallocate(this->count + 1);
                 }
                 __jutil__queue__move(this->block + n + 1, this->block + n, sizeof(ValueType) * (this->count - n));
-                new (this->block + n) ValueType(value);
+                new (this->block + n) ValueType(vC);
                 ++(this->count);
                 return *this;
             }
@@ -176,12 +178,12 @@ namespace jutil JUTIL_PUBLIC_ {
             @param q    Queue to be inserted.
             @return     Reference to calling object.
         */
-        Type &insert(const Type &q) {
-            reserve(this->count + q.size());
-            for (unsigned i = 0; i < q.size(); ++i) {
-                new (this->block + i + this->count) ValueType(q[i]);
+        Type &insert(const Queue<T> &q) {
+            reserve(this->count + q.count);
+            for (size_t i = 0; i < q.count; ++i) {
+                new (this->block + i + this->count) ValueType(*(q.block + i));
             }
-            this->count += q.size();
+            this->count += q.count;
             return *this;
         }
 
@@ -215,7 +217,7 @@ namespace jutil JUTIL_PUBLIC_ {
         */
         bool find(const ValueType &value, size_t *p = JUTIL_NULLPTR) JUTIL_C_ {
             for (JUTIL_INIT(size_t i, 0); i < this->count; ++i) {
-                if (__jutil__queue_compare(static_cast<const void*>(&value), static_cast<const void*>(this->block + i), sizeof(ValueType))) {
+                if (value ==  *(this->block + i)) {
                     if (p) *p = i;
                     return true;
                 }
@@ -232,7 +234,7 @@ namespace jutil JUTIL_PUBLIC_ {
         Queue<size_t> findAll(const ValueType &value) JUTIL_C_ {
             Queue<T> r;
             for (size_t i = 0; i < this->count; ++i) {
-                if (__jutil__queue_compare(static_cast<const void*>(&value), static_cast<const void*>(this->block + i), sizeof(ValueType))) {
+                if (value ==  *(this->block + i)) {
                     r.insert((*this)[i]);
                 }
             }
@@ -267,20 +269,9 @@ namespace jutil JUTIL_PUBLIC_ {
             @param amount   Number of elements to allocate.
         */
         void reallocate(size_t amount) {
-            if (allocated == 0) {
-                this->block = static_cast<ValueType*>(__jutil__queue__alloc(sizeof(ValueType) * amount));
-                allocated = amount;
-            } else if (amount > allocated) {
-                void *nBlock = __jutil__queue__realloc(static_cast<void*>(this->block), sizeof(ValueType) * amount);
-                if (nBlock) this->block = static_cast<ValueType*>(nBlock);
-                else {
-                    ValueType *nAlloc = static_cast<ValueType*>(__jutil__queue__alloc(sizeof(ValueType) * amount));
-                    __jutil__queue__copy(nAlloc, this->block, sizeof(ValueType) * allocated);
-                    __jutil__queue__destroy(this->block);
-                    this->block = nAlloc;
-                }
-                allocated = amount;
-            }
+            this->block = static_cast<ValueType*>(__jutil__queue__realloc(static_cast<void*>(this->block), sizeof(ValueType) * amount));
+            allocated = amount;
+            if (allocated < this->count) this->count = allocated;
         }
 
         /**
@@ -310,7 +301,7 @@ namespace jutil JUTIL_PUBLIC_ {
             @param q    The Queue to copy.
             @return     Reference to calling object.
         */
-        Queue<T> &operator=(const Type &q) {
+       Queue<T> &operator=(const Queue<T> &q) {
             free();
             insert(q);
             return *this;
@@ -382,9 +373,9 @@ namespace jutil JUTIL_PUBLIC_ {
                     insert(i);
                 }
             }
-            /*Queue(Queue<T> &&q) : allocated(0), BaseType() {
+            Queue(Queue<T> &&q) : allocated(0), BaseType() {
                 insert(move(q));
-            }*/
+            }
             Queue<T> &operator=(Queue<T> &&q) {
                 this->clear();
                 insert(move(q));
@@ -405,7 +396,7 @@ namespace jutil JUTIL_PUBLIC_ {
                 (this->block + i)->~ValueType();
             }
             __jutil__queue__destroy(this->block);
-            this->block = NULL;
+            this->block = JUTIL_NULLPTR;
             this->allocated = 0;
             this->count = 0;
         }

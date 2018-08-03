@@ -159,7 +159,7 @@ namespace jutil JUTIL_PUBLIC_ {
         #define NULL    nullptr
     #endif
     #define JUTIL_INIT(a, b)        a {b}
-    #define JUTIL_INIT_DEFAULT(a)   a {}
+    #define JUTIL_INIT_DEFAULT(a)   a ()
     #define JUTIL_GENERATE_TEMPLATE_ALIASES_(T) \
         typedef T&&         Rvalue;\
         typedef const T&&   const_Rvalue;

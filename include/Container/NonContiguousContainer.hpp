@@ -92,7 +92,7 @@ namespace jutil JUTIL_PUBLIC_ {
         typedef NonContiguousContainer<KeyType, ValueType, DerivedType, Iterator> Type;
 
         NonContiguousContainer() :
-            JUTIL_INIT(head, new Node(this, JUTIL_NULLPTR, JUTIL_NULLPTR, JUTIL_DEFAULT(ValueType), JUTIL_DEFAULT(KeyType), 0x02)),
+            JUTIL_INIT(head, new Node(this, JUTIL_NULLPTR, JUTIL_NULLPTR, {}, JUTIL_DEFAULT(KeyType), 0x02)),
             JUTIL_INIT(endNode, head),
             JUTIL_INIT(length, 0) {}
 
