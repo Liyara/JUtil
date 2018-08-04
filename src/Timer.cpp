@@ -18,7 +18,6 @@ namespace jutil JUTIL_PUBLIC_ {
     }
     Timer &Timer::operator=(const Timer &timer) {
         ct = timer.ct;
-        freq = timer.freq;
         return *this;
     }
     #ifdef JUTIL_CPP11
@@ -27,9 +26,7 @@ namespace jutil JUTIL_PUBLIC_ {
         }
         Timer &Timer::operator=(Timer &&timer) {
             ct = timer.ct;
-            freq = timer.freq;
             timer.ct = -1;
-            timer.freq = 1;
             return *this;
         }
     #endif
@@ -51,7 +48,6 @@ namespace jutil JUTIL_PUBLIC_ {
     long double Timer::stop(unsigned type) {
         long double r = get(type);
         ct = -1;
-        freq = 1;
         return r;
     }
     long double Timer::fastForward(long double t, unsigned type) {
