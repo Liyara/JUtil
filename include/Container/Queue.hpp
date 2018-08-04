@@ -106,10 +106,7 @@ namespace jutil JUTIL_PUBLIC_ {
             @return     Reference to calling object.
         */
         Type &erase(const size_t &n) JUTIL_OVERRIDE_ {
-            if ((n + 1) < allocated) {
-                 __jutil__queue__move(this->block + (n), this->block + n + 1, sizeof(ValueType) * (this->count - n));
-            }
-            --(this->count);
+            erase(this->block + n);
             return *this;
         }
 
@@ -124,13 +121,8 @@ namespace jutil JUTIL_PUBLIC_ {
             typename = typename jutil::Enable<jutil::IsSame<X, T>::Value>::Type
         >
         Type &erase(X *it) {
-            for (size_t i = 0; i < this->count; ++i) {
-                if (it == (this->block + i)) {
-                    erase(i);
-                    --it;
-                    break;
-                }
-            }
+            if (it + 1 != this->end()) __jutil__queue__move(it, it + 1, sizeof(ValueType) * (this->end() - (it + 1)));
+            --(this->count);
             return *this;
         }
 
@@ -194,13 +186,7 @@ namespace jutil JUTIL_PUBLIC_ {
             @param n    Index to insert at.
             @return     Reference to calling object.
         */
-        template <
-            typename U
-            #ifdef JUTIL_CPP11
-            , typename = typename Enable<Convert<U, T>::Value>::Type
-            #endif
-        >
-        Type &insert(const Queue<U> &q, const size_t &n) {
+        Type &insert(const Queue<T> &q, const size_t &n) {
             reserve(this->count + q.size());
             for (Iterator i = q.begin(); i != q.end(); ++i) {
                 insert(static_cast<T>(*i), n);

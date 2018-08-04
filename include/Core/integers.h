@@ -35,7 +35,7 @@ typedef unsigned long long   uint_fast64_t;
 
 #ifndef _UINTPTR_T_DEFINED
     #define _UINTPTR_T_DEFINED
-    typedef unsigned int uintptr_t;
+    typedef long long unsigned int uintptr_t;
 #endif
 
 typedef long long  intmax_t;

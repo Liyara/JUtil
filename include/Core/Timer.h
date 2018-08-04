@@ -44,9 +44,17 @@ namespace jutil JUTIL_PUBLIC_ {
 
         void start();
 
-        long double get(unsigned type = SECONDS);
+        long double get(unsigned = SECONDS);
 
-        long double stop(unsigned type = SECONDS);
+        long double fastForward(long double, unsigned = SECONDS);
+
+        long double rewind(long double, unsigned = SECONDS);
+
+        long double stop(unsigned = SECONDS);
+
+        void set(long double, unsigned = SECONDS);
+
+        long double restart(unsigned = SECONDS);
 
     private:
         long long ct;
