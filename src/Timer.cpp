@@ -3,7 +3,7 @@
 #include <windows.h>
 #include "IO/IO.h"
 
-#define NANOS_PER_SECOND 1000000000.L
+#define NANOS_PER_SECOND 0x3B9ACA00.p0L
 
 namespace jutil JUTIL_PUBLIC_ {
 

@@ -43,7 +43,7 @@ namespace jutil JUTIL_PUBLIC_ {
         struct JUTIL_PRIVATE_ __NonContiguousContainerInternalNode;
     #endif
     #ifndef JUTIL_QUEUE_H
-        template <typename>
+        template <typename, typename>
         class JUTIL_PUBLIC_ Queue;
     #endif
     #ifndef JUTIL_LIST_H

@@ -218,13 +218,13 @@ namespace jutil JUTIL_PUBLIC_ {
         return s;
     }
 
-    template <typename T>
-    jutil::Queue<T>::operator const jutil::String() const {
+    template <typename T, typename A>
+    jutil::Queue<T, A>::operator const jutil::String() const {
         return qAsString(*this);
     }
 
-    template <typename T>
-    jutil::Queue<T>::operator jutil::String() {
+    template <typename T, typename A>
+    jutil::Queue<T, A>::operator jutil::String() {
         return qAsString(*this);
     }
 }

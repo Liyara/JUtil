@@ -56,9 +56,9 @@ namespace jutil JUTIL_PUBLIC_ {
         ValueType *block;
         size_t count;
         void reset() {
-            free();
+            destroy();
         }
-        virtual void free() = 0;
+        virtual void destroy() = 0;
     };
 }
 
