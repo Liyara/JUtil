@@ -20,7 +20,7 @@ namespace jutil {
     char readCharacter() {
         char c = 0;
         #ifdef _WIN32
-            HANDLE conin = CreateFileW(L"CONIN$", GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr, OPEN_EXISTING, 0, nullptr);
+            HANDLE conin = CreateFileW(L"CONIN$", GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, JUTIL_NULLPTR, OPEN_EXISTING, 0, JUTIL_NULLPTR);
             DWORD mode, cc;
             GetConsoleMode(conin, &mode);
             SetConsoleMode(conin, mode & ~(ENABLE_LINE_INPUT | ENABLE_ECHO_INPUT));

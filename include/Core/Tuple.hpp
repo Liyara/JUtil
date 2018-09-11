@@ -4,10 +4,7 @@
 #include "Core/Macro.h"
 #include "Traits/Traits.hpp"
 
-#ifndef JUTIL_CPP11
-    #error The "Tuple.hpp" file in the JUtil library requires C++11 to operate.\
-    Please enable C++11 in your compilers settings, or uninclude "Tuple.hpp".
-#endif
+#ifdef JUTIL_CPP11
 
 namespace jutil JUTIL_PUBLIC_ {
 
@@ -101,5 +98,7 @@ namespace jutil JUTIL_PUBLIC_ {
         _forEach(t, f, IndexSetGenerator<sizeof...(N)>());
     }
 }
+
+#endif
 
 #endif // JUTIL_TUPLE_H

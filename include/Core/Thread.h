@@ -2,6 +2,9 @@
 #define JUTIL_THREAD_H
 
 #include "Core/Macro.h"
+
+#ifdef JUTIL_CPP11
+
 #include "Core/NonCopyable.h"
 #include "Core/integers.h"
 #include <Core/Tuple.hpp>
@@ -29,8 +32,8 @@ namespace jutil JUTIL_PUBLIC_ {
         static void lock();
         static void unlock();
 
-        static void pause(long = 0);
-        static void unpause();
+        bool isPaused() const;
+
     private:
         uintptr_t thread;
 
@@ -38,12 +41,18 @@ namespace jutil JUTIL_PUBLIC_ {
 
         void *cond;
         static void *pcond, *mut;
-        bool shoudlPause;
+        bool shoudlPause, paused;
         long pauseLength;
     protected:
         virtual void main() = 0;
         void yield();
+        static void pause(unsigned long = 0);
+
+        static void sync(Thread*);
+
     };
 }
+
+#endif
 
 #endif // JUTIL_THREAD_H

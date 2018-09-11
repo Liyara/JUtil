@@ -21,18 +21,20 @@ namespace jutil {
         internalValue = o.internalValue;
         return *this;
     }
-    RNG::RNG(RNG &&o) {
-        (*this) = jutil::move(o);
-    }
-    RNG &RNG::operator=(RNG &&o) {
-        floor = o.floor;
-        ceiling = o.ceiling;
-        internalValue = o.internalValue;
-        o.floor = 0;
-        o.ceiling = 0;
-        o.internalValue = 0;
-        return *this;
-    }
+    #ifdef JUTIL_CPP11
+        RNG::RNG(RNG &&o) {
+            (*this) = jutil::move(o);
+        }
+        RNG &RNG::operator=(RNG &&o) {
+            floor = o.floor;
+            ceiling = o.ceiling;
+            internalValue = o.internalValue;
+            o.floor = 0;
+            o.ceiling = 0;
+            o.internalValue = 0;
+            return *this;
+        }
+    #endif
 
     void RNG::setFloor(long double f) {
         floor = f;

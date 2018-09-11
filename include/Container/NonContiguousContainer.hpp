@@ -49,7 +49,7 @@ namespace jutil JUTIL_PUBLIC_ {
         typedef K KeyType;
         typedef T ValueType;
 
-        JUTIL_CX_ JUTIL_NCCIN(ContainerType * const c, Type *p, Type *n, const ValueType &v, const KeyType &k, unsigned char &&f  = 0x00) JUTIL_N_ :
+        JUTIL_CX_ JUTIL_NCCIN(ContainerType * const c, Type *p, Type *n, const ValueType &v, const KeyType &k, unsigned char JUTIL_RVAL_ f  = 0x00) JUTIL_N_ :
             JUTIL_INIT(container, c),
             JUTIL_INIT(next, n),
             JUTIL_INIT(previous, p),
@@ -92,7 +92,7 @@ namespace jutil JUTIL_PUBLIC_ {
         typedef NonContiguousContainer<KeyType, ValueType, DerivedType, Iterator> Type;
 
         NonContiguousContainer() :
-            JUTIL_INIT(head, new Node(this, JUTIL_NULLPTR, JUTIL_NULLPTR, {}, JUTIL_DEFAULT(KeyType), 0x02)),
+            JUTIL_INIT(head, new Node(this, JUTIL_NULLPTR, JUTIL_NULLPTR, JUTIL_DEFAULT(ValueType), JUTIL_DEFAULT(KeyType), 0x02)),
             JUTIL_INIT(endNode, head),
             JUTIL_INIT(length, 0) {}
 
@@ -168,7 +168,7 @@ namespace jutil JUTIL_PUBLIC_ {
                 }
             }
             length = 0;
-            head = nullptr;
+            head = NULL;
             return *JUTIL_CAST_DERIVED;
         }
 

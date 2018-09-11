@@ -1,6 +1,7 @@
 #include "Container/Queue.hpp"
 #include <cstring>
 #include <stdlib.h>
+#include "Core/RNG.h"
 
 namespace jutil {
 
@@ -14,4 +15,7 @@ namespace jutil {
         if (p) ::free(p);
         return p;
     }
+    __QueueInternalAllocator::~__QueueInternalAllocator() {}
+
+
 }

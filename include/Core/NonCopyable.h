@@ -18,7 +18,6 @@ namespace jutil {
         private:
             NonCopyable(const NonCopyable&);
             NonCopyable &operator=(const NonCopyable&);
-            NonCopyable() {}
         #endif
     };
 }

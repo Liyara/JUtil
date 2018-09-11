@@ -1,6 +1,8 @@
 #ifndef JUTIL_VALIDATOR_H
 #define JUTIL_VALIDATOR_H
 
+#if __cplusplus >= 201103L
+
 namespace jutil {
     template <bool b, typename T>
     struct JUTIL_PUBLIC_ Enable {};
@@ -29,5 +31,7 @@ namespace jutil {
     struct IsSame<T, T> : TrueType {};
 
 }
+
+#endif
 
 #endif // JUTIL_VALIDATOR_H

@@ -3,10 +3,7 @@
 
 #include "Core/Macro.h"
 
-#ifndef JUTIL_CPP11
-    #error The "Traits.hpp" file in the JUtil library requires C++11 to operate.\
-    Please enable C++11 in your compilers settings, or uninclude "Traits.hpp".
-#endif
+#ifdef JUTIL_CPP11
 
 #include "TypeManipulators.hpp"
 #include "Validator.hpp"
@@ -26,5 +23,7 @@
 #include "IsInteger.hpp"
 
 namespace jutil JUTIL_PUBLIC_ {}
+
+#endif
 
 #endif // JUTIL_TRAITS_H

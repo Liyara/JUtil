@@ -1,6 +1,8 @@
 #ifndef JUTILIS_ARITHMATIC_H
 #define JUTILIS_ARITHMATIC_H
 
+#if __cplusplus >= 201103L
+
 #include "Validator.hpp"
 #include "Convert.hpp"
 #include "declval.hpp"
@@ -32,5 +34,7 @@ namespace jutil {
         >::Type
     > : TrueType {};
 }
+
+#endif
 
 #endif // JUTILIS_ARITHMATIC_H

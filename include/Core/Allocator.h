@@ -15,6 +15,8 @@ namespace jutil JUTIL_PUBLIC_ {
         virtual bool move(void*, const void*, size_t);
         virtual bool copy(void*, const void*, size_t);
 
+        virtual ~Allocator();
+
     };
 }
 

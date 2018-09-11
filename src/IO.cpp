@@ -42,7 +42,7 @@ namespace jutil JUTIL_PRIVATE_ {
             fputs(msgcstr, stderr);
         }
     }
-    String io_interface::In::scan() JUTIL_N_ {
+    String io_interface::In::scan() JUTIL_CN_ {
         if (this == &in) {
             char cstr[BUFFER_LENGTH];
             scanf("%s", cstr);
@@ -87,24 +87,20 @@ namespace jutil JUTIL_PRIVATE_ {
         modeStr.array(modecstr);
         file = fopen(filecstr, modecstr);
     }
-    String File::scan() JUTIL_N_ {
+
+    String File::scan() JUTIL_CN_ {
         if (mode != WRITE && mode != APPEND && mode != OVERWRITE) {
             char buf[BUFFER_LENGTH];
             if (fgets(buf, sizeof(buf), file)) {
-                fseek(file, 1, SEEK_CUR);
-                if (feof(file)) {
-                    fileEnd = true;
-                }
-                fseek(file, -1, SEEK_CUR);
                 return String(buf);
             } else {
-                fileEnd = true;
                 return String("\0");
             }
         } else {
             return String();
         }
     }
+
     void File::put(const String &data) JUTIL_CN_ {
         if (mode != READ) {
             char dat[data.size() + 1];
@@ -116,7 +112,8 @@ namespace jutil JUTIL_PRIVATE_ {
         fclose(file);
     }
     bool File::eof() JUTIL_CN_ {
-        return fileEnd;
+        int c = ungetc(fgetc(file), file);
+        return c == EOF;
     }
     File &File::setPosition(int p) JUTIL_N_ {
         if (p >= 0) {

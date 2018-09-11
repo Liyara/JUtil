@@ -13,7 +13,10 @@ namespace jutil JUTIL_PUBLIC_ {
         QueryPerformanceFrequency(&i);
         freq = static_cast<long double>(i.QuadPart) / NANOS_PER_SECOND;
     }
-    Timer::Timer(const Timer &timer) : Timer() {
+    Timer::Timer(const Timer &timer) : ct(-1) {
+        LARGE_INTEGER i;
+        QueryPerformanceFrequency(&i);
+        freq = static_cast<long double>(i.QuadPart) / NANOS_PER_SECOND;
         *this = timer;
     }
     Timer &Timer::operator=(const Timer &timer) {

@@ -1,10 +1,7 @@
 #ifndef JUTIL_PAIR_H
 #define JUTIL_PAIR_H
 
-#ifndef JUTIL_CPP11
-    #error The "Pair.hpp" file in the JUtil library requires C++11 to operate.\
-    Please enable C++11 in your compilers settings, or uninclude "Pair.hpp".
-#endif
+#ifdef JUTIL_CPP11
 
 #include "Tuple.hpp"
 #include "String.h"
@@ -57,5 +54,7 @@ namespace jutil JUTIL_PUBLIC_ {
         virtual ~Pair() {}
     };
 }
+
+#endif
 
 #endif // JUTIL_PAIR_H

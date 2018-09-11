@@ -29,7 +29,7 @@
     The following JUtil library files are included here,
     either directly or through an include chain:
 
-    Macro.h, IO.h, String.h, List.hpp, Error.h, MemoryBlock.h, Pair <C++11>, Tuple.hpp <C++11>, Traits.hpp <C++11>
+    Macro.h, IO.h, String.h, Error.h, MemoryBlock.h, Pair <C++11>, Tuple.hpp <C++11>, Traits.hpp <C++11>
 */
 #include "Macro.h"
 #include "NonCopyable.h"
@@ -41,7 +41,6 @@
     #include "Core/Thread.h"
     #include "Core/RNG.h"
 #endif
-#include "Container/List.hpp"
 #include "Core/Timer.h"
 
 namespace jutil JUTIL_PUBLIC_ {

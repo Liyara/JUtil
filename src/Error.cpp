@@ -1,11 +1,10 @@
 #include "Core/Error.h"
 #include "IO/IO.h"
-#include "Container/List.hpp"
 #include <cstdlib>
 
 namespace jutil JUTIL_PRIVATE_ {
 
-    List<Error*> stack;
+    Queue<Error*> stack;
 
     Error &Error::write(int o, int i, const char *m, const char *f) JUTIL_N_ {
         stack.insert(new Error(o, i, m, f));
@@ -19,21 +18,21 @@ namespace jutil JUTIL_PRIVATE_ {
         return stack.size();
     }
     bool Error::has(Error *e) JUTIL_N_ {
-        return stack.find(e, JUTIL_NULLPTR);
+        return stack.find(e);
     }
     void Error::handle() JUTIL_N_ {
         if (!silenced) {
-            jutil::err << "ERROR [" << outer << "." << inner <<  "]: " << msg << " at " << func << jutil::endl;
+            jutil::err << "ERROR [" << outer << "." << inner <<  "]: \"" << msg << "\"   (at " << func << ")" << jutil::endl;
         }
         destroySelf();
     }
     void Error::handleStack() JUTIL_N_ {
-        for (List<Error*>::Iterator it = stack.begin(); it != stack.end(); ++it) {
+        for (Queue<Error*>::Iterator it = stack.begin(); it != stack.end(); ++it) {
             (*it)->handle();
         }
     }
     void Error::destroyStack() JUTIL_N_ {
-        for (List<Error*>::Iterator it = stack.begin(); it != stack.end(); ++it) {
+        for (Queue<Error*>::Iterator it = stack.begin(); it != stack.end(); ++it) {
             (*it)->destroySelf();
         }
     }

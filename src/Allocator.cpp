@@ -10,4 +10,6 @@ namespace jutil {
     bool Allocator::copy(void *d, const void *s, size_t c) {
         return !memcpy_s(d, c, s, c);
     }
+
+    Allocator::~Allocator() {}
 }

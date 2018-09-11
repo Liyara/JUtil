@@ -1,6 +1,8 @@
 #ifndef JUTIL_CONVERT_H
 #define JUTIL_CONVERT_H
 
+#if __cplusplus >= 201103L
+
 #include "declval.hpp"
 #include "Validator.hpp"
 
@@ -29,4 +31,7 @@ namespace jutil {
         enum {Value = (sizeof(test<T, T2>(0)) == sizeof(Valid))};
     };
 }
+
+#endif
+
 #endif // JUTIL_CONVERT_H

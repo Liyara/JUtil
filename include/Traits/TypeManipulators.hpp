@@ -1,6 +1,8 @@
 #ifndef JUTIL_TYPE_MANIPULATORS_H
 #define JUTIL_TYPE_MANIPULATORS_H
 
+#if __cplusplus >= 201103L
+
 namespace jutil {
     template <typename T>
     struct RemoveReference      {typedef T Type;};
@@ -159,4 +161,7 @@ namespace jutil {
     template<>
     struct IndexSetGenerator<1> : IndexSet<0> {};
 }
+
+#endif
+
 #endif // JUTIL_TYPE_MANIPULATORS_H

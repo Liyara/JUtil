@@ -1,6 +1,8 @@
 #ifndef JUTIL_IS_INTEGER_H
 #define JUTIL_IS_INTEGER_H
 
+#if __cplusplus >= 201103L
+
 #include "Validator.hpp"
 #include "BaseOf.hpp"
 #include "IsFloatingPoint.hpp"
@@ -21,5 +23,7 @@ namespace jutil {
     struct IsInteger : Validator<bool, BaseOf<Integer<T>, T>::Value || (IsArithmatic<T>::Value && !(IsFloatingPoint<T>::Value))> {};
 
 }
+
+#endif
 
 #endif // JUTIL_IS_INTEGER_H

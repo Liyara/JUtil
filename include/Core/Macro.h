@@ -46,12 +46,6 @@ namespace jutil JUTIL_PUBLIC_ {
         template <typename, typename>
         class JUTIL_PUBLIC_ Queue;
     #endif
-    #ifndef JUTIL_LIST_H
-        template <typename>
-        class JUTIL_PRIVATE_ __ListInternalIterator;
-        template <typename>
-        class JUTIL_PUBLIC_ List;
-    #endif
     #ifndef JUTIL_MAP_H
         template<typename, typename>
         class JUTIL_PRIVATE_ __MapInternalIterator;
@@ -155,6 +149,7 @@ namespace jutil JUTIL_PUBLIC_ {
     #define JUTIL_CO_       JUTIL__ JUTIL_C_ JUTIL_OVERRIDE_
     #define JUTIL_CNO_      JUTIL__ JUTIL_CN_ JUTIL_OVERRIDE_
     #define JUTIL_NO_       JUTIL__ JUTIL_N_ JUTIL_OVERRIDE_
+    #define JUTIL_RVAL_     JUTIL__ &&
     #ifndef NULL
         #define NULL    nullptr
     #endif
@@ -180,6 +175,7 @@ namespace jutil JUTIL_PUBLIC_ {
     #define JUTIL_CNO_      JUTIL__ JUTIL_C_
     #define JUTIL_NO_       JUTIL__
     #define JUTIL_EXPL_CX_  JUTIL__ JUTIL_C_
+    #define JUTIL_RVAL_     JUTIL__
     #ifndef NULL
         #define NULL    0
     #endif
@@ -229,14 +225,20 @@ namespace jutil JUTIL_PUBLIC_ {
 
 
 //placement-new defined here to avoid including <new>
-#ifndef _NEW
-#define _NEW
-    inline void* operator new(size_t, void* dat) JUTIL_N_ {
-        return dat;
-    }
-    inline void* operator new[](size_t, void* dat) JUTIL_N_ {
-        return dat;
-    }
+
+#ifdef JUTIL_CPP11
+    #ifndef _NEW
+    #define _NEW
+        inline void* operator new(size_t, void* dat) JUTIL_N_ {
+            return dat;
+        }
+        inline void* operator new[](size_t, void* dat) JUTIL_N_ {
+            return dat;
+        }
+    #endif
+    #define JUTIL_NEW(mem, val) new (mem) val
+#else
+    #define JUTIL_NEW(mem, val) *(mem) = val
 #endif
 
 #endif // JUTIL_MACRO_H

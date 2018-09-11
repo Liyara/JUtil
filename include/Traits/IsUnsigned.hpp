@@ -1,6 +1,8 @@
 #ifndef JUTIL_IS_UNSIGNED_H
 #define JUTIL_IS_UNSIGNED_H
 
+#if __cplusplus >= 201103L
+
 #include "Validator.hpp"
 #include "IsArithmatic.hpp"
 
@@ -10,5 +12,7 @@ namespace jutil {
     struct IsUnsigned : Validator<bool, jutil::IsArithmatic<T>::Value && !(static_cast<T>(-1) < static_cast<T>(0))>::Type {};
 
 }
+
+#endif
 
 #endif // JUTIL_IS_UNSIGNED_H

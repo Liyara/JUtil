@@ -1,6 +1,10 @@
 #ifndef JUTIL_MAP_H
 #define JUTIL_MAP_H
 
+#include "Core/Macro.h"
+
+#ifdef JUTIL_CPP11
+
 #include "Core/Pair.hpp"
 #include "NonContiguousContainer.hpp"
 
@@ -199,5 +203,7 @@ namespace jutil JUTIL_PUBLIC_ {
         virtual ~Map() {}
     };
 }
+
+#endif
 
 #endif // MAP_H

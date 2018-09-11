@@ -1,6 +1,8 @@
 #ifndef JUTIL_DECLVAL_H
 #define JUTIL_DECLVAL_H
 
+#if __cplusplus >= 201103L
+
 #include "Traits/TypeManipulators.hpp"
 
 namespace jutil {
@@ -15,5 +17,7 @@ namespace jutil {
         return JUTIL_Declval_<T>::rType();
     }
 }
+
+#endif
 
 #endif // JUTIL_DECLVAL_H

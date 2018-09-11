@@ -1,6 +1,8 @@
 #ifndef JUTIL_BASE_OF_H
 #define JUTIL_BASE_OF_H
 
+#if __cplusplus >= 201103L
+
 #include "Validator.hpp"
 
 namespace jutil {
@@ -24,5 +26,7 @@ namespace jutil {
 
     };
 }
+
+#endif
 
 #endif // JUTIL_BASE_OF_H
