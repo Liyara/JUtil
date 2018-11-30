@@ -213,6 +213,23 @@ namespace jutil JUTIL_PRIVATE_ {
 
     String::~String() JUTIL_N_ {clear();}
 
+    Queue<String> String::split(char delim) JUTIL_C_ {
+        return split(String(delim));
+    }
+
+    Queue<String> String::split(const String &delim) JUTIL_C_ {
+        size_t start = 0;
+        Queue<String> r;
+        for (size_t i = 0; i < this->size() - (delim.size() - 1); ++i) {
+            if (substr(i, i + (delim.size() - 1)) == delim) {
+                if (i > start) r.insert(substr(start, i - 1));
+                start = i + delim.size();
+            }
+        }
+        if (start < this->size()) r.insert(substr(start));
+        return r;
+    }
+
     void String::array(char arr[]) JUTIL_CN_ {
         size_t i = 0;
         for (auto &it: *this) {

@@ -119,7 +119,7 @@ namespace jutil JUTIL_PUBLIC_ {
             return *this;
         }
 
-        bool find(K k, T v) JUTIL_C_ {
+        bool find(const K &k, T v) JUTIL_C_ {
             for (auto &it: *this) {
                 if ((&it == k) && (*it == v)) {
                     return true;
@@ -128,7 +128,7 @@ namespace jutil JUTIL_PUBLIC_ {
             return false;
         }
 
-        bool findByKey(K k, T *t = JUTIL_NULLPTR) JUTIL_C_ {
+        bool findByKey(const K &k, T *t = JUTIL_NULLPTR) JUTIL_C_ {
             for (auto it = this->begin(); it != this->end(); ++it) {
                 if (&it == k) {
                     if (t) {
@@ -140,7 +140,16 @@ namespace jutil JUTIL_PUBLIC_ {
             return false;
         }
 
-        bool findByValue(T v, K *k = JUTIL_NULLPTR) JUTIL_C_ {
+        const T &obtainKey(const K &k) {
+            T *val = JUTIL_NULLPTR;
+            if (!findByKey(k, val)) {
+                insert(k, JUTIL_DEFAULT(T));
+                val = &((*this)[k]);
+            }
+            return *val;
+        }
+
+        bool findByValue(const T &v, K *k = JUTIL_NULLPTR) JUTIL_C_ {
             for (auto &it: *this) {
                 if (*it == v) {
                     if (k) {

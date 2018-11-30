@@ -1,6 +1,7 @@
 #include "Core/RNG.h"
 #include "Traits/TypeManipulators.hpp"
 #include <time.h>
+#include <windows.h>
 
 #define JUTIL_RNG_MAX __LDBL_MAX__
 #define JUTIL_RNG_MIN __LDBL_MIN__
@@ -9,7 +10,9 @@
 namespace jutil {
     RNG::RNG() : RNG(JUTIL_RNG_MIN + 1, JUTIL_RNG_MAX - 1) {}
     RNG::RNG(long double f, long double c) : floor(f), ceiling(c) {
-        internalValue = time(0);
+        _time = (void*) new LARGE_INTEGER;
+        QueryPerformanceCounter((LARGE_INTEGER*)_time);
+        internalValue = ((LARGE_INTEGER*)_time)->QuadPart;
     }
 
     RNG::RNG(const RNG &o) {
@@ -45,9 +48,10 @@ namespace jutil {
     }
 
     void RNG::shake() {
+        QueryPerformanceCounter((LARGE_INTEGER*)_time);
         internalValue ^= internalValue >> 12;
         internalValue ^= internalValue << 25;
         internalValue ^= internalValue >> 27;
-        internalValue *= _JUTIL_RNG_INVERTIBLE_MULTIPLIER;
+        internalValue *= _JUTIL_RNG_INVERTIBLE_MULTIPLIER * ((LARGE_INTEGER*)_time)->QuadPart;
     }
 }

@@ -146,6 +146,9 @@ namespace jutil JUTIL_PUBLIC_ {
         String lowerCase() JUTIL_CN_;
         String toggleCase() JUTIL_CN_;
 
+        Queue<String> split(char) JUTIL_C_;
+        Queue<String> split(const String &) JUTIL_C_;
+
         virtual ~String() JUTIL_N_;
 
         /**

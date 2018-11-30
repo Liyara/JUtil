@@ -217,8 +217,7 @@ namespace jutil JUTIL_PUBLIC_ {
         Type &erase(const size_t &n) JUTIL_OVERRIDE_ {
             if (n >= this->count) {
                 QUEUEERR_INDEX_INVOKE;
-            }
-            erase(this->block + n);
+            } else erase(this->block + n);
             return *this;
         }
 
@@ -230,9 +229,13 @@ namespace jutil JUTIL_PUBLIC_ {
 
         JUTIL_NULL_PROTECTOR(T, X)
         Type &erase(X *it) {
-            if (it > this->block + this->count) QUEUEERR_ITERATOR_INVOKE;
-            if (it + 1 != this->end()) this->move(it, it + 1, sizeof(ValueType) * (this->end() - (it + 1)));
-            --(this->count);
+            if (it > this->block + this->count) {
+                QUEUEERR_ITERATOR_INVOKE;
+            } else {
+                it->~ValueType();
+                if (it + 1 != this->end()) this->move(it, it + 1, sizeof(ValueType) * (this->end() - (it + 1)));
+                --(this->count);
+            }
             return *this;
         }
 
@@ -258,18 +261,21 @@ namespace jutil JUTIL_PUBLIC_ {
             @return         Reference to calling object.
         */
         Type &insert(const ValueType &value, const size_t &n) JUTIL_OVERRIDE_ {
-            if (n > this->count) QUEUEERR_INDEX_INVOKE;
-            if (n == this->count) return insert(value);
-            else {
-                ValueType vC(value);
-                if (allocated <= this->count) {
-                    reallocate(this->count + 1);
+            if (n > this->count) {
+                QUEUEERR_INDEX_INVOKE;
+            } else {
+                if (n == this->count) return insert(value);
+                else {
+                    ValueType vC(value);
+                    if (allocated <= this->count) {
+                        reallocate(this->count + 1);
+                    }
+                    this->move(this->block + n + 1, this->block + n, sizeof(ValueType) * (this->count - n));
+                    JUTIL_NEW(this->block + n, ValueType(vC));
+                    ++(this->count);
                 }
-                this->move(this->block + n + 1, this->block + n, sizeof(ValueType) * (this->count - n));
-                JUTIL_NEW(this->block + n, ValueType(vC));
-                ++(this->count);
-                return *this;
             }
+            return *this;
         }
 
         /**
@@ -306,11 +312,14 @@ namespace jutil JUTIL_PUBLIC_ {
             @return         Wheather or not a matching element was found.
         */
         bool find(const ValueType &value, size_t start, size_t end, size_t *p = JUTIL_NULLPTR) JUTIL_C_ {
-            if (start >= this->count || end > this->count) QUEUEERR_INDEX_INVOKE;
-            for (JUTIL_INIT(size_t i, start); i < end; ++i) {
-                if (value ==  *(this->block + i)) {
-                    if (p) *p = i;
-                    return true;
+            if (start >= this->count || end > this->count) {
+                QUEUEERR_INDEX_INVOKE;
+            } else {
+                for (JUTIL_INIT(size_t i, start); i < end; ++i) {
+                    if (value ==  *(this->block + i)) {
+                        if (p) *p = i;
+                        return true;
+                    }
                 }
             }
             return false;
@@ -325,22 +334,25 @@ namespace jutil JUTIL_PUBLIC_ {
         }
 
         bool find(const Type &q, size_t start, size_t end, size_t start2, size_t end2, size_t *p = JUTIL_NULLPTR) JUTIL_C_ {
-            if (start >= this->count || end > this->count) QUEUEERR_INDEX_INVOKE;
-            size_t qIndex;
-            bool confirm;
-            for (JUTIL_INIT(size_t i, start); i < end; ++i) {
-                qIndex = 0;
-                confirm = true;
-                for (JUTIL_INIT(size_t ii, start2); ii < end2; ++ii) {
-                    if (i + qIndex >= this->count || *(this->block + i + qIndex) != q[ii]) {
-                        confirm = false;
-                        break;
+            if (start >= this->count || end > this->count) {
+                QUEUEERR_INDEX_INVOKE;
+            } else {
+                size_t qIndex;
+                bool confirm;
+                for (JUTIL_INIT(size_t i, start); i < end; ++i) {
+                    qIndex = 0;
+                    confirm = true;
+                    for (JUTIL_INIT(size_t ii, start2); ii < end2; ++ii) {
+                        if (i + qIndex >= this->count || *(this->block + i + qIndex) != q[ii]) {
+                            confirm = false;
+                            break;
+                        }
+                        ++qIndex;
                     }
-                    ++qIndex;
-                }
-                if (confirm) {
-                    if (p) *p = i;
-                    return true;
+                    if (confirm) {
+                        if (p) *p = i;
+                        return true;
+                    }
                 }
             }
             return false;
@@ -363,23 +375,29 @@ namespace jutil JUTIL_PUBLIC_ {
         }
 
         bool replace(const ValueType &value, const ValueType &value2, size_t start, size_t end) {
-            if (start >= this->count || end > this->count) QUEUEERR_INDEX_INVOKE;
             bool found = false;
-            for (JUTIL_INIT(size_t i, start); i < end; ++i) {
-                if (value ==  *(this->block + i)) {
-                    new (this->block + i) ValueType(value2);
-                    found = true;
+            if (start >= this->count || end > this->count) {
+                QUEUEERR_INDEX_INVOKE;
+            } else {
+                for (JUTIL_INIT(size_t i, start); i < end; ++i) {
+                    if (value ==  *(this->block + i)) {
+                        new (this->block + i) ValueType(value2);
+                        found = true;
+                    }
                 }
             }
             return found;
         }
 
         bool replaceFirst(const ValueType &value, const ValueType &value2, size_t start, size_t end) {
-            if (start >= this->count || end > this->count) QUEUEERR_INDEX_INVOKE;
-            for (JUTIL_INIT(size_t i, start); i < end; ++i) {
-                if (value ==  *(this->block + i)) {
-                    new (this->block + i) ValueType(value2);
-                    return true;
+            if (start >= this->count || end > this->count) {
+                QUEUEERR_INDEX_INVOKE;
+            } else {
+                for (JUTIL_INIT(size_t i, start); i < end; ++i) {
+                    if (value ==  *(this->block + i)) {
+                        new (this->block + i) ValueType(value2);
+                        return true;
+                    }
                 }
             }
             return false;
@@ -402,34 +420,38 @@ namespace jutil JUTIL_PUBLIC_ {
         }
 
         bool replace(const Type &value, const Type &value2, size_t start, size_t end, size_t start2, size_t end2) {
-            if (start >= this->count || end > this->count) QUEUEERR_INDEX_INVOKE;
-            size_t qIndex;
-            bool confirm;
-            Queue<size_t, Allocator> indices;
-            for (JUTIL_INIT(size_t i, start); i < end; ++i) {
-                qIndex = 0;
-                confirm = true;
-                for (JUTIL_INIT(size_t ii, start2); ii < end2; ++ii) {
-                    if (i + qIndex >= this->count || *(this->block + i + qIndex) != value[ii]) {
-                        confirm = false;
-                        break;
+            if (start >= this->count || end > this->count) {
+                QUEUEERR_INDEX_INVOKE;
+            } else {
+                size_t qIndex;
+                bool confirm;
+                Queue<size_t, Allocator> indices;
+                for (JUTIL_INIT(size_t i, start); i < end; ++i) {
+                    qIndex = 0;
+                    confirm = true;
+                    for (JUTIL_INIT(size_t ii, start2); ii < end2; ++ii) {
+                        if (i + qIndex >= this->count || *(this->block + i + qIndex) != value[ii]) {
+                            confirm = false;
+                            break;
+                        }
+                        ++qIndex;
                     }
-                    ++qIndex;
+                    if (confirm) indices.insert(i);
                 }
-                if (confirm) indices.insert(i);
+                size_t cursor = 0;
+                for (size_t i = 0; i < indices.size(); ++i) {
+                    for (auto &_: value) {(void)_; erase(indices[i] - cursor);}
+                    indices[i] -= cursor;
+                    cursor += value.size();
+                }
+                cursor = 0;
+                for (size_t i = 0; i < indices.size(); ++i) {
+                    insert(value2, indices[i] + cursor);
+                    cursor += value2.size();
+                }
+                return indices.size();
             }
-            size_t cursor = 0;
-            for (size_t i = 0; i < indices.size(); ++i) {
-                for (auto &_: value) {(void)_; erase(indices[i] - cursor);}
-                indices[i] -= cursor;
-                cursor += value.size();
-            }
-            cursor = 0;
-            for (size_t i = 0; i < indices.size(); ++i) {
-                insert(value2, indices[i] + cursor);
-                cursor += value2.size();
-            }
-            return indices.size();
+            return false;
         }
 
         bool replace(const Type &value, const Type &value2, size_t start, size_t end, size_t start2 = 0) {
@@ -441,23 +463,26 @@ namespace jutil JUTIL_PUBLIC_ {
         }
 
         bool replaceFirst(const Type &value, const Type &value2, size_t start, size_t end, size_t start2, size_t end2) {
-            if (start >= this->count || end > this->count) QUEUEERR_INDEX_INVOKE;
-            size_t qIndex;
-            bool confirm;
-            for (JUTIL_INIT(size_t i, start); i < end; ++i) {
-                qIndex = 0;
-                confirm = true;
-                for (JUTIL_INIT(size_t ii, start2); ii < end2; ++ii) {
-                    if (i + qIndex >= this->count || *(this->block + i + qIndex) != value[ii]) {
-                        confirm = false;
-                        break;
+            if (start >= this->count || end > this->count) {
+                QUEUEERR_INDEX_INVOKE;
+            } else {
+                size_t qIndex;
+                bool confirm;
+                for (JUTIL_INIT(size_t i, start); i < end; ++i) {
+                    qIndex = 0;
+                    confirm = true;
+                    for (JUTIL_INIT(size_t ii, start2); ii < end2; ++ii) {
+                        if (i + qIndex >= this->count || *(this->block + i + qIndex) != value[ii]) {
+                            confirm = false;
+                            break;
+                        }
+                        ++qIndex;
                     }
-                    ++qIndex;
-                }
-                if (confirm) {
-                    for (auto &_: value) {(void)_; erase(i);}
-                    insert(value2, i);
-                    return true;
+                    if (confirm) {
+                        for (auto &_: value) {(void)_; erase(i);}
+                        insert(value2, i);
+                        return true;
+                    }
                 }
             }
             return false;
@@ -472,10 +497,13 @@ namespace jutil JUTIL_PUBLIC_ {
         }
 
         Queue<size_t, Allocator> findAll(const ValueType &value, size_t start, size_t end) JUTIL_C_ {
-            if (start >= this->count || end > this->count) QUEUEERR_INDEX_INVOKE;
             Queue<size_t, Allocator> r;
-            for (JUTIL_INIT(size_t i, start); i < end; ++i) {
-                if (value ==  *(this->block + i)) r.insert(i);
+            if (start >= this->count || end > this->count) {
+                QUEUEERR_INDEX_INVOKE;
+            } else {
+                for (JUTIL_INIT(size_t i, start); i < end; ++i) {
+                    if (value ==  *(this->block + i)) r.insert(i);
+                }
             }
             return r;
         }
@@ -544,6 +572,7 @@ namespace jutil JUTIL_PUBLIC_ {
 
         Type &resize(size_t s) {
             this->count = s;
+            return *this;
         }
 
         /** =========================================================================================================================================
@@ -572,16 +601,20 @@ namespace jutil JUTIL_PUBLIC_ {
             @return     Reference to element at the specified index.
         */
         ValueType &operator[](const size_t &n) JUTIL_OVERRIDE_ {
-            if (n >= this->count) QUEUEERR_INDEX_INVOKE;
-            return this->block[n];
+            if (n >= this->count) {
+                QUEUEERR_INDEX_INVOKE;
+            } else return this->block[n];
+            return JUTIL_NULLREF(ValueType);
         }
 
         /**
             Const overload of @see operator[]
         */
         const ValueType &operator[](const size_t &n) JUTIL_CO_ {
-            if (n >= this->count) QUEUEERR_INDEX_INVOKE;
-            return this->block[n];
+            if (n >= this->count) {
+                QUEUEERR_INDEX_INVOKE;
+            } else return this->block[n];
+            return JUTIL_NULLREF(ValueType);
         }
 
         /**

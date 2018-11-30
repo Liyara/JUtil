@@ -85,6 +85,7 @@ namespace jutil JUTIL_PUBLIC_ {
 
     private:
         long double floor, ceiling;
+        void *_time;
         int64_t internalValue;
         void shake();
     };
