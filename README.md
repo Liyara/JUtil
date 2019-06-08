@@ -1,5 +1,5 @@
 # JUtil
-JUtil is written to be a replacement for the standard C++ library, built on top the the standard C library. It is not intedned as a viable alternative, however, merely as a proof-of-concept project. 
+JUtil is written to be a replacement for the standard C++ library, built on top the the standard C library. It is not intended as a viable alternative, however, merely as a proof-of-concept project. 
 
 ## Dependencies
 The C standard Library  
