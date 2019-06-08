@@ -485,7 +485,7 @@ template <typename T, typename A> jutil::Queue<T, A>::operator jutil::StringBase
         str += jutil::String((*this)[i]);
         str += ",";
     }
-    str.erase(str.size() - 1);
+    if (str.size() > 1) str.erase(str.size() - 1);
     str += "}";
     return str;
 }
@@ -496,7 +496,7 @@ template <typename T, typename A> jutil::Queue<T, A>::operator const jutil::Stri
         str += jutil::String((*this)[i]);
         str += ",";
     }
-    str.erase(str.size() - 1);
+    if (str.size() > 1) str.erase(str.size() - 1);
     str += "}";
     return str;
 }

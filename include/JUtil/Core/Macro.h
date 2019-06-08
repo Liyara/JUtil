@@ -215,7 +215,7 @@ namespace jutil JUTIL_PUBLIC_ {
 #define JUTIL_FREE(a)       {if (a) {JUTIL_FREE_(a);}}
 
 #define JUTIL_FOR_(a, b, c) for (JUTIL_INIT(auto (a), (b)); (a) < (c); ++(a))
-#define JUTIL_FOR(a, b)     JUTIL_FOR_(a, 0, c)
+#define JUTIL_FOR(a, b)     JUTIL_FOR_(a, 0, b)
 
 #define JUTIL_FUNC_EXPAND(a, ...) char __jutil_expansion_array[] {(a(__VA_ARGS__), '\0')...}; (void) __jutil_expansion_array;
 

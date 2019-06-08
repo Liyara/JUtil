@@ -164,7 +164,9 @@ namespace jutil JUTIL_PUBLIC_ {
         /**
             Default constructor. Queue is empty.
         */
-        JUTIL_CX_ Queue() JUTIL_N_ : allocated(0), is(BOUNDED), BaseType() {}
+        JUTIL_CX_ Queue() JUTIL_N_ : allocated(0), is(BOUNDED), BaseType() {
+            reserve(2);
+        }
 
         /**
             Copy constructor.
@@ -285,7 +287,7 @@ namespace jutil JUTIL_PUBLIC_ {
                     ++(this->count);
                     //Copy into buffer to avoid pointer move issues
                     ValueType vC(value);
-                    if (allocated < this->count) reallocate(this->count << 2);
+                    if (allocated < this->count) reallocate(this->count << 1);
                     this->move(this->block + n + 1, this->block + n, sizeof(ValueType) * (this->count - n));
                     JUTIL_NEW(this->block + n, ValueType(vC));
                 }
@@ -805,7 +807,7 @@ namespace jutil JUTIL_PUBLIC_ {
                     if (n == this->count) return insert(move(value));
                     else {
                         ++(this->count);
-                        if (allocated < this->count) reallocate(this->count << 2);
+                        if (allocated < this->count) reallocate(this->count << 1);
                         this->move(this->block + n + 1, this->block + n, sizeof(ValueType) * (this->count - n));
                         JUTIL_NEW(this->block + n, ValueType(move(value)));
                     }
