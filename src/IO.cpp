@@ -1,3 +1,4 @@
+#include <JUtil/Core/version.h>
 #include "JUtil/IO/IO.h"
 #include <cstdio>
 #include <stdlib.h>
@@ -32,8 +33,36 @@
 
 namespace jutil JUTIL_PRIVATE_ {
 
+    template <typename T>
+    struct PutFunc {
+        typedef int (*Definition)(const T*, FILE*);
+    };
+
+    template <typename T>
+    struct PrintFunc {
+        typedef int (*Definition)(T*, size_t, const T*, ...);
+    };
+
+    template <typename T>
+    struct PrintFunc_MINGW32 {
+        typedef int (*Definition)(T*, const T*, ...);
+    };
+
+    template <typename T>
+    struct LenFunc {
+        typedef size_t (*Definition)(const T*);
+    };
+
+    #define PUT_FUNC        typename PutFunc<T>::Definition
+    #ifndef JUTIL_MINGW_32
+        #define PRINT_FUNC  typename PrintFunc<T>::Definition
+    #else
+         #define PRINT_FUNC typename PrintFunc_MINGW32<T>::Definition
+    #endif
+    #define LEN_FUNC        typename LenFunc<T>::Definition
+
     template<typename T>
-    int putBuffer(StringBase<T> data, IOTarget *target, int (*putfunc)(const T*, FILE*), int (*printfunc)(T*, size_t, const T*, ...), size_t (*lenfunc)(const T*), const T *format) {
+    int putBuffer(StringBase<T> data, IOTarget *target, PUT_FUNC putfunc, PRINT_FUNC printfunc, LEN_FUNC lenfunc, const T *format) {
         T *str = new T[data.size() + 1];
         data.array(str);
         if (target->getTargetType() == IOTarget::BUFFER_TARGET) {

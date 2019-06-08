@@ -3,7 +3,6 @@ JUtil is written to be a replacement for the standard C++ library, built on top 
 
 ## Dependencies
 The C standard Library  
-<initializer_list> when building under C++11 (recommended)  
 dirent.h
 
 ## Dependees

@@ -256,10 +256,15 @@ namespace jutil JUTIL_PUBLIC_ {
             @return         Reference to calling object.
         */
         Type &insert(const ValueType &value) {
-            ValueType vC(value);
-            if (allocated <= this->count) reallocate(this->count + 1);
+            ValueType temp(value);
             ++(this->count);
-            JUTIL_NEW(this->block + (this->count - 1), ValueType(vC));
+            //reallocation over-estimates space needs in favor of speed.
+            if (allocated < this->count) reallocate(this->count << 1);
+            #ifdef JUTIL_CPP11
+                JUTIL_NEW(this->block + (this->count - 1), ValueType(temp));
+            #else
+                JUTIL_NEW(this->block + (this->count - 1), temp);
+            #endif
             return *this;
         }
 
@@ -277,13 +282,12 @@ namespace jutil JUTIL_PUBLIC_ {
             } else {
                 if (n == this->count) return insert(value);
                 else {
+                    ++(this->count);
+                    //Copy into buffer to avoid pointer move issues
                     ValueType vC(value);
-                    if (allocated <= this->count) {
-                        reallocate(this->count + 1);
-                    }
+                    if (allocated < this->count) reallocate(this->count << 2);
                     this->move(this->block + n + 1, this->block + n, sizeof(ValueType) * (this->count - n));
                     JUTIL_NEW(this->block + n, ValueType(vC));
-                    ++(this->count);
                 }
             }
             return *this;
@@ -297,7 +301,7 @@ namespace jutil JUTIL_PUBLIC_ {
         */
         Type &insert(const Type &q) {
             reserve(this->count + q.count);
-            for (size_t i = 0; i < q.count; ++i )JUTIL_NEW(this->block + i + this->count, ValueType(*(q.block + i)));
+            for (size_t i = 0; i < q.count; ++i) JUTIL_NEW(this->block + i + this->count, ValueType(*(q.block + i)));
             this->count += q.count;
             return *this;
         }
@@ -312,7 +316,7 @@ namespace jutil JUTIL_PUBLIC_ {
         Type &insert(const Type &q, size_t n) {
             if (is == CYCLICAL) n = n % this->count;
             reserve(this->count + q.size());
-            for (Iterator i = q.end() - 1; i != q.begin() - 1; --i) insert(static_cast<T>(*i), n);
+            for (Iterator i = q.end() - 1; i != q.begin() - 1; --i) insert(*i, n);
             return *this;
         }
 
@@ -780,6 +784,33 @@ namespace jutil JUTIL_PUBLIC_ {
                 insert(static_cast<T>(head));
                 using et = int[];
                 et {0, (insert(static_cast<T>(tail)), 0)...};
+            }
+
+            Type &insert(ValueType &&value) {
+                ++(this->count);
+                if (allocated < this->count) reallocate(this->count << 1);
+                #ifdef JUTIL_CPP11
+                    JUTIL_NEW(this->block + (this->count - 1), ValueType(move(value)));
+                #else
+                    JUTIL_NEW(this->block + (this->count - 1), move(value));
+                #endif
+                return *this;
+            }
+
+            Type &insert(ValueType &&value, const size_t &n) {
+                if (n > this->count) {
+                    if (is == CYCLICAL) return insert(move(value), n % this->count);
+                    else QUEUEERR_INDEX_INVOKE;
+                } else {
+                    if (n == this->count) return insert(move(value));
+                    else {
+                        ++(this->count);
+                        if (allocated < this->count) reallocate(this->count << 2);
+                        this->move(this->block + n + 1, this->block + n, sizeof(ValueType) * (this->count - n));
+                        JUTIL_NEW(this->block + n, ValueType(move(value)));
+                    }
+                }
+                return *this;
             }
 
         #endif
