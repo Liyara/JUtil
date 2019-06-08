@@ -1,5 +1,5 @@
-#include "Core/Error.h"
-#include "IO/IO.h"
+#include "JUtil/Core/Error.h"
+#include "JUtil/IO/IO.h"
 #include <cstdlib>
 
 namespace jutil JUTIL_PRIVATE_ {
@@ -22,7 +22,7 @@ namespace jutil JUTIL_PRIVATE_ {
     }
     void Error::handle() JUTIL_N_ {
         if (!silenced) {
-            jutil::err << "ERROR [" << outer << "." << inner <<  "]: \"" << msg << "\"   (at " << func << ")" << jutil::endl;
+            //jutil::err << "JUTIL_ERROR [" << outer << "." << inner <<  "]: \"" << msg << "\"   (at " << func << ")" << jutil::endl;
         }
         destroySelf();
     }
@@ -64,7 +64,7 @@ namespace jutil JUTIL_PRIVATE_ {
         (new FatalError(o, i, m, f))->handle();
     }
     void FatalError::handle() JUTIL_N_ {
-        jutil::err << "FATAL ERROR [" << outer << "." << inner <<  "]: " << msg << " at " << func << jutil::endl;
+        //jutil::err << "FATAL JUTIL_ERROR [" << outer << "." << inner <<  "]: " << msg << " at " << func << jutil::endl;
         exit(outer + inner);
     }
 }

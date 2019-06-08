@@ -1,4 +1,4 @@
-#include "Core/jutil.h"
+#include "JUtil/jutil.h"
 
 #ifdef _WIN32
     #include "windows.h"
@@ -6,6 +6,8 @@
 
     #include <termios.h>
     #include <cstdio>
+    #include <time.h>
+    #include <wchar.h>
 
     static struct termios _old, _new;
 
@@ -40,7 +42,7 @@ namespace jutil {
 
     void cls(size_t pauseFor) {
         #ifdef _WIN32
-            sleep(pauseFor);
+            Sleep(pauseFor);
             COORD coord = {0, 0};
             CONSOLE_SCREEN_BUFFER_INFO s;
             GetConsoleScreenBufferInfo(console, &s);
@@ -50,7 +52,9 @@ namespace jutil {
             FillConsoleOutputAttribute(console, s.wAttributes, cells, coord, &written);
             SetConsoleCursorPosition(console, coord);
         #elif defined __linux__
-            fputs("\033[2J\033[1;1H", stdout);
+            sleep(pauseFor);
+            if (fwide(stdout, 0) <= 0) fputs("\033[2J\033[1;1H", stdout);
+            else fputws(L"\033[2J\033[1;1H", stdout);
         #endif // _WIN32
     }
 
@@ -58,7 +62,11 @@ namespace jutil {
         #ifdef _WIN32
             Sleep(t);
         #elif defined __linux__
-            usleep(t);
+            timespec ts;
+            ts.tv_sec = t / 1000;
+            long double r = (t % 1000);
+            ts.tv_nsec = (r * (1000 * 1000));
+            nanosleep(&ts, NULL);
         #endif // _WIN32
     }
 }

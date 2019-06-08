@@ -1,6 +1,6 @@
-#include "Core/MemoryBlock.h"
-#include "Core/Error.h"
-#include "Core/String.h"
+#include "JUtil/Core/MemoryBlock.h"
+#include "JUtil/Core/Error.h"
+#include "JUtil/Core/String.h"
 #include <cstdlib>
 
 namespace jutil JUTIL_PRIVATE_ {

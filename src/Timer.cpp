@@ -1,7 +1,11 @@
-#include "Core/Timer.h"
-#include "Traits/TypeManipulators.hpp"
-#include <windows.h>
-#include "IO/IO.h"
+#include "JUtil/Core/Timer.h"
+#include "JUtil/Traits/TypeManipulators.hpp"
+#ifdef JUTIL_WINDOWS
+    #include <windows.h>
+#elif defined JUTIL_LINUX
+    #include <time.h>
+#endif
+#include "JUtil/IO/IO.h"
 
 #define NANOS_PER_SECOND 0x3B9ACA00.p0L
 
@@ -9,16 +13,31 @@ namespace jutil JUTIL_PUBLIC_ {
 
 
     Timer::Timer() : ct(-1) {
-        LARGE_INTEGER i;
-        QueryPerformanceFrequency(&i);
-        freq = static_cast<long double>(i.QuadPart) / NANOS_PER_SECOND;
+        #ifdef JUTIL_WINDOWS
+            LARGE_INTEGER i;
+            QueryPerformanceFrequency(&i);
+            freq = static_cast<long double>(i.QuadPart) / NANOS_PER_SECOND;
+        #else
+            freq = 1;
+        #endif
     }
-    Timer::Timer(const Timer &timer) : ct(-1) {
-        LARGE_INTEGER i;
-        QueryPerformanceFrequency(&i);
-        freq = static_cast<long double>(i.QuadPart) / NANOS_PER_SECOND;
-        *this = timer;
-    }
+    Timer::Timer(const Timer &timer)
+    #ifdef JUTIL_CPP11
+        : Timer() {
+            *this = timer;
+        }
+    #else
+        : ct(timer.ct) {
+            #ifdef JUTIL_WINDOWS
+                LARGE_INTEGER i;
+                QueryPerformanceFrequency(&i);
+                freq = static_cast<long double>(i.QuadPart) / NANOS_PER_SECOND;
+            #else
+                freq = 1;
+            #endif
+        }
+    #endif
+    
     Timer &Timer::operator=(const Timer &timer) {
         ct = timer.ct;
         return *this;
@@ -34,19 +53,28 @@ namespace jutil JUTIL_PUBLIC_ {
         }
     #endif
 
+    long long queryGlobalTimer() {
+        #ifdef JUTIL_WINDOWS
+            LARGE_INTEGER i;
+            QueryPerformanceCounter(&i);
+            return i.QuadPart;
+        #elif defined JUTIL_LINUX
+            timespec t;
+            clock_gettime(CLOCK_REALTIME, &t);
+            return (t.tv_sec * NANOS_PER_SECOND) + t.tv_nsec;
+        #endif
+    }
+
     void Timer::start() {
-        LARGE_INTEGER i;
-        QueryPerformanceCounter(&i);
-        ct = i.QuadPart;
+        ct = queryGlobalTimer();
     }
     long double Timer::get(unsigned type) {
-        LARGE_INTEGER i;
-        QueryPerformanceCounter(&i);
-        long double endTime = static_cast<long double>(i.QuadPart - ct), sFreq = freq;
+        long long nct = queryGlobalTimer();
+        long double transform = freq;
         for (unsigned i = 0; i < type; ++i) {
-            sFreq *= 1000.L;
+            transform *= 1000.L;
         }
-        return endTime / sFreq;
+        return static_cast<long double>(nct - ct) / transform;
     }
     long double Timer::stop(unsigned type) {
         long double r = get(type);

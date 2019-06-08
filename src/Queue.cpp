@@ -1,7 +1,6 @@
-#include "Container/Queue.hpp"
+#include "JUtil/Container/Queue.hpp"
 #include <cstring>
 #include <stdlib.h>
-#include "Core/RNG.h"
 
 namespace jutil {
 
