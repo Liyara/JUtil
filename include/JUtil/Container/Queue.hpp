@@ -164,9 +164,22 @@ namespace jutil JUTIL_PUBLIC_ {
         /**
             Default constructor. Queue is empty.
         */
+
         JUTIL_CX_ Queue() JUTIL_N_ : allocated(0), is(BOUNDED), BaseType() {
             reserve(2);
         }
+
+        #ifdef JUTIL_CPP11
+            template <typename X, typename ...Y>
+            Queue(X &&head, Y&&... tail) : Queue(tail...) {
+                insert(move(head));
+            }
+
+            template <typename X, typename ...Y>
+            Queue(const X &head, const Y&... tail) : Queue(tail...) {
+                insert(head);
+            }
+        #endif
 
         /**
             Copy constructor.
@@ -780,22 +793,10 @@ namespace jutil JUTIL_PUBLIC_ {
                 return *this;
             }
 
-            template <typename X, typename... Y>
-            Queue(X head, Y... tail) : Type() {
-                reserve(sizeof...(tail) + 1);
-                insert(static_cast<T>(head));
-                using et = int[];
-                et {0, (insert(static_cast<T>(tail)), 0)...};
-            }
-
             Type &insert(ValueType &&value) {
                 ++(this->count);
                 if (allocated < this->count) reallocate(this->count << 1);
-                #ifdef JUTIL_CPP11
-                    JUTIL_NEW(this->block + (this->count - 1), ValueType(move(value)));
-                #else
-                    JUTIL_NEW(this->block + (this->count - 1), move(value));
-                #endif
+                JUTIL_NEW(this->block + (this->count - 1), ValueType(move(value)));
                 return *this;
             }
 
