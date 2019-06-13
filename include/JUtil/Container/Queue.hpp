@@ -171,13 +171,11 @@ namespace jutil JUTIL_PUBLIC_ {
 
         #ifdef JUTIL_CPP11
             template <typename X, typename ...Y>
-            Queue(X &&head, Y&&... tail) : Queue(tail...) {
-                insert(move(head));
-            }
-
-            template <typename X, typename ...Y>
-            Queue(const X &head, const Y&... tail) : Queue(tail...) {
-                insert(head);
+            Queue(const X &head, const Y&... tail) : Type() {
+                reserve(sizeof...(tail) + 1);
+                insert(static_cast<T>(head));
+                using et = int[];
+                et {0, (insert(static_cast<T>(tail)), 0)...};
             }
         #endif
 
