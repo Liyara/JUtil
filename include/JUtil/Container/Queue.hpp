@@ -673,6 +673,10 @@ namespace jutil JUTIL_PUBLIC_ {
             return this->block;
         }
 
+        const ValueType *getArray() const {
+            return this->block;
+        }
+
         Type &sort(void (*sorter)(Type*)) {
             sorter(this);
             return *this;
