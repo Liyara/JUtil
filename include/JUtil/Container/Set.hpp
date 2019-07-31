@@ -32,7 +32,11 @@ namespace jutil {
             }
         }
 
-        Set(const Set &set) : data(set.data) {}
+        Set(const Set &set) {
+            for (size_t i = 0; i < set.size(); ++i) {
+                JUTIL_NEW(data + i, T(set.data[i]));
+            }
+        }
 
         Set &operator=(const Set &set) {
             for (size_t i = 0; i < capacity; ++i) {
@@ -73,8 +77,6 @@ namespace jutil {
         virtual ~Set() {}
 
         T data[capacity];
-
-    protected:
 
     };
 }
