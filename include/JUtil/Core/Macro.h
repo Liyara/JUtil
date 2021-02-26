@@ -230,20 +230,21 @@ namespace jutil JUTIL_PUBLIC_ {
 
 
 //placement-new defined here to avoid including <new>
-
-#ifdef JUTIL_CPP11
-    #ifndef _NEW
-    #define _NEW
-        inline void* operator new(size_t, void* dat) JUTIL_N_ {
-            return dat;
-        }
-        inline void* operator new[](size_t, void* dat) JUTIL_N_ {
-            return dat;
-        }
+#ifndef JUTIL_DISABLE_NEW
+    #ifdef JUTIL_CPP11
+        #ifndef _NEW
+        #define _NEW
+            inline void* operator new(size_t, void* dat) JUTIL_N_ {
+                return dat;
+            }
+            inline void* operator new[](size_t, void* dat) JUTIL_N_ {
+                return dat;
+            }
+        #endif
+        #define JUTIL_NEW(mem, val) new (mem) val
+    #else
+        #define JUTIL_NEW(mem, val) *(mem) = val
     #endif
-    #define JUTIL_NEW(mem, val) new (mem) val
-#else
-    #define JUTIL_NEW(mem, val) *(mem) = val
 #endif
 
 #endif // JUTIL_MACRO_H

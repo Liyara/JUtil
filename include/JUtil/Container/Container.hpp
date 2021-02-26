@@ -2,7 +2,6 @@
 #define JUTIL_CONTAINER_H
 
 #include "JUtil/Core/Allocator.h"
-#include "JUtil/Core/Error.h"
 #ifdef JUTIL_CPP11
     #include "JUtil/Traits/Traits.hpp"
 #endif

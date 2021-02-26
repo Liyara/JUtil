@@ -3,29 +3,8 @@
 
 #include "ContiguousContainer.hpp"
 #include "JUtil/Core/StringInterface.hpp"
-
-#define QUEUE_ERR_INDEX 0x05
-
-#ifdef JUTIL_ERR
-
-    #define QUEUEERR JUTIL_ERR_QUEUE
-
-    #define QUEUEERR_OUTER              ((CONTAINER_ERR_INDEX << 4) | QUEUE_ERR_INDEX)
-
-    #define QUEUEERR_INNER_INDEX        0x0000
-    #define QUEUEERR_INNER_ALLOC        0x0001
-    #define QUEUEERR_INNER_ITERATOR     0x0002
-    #define QUEUEERR_INDEX_MSG          "Queue given invalid lookup index!"
-    #define QUEUEERR_ALLOC_MSG          "Queue failed to allocate memory!"
-    #define QUEUEERR_ITERATOR_MSG       "Queue given iterator outside of its bounds!"
-    #define QUEUEERR_INDEX_INVOKE       JUTIL_INVOKE_ERR(QUEUEERR_OUTER, QUEUEERR_INNER_INDEX, JUTIL_ERR_MSG(QUEUEERR_INDEX_MSG))
-    #define QUEUEERR_ALLOC_INVOKE       JUTIL_INVOKE_ERR(QUEUEERR_OUTER, QUEUEERR_INNER_ALLOC, JUTIL_ERR_MSG(QUEUEERR_ALLOC_MSG))
-    #define QUEUEERR_ITERATOR_INVOKE    JUTIL_INVOKE_ERR(QUEUEERR_OUTER, QUEUEERR_INNER_ITERATOR, JUTIL_ERR_MSG(QUEUEERR_ITERATOR_MSG))
-
-#else
-    #define QUEUEERR_INDEX_INVOKE
-    #define QUEUEERR_ALLOC_INVOKE
-#endif
+#include <cstring>
+#include <cstdlib>
 
 #ifdef JUTIL_CPP11
     #define JUTIL_NULL_PROTECTOR(ot, nt) template <typename nt, typename = typename jutil::Enable<jutil::IsSame<nt, ot>::Value>::Type>
@@ -165,7 +144,7 @@ namespace jutil JUTIL_PUBLIC_ {
             Default constructor. Queue is empty.
         */
 
-        JUTIL_CX_ Queue() JUTIL_N_ : allocated(0), is(BOUNDED), BaseType() {
+        JUTIL__ Queue() JUTIL_N_ : allocated(0), is(BOUNDED), BaseType() {
             reserve(2);
         }
 
@@ -201,7 +180,7 @@ namespace jutil JUTIL_PUBLIC_ {
         }
 
         template <size_t len>
-        Queue(ValueType arr[len]) 
+        Queue(ValueType arr[len])
         #ifdef JUTIL_CPP11
             : Queue(arr, len) {}
         #else
@@ -239,7 +218,6 @@ namespace jutil JUTIL_PUBLIC_ {
         Type &erase(const size_t &n) JUTIL_OVERRIDE_ {
             if (n >= this->count) {
                 if (is == CYCLICAL) erase(this->block + (n % this->count));
-                else QUEUEERR_INDEX_INVOKE;
             } else erase(this->block + n);
             return *this;
         }
@@ -253,7 +231,6 @@ namespace jutil JUTIL_PUBLIC_ {
         JUTIL_NULL_PROTECTOR(T, X)
         Type &erase(X *it) {
             if (it > this->block + this->count) {
-                QUEUEERR_ITERATOR_INVOKE;
             } else {
                 it->~ValueType();
                 if (it + 1 != this->end()) this->move(it, it + 1, sizeof(ValueType) * (this->end() - (it + 1)));
@@ -291,7 +268,6 @@ namespace jutil JUTIL_PUBLIC_ {
         Type &insert(const ValueType &value, const size_t &n) JUTIL_OVERRIDE_ {
             if (n > this->count) {
                 if (is == CYCLICAL) return insert(value, n % this->count);
-                else QUEUEERR_INDEX_INVOKE;
             } else {
                 if (n == this->count) return insert(value);
                 else {
@@ -347,7 +323,6 @@ namespace jutil JUTIL_PUBLIC_ {
             }
             if (this->count == 0) return false;
             if (start >= this->count || end > this->count) {
-                QUEUEERR_INDEX_INVOKE;
             } else {
                 for (JUTIL_INIT(size_t i, start); i < end; ++i) {
                     if (value ==  *(this->block + i)) {
@@ -375,9 +350,11 @@ namespace jutil JUTIL_PUBLIC_ {
                 start = start % this->count;
                 end = end % this->count + 1;
             }
-            if (this->count == 0) return false;
+
+            if (this->count == 0)
+              return false;
+
             if (start >= this->count || end > this->count) {
-                QUEUEERR_INDEX_INVOKE;
             } else {
                 size_t qIndex;
                 bool confirm;
@@ -434,9 +411,7 @@ namespace jutil JUTIL_PUBLIC_ {
             }
             bool found = false;
             if (this->count == 0) return false;
-            if (start >= this->count || end > this->count) {
-                QUEUEERR_INDEX_INVOKE;
-            } else {
+            else {
                 for (JUTIL_INIT(size_t i, start); i < end; ++i) {
                     if (value ==  *(this->block + i)) {
                         new (this->block + i) ValueType(value2);
@@ -454,7 +429,6 @@ namespace jutil JUTIL_PUBLIC_ {
             }
             if (this->count == 0) return false;
             if (start >= this->count || end > this->count) {
-                QUEUEERR_INDEX_INVOKE;
             } else {
                 for (JUTIL_INIT(size_t i, start); i < end; ++i) {
                     if (value ==  *(this->block + i)) {
@@ -497,7 +471,6 @@ namespace jutil JUTIL_PUBLIC_ {
             }
             if (this->count == 0) return false;
             if (start >= this->count || end > this->count) {
-                QUEUEERR_INDEX_INVOKE;
             } else {
                 size_t qIndex;
                 bool confirm;
@@ -555,7 +528,6 @@ namespace jutil JUTIL_PUBLIC_ {
             }
             if (this->count == 0) return false;
             if (start >= this->count || end > this->count) {
-                QUEUEERR_INDEX_INVOKE;
             } else {
                 size_t qIndex;
                 bool confirm;
@@ -608,7 +580,6 @@ namespace jutil JUTIL_PUBLIC_ {
             Queue<size_t, Allocator> r;
             if (this->count == 0) return r;
             if (start >= this->count || end > this->count) {
-                QUEUEERR_INDEX_INVOKE;
             } else {
                 for (JUTIL_INIT(size_t i, start); i < end; ++i) {
                     if (value ==  *(this->block + i)) r.insert(i);
@@ -719,7 +690,6 @@ namespace jutil JUTIL_PUBLIC_ {
         ValueType &operator[](const size_t &n) JUTIL_OVERRIDE_ {
             if (n >= this->count) {
                 if (is == CYCLICAL) return this->block[n % this->count];
-                else QUEUEERR_INDEX_INVOKE;
             } else return this->block[n];
             return JUTIL_NULLREF(ValueType);
         }
@@ -730,7 +700,6 @@ namespace jutil JUTIL_PUBLIC_ {
         const ValueType &operator[](const size_t &n) JUTIL_CO_ {
             if (n >= this->count) {
                 if (is == CYCLICAL) return this->block[n % this->count];
-                else QUEUEERR_INDEX_INVOKE;
             } else return this->block[n];
             return JUTIL_NULLREF(ValueType);
         }
@@ -805,7 +774,6 @@ namespace jutil JUTIL_PUBLIC_ {
             Type &insert(ValueType &&value, const size_t &n) {
                 if (n > this->count) {
                     if (is == CYCLICAL) return insert(move(value), n % this->count);
-                    else QUEUEERR_INDEX_INVOKE;
                 } else {
                     if (n == this->count) return insert(move(value));
                     else {
@@ -836,6 +804,18 @@ namespace jutil JUTIL_PUBLIC_ {
         IndexingStrategy is;
         size_t allocated;
     };
+
+    void *__QueueInternalAllocator::alloc(size_t c) {
+        return malloc(c);
+    }
+    void *__QueueInternalAllocator::realloc(void *p, size_t c) {
+        return ::realloc(p, c);
+    }
+    bool __QueueInternalAllocator::free(void *p) {
+        if (p) ::free(p);
+        return p;
+    }
+    __QueueInternalAllocator::~__QueueInternalAllocator() {}
 }
 
 #endif // JUTIL_QUEUE_H

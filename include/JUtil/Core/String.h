@@ -3,32 +3,11 @@
 
 #include "JUtil/Core/Tuple.hpp"
 #include "JUtil/Container/Queue.hpp"
-
-#define STRING_ERR_INDEX   0x0A
-
-#ifdef JUTIL_ERR
-
-    #define STRINGERR JUTIL_ERR_STRING
-
-    #define STRINGERR_OUTER             ((CORE_ERR_INDEX << 4) | STRING_ERR_INDEX)
-    #define STRINGERR_INNER_CHARACTER   0x0000
-    #define STRINGERR_INNER_CONVERSION  0x0001
-    #define STRINGERR_INNER_BASE        0x0002
-    #define STRINGERR_CHARACTER_MSG     "Invalid character"
-    #define STRINGERR_CONVERSION_MSG    "Conversion failed"
-    #define STRINGERR_BASE_MSG          "Attempt to instantiate invalid String type"
-    #define STRINGERR_CHARACTER_INVOKE  JUTIL_INVOKE_ERR(STRINGERR_OUTER, STRINGERR_INNER_CHARACTER, JUTIL_ERR_MSG(STRINGERR_CHARACTER_MSG))
-    #define STRINGERR_CONVERSION_INVOKE JUTIL_INVOKE_ERR(STRINGERR_OUTER, STRINGERR_INNER_CONVERSION, JUTIL_ERR_MSG(STRINGERR_CONVERSION_MSG))
-    #define STRINGERR_BASE_INVOKE       JUTIL_INVOKE_ERR(STRINGERR_OUTER, STRINGERR_INNER_BASE, JUTIL_ERR_MSG(STRINGERR_BASE_MSG))
-
-#else
-    #define STRINGERR_CHARACTER_INVOKE
-    #define STRINGERR_CONVERSION_INVOKE
-#endif
-
-#if defined(JUTIL_TRAITS_H) && defined(JUTIL_CPP11)
-    #define JUTIL_TRAITS_ENABLED
-#endif
+#include "JUtil/Core/integers.h"
+#include <cstdio>
+#include <cstdarg>
+#include <cstdlib>
+#include <cwchar>
 
 #ifdef JUTIL_TRAITS_ENABLED
     #define JUTIL_ENFORCE_TYPE_STRING_CONVERSION(T) = typename jutil::Enable<jutil::Convert<T, jutil::String>::Value, T>::Type
@@ -48,8 +27,6 @@
 #endif
 
 #define __STRING_BUFFER__ ((8 * sizeof(long long) - 1) / 3 + 2)
-
-#define __STRING_BASE_ERR__ {STRINGERR_BASE_INVOKE;}
 
 #define __STRING_CAST_CONSTRUCTORS__(type) \
 
@@ -88,6 +65,10 @@
     JUTIL_EXPL_ operator float() JUTIL_CN_              {__STRING_DO_CONVERSION__(type, F, float);}
 #define JUTIL_BYTE_STRING_ (unsigned char*)
 
+#ifndef CONCAT
+    #define CONCAT + (jutil::String)
+#endif
+
 namespace jutil JUTIL_PUBLIC_ {
 
     typedef unsigned char Byte;
@@ -95,12 +76,12 @@ namespace jutil JUTIL_PUBLIC_ {
     template <typename T>
     class JUTIL_PRIVATE_ StringBase : public Queue<T> {
     public:
-        StringBase()                                            __STRING_BASE_ERR__
-        StringBase(const Queue<T>&)                             __STRING_BASE_ERR__
-        template <typename U> StringBase(const StringBase<U>&)  __STRING_BASE_ERR__
-        StringBase(T)                                           __STRING_BASE_ERR__
-        template <size_t l> StringBase(const T (&c)[l])         __STRING_BASE_ERR__
-        StringBase(const T *c, size_t l = 0)                    __STRING_BASE_ERR__
+        StringBase() {}
+        StringBase(const Queue<T>&) {}
+        template <typename U> StringBase(const StringBase<U>&) {}
+        StringBase(T) {}
+        template <size_t l> StringBase(const T (&c)[l]) {}
+        StringBase(const T *c, size_t l = 0) {}
     };
 
     int toCString(char*, size_t, const char*, ...);
@@ -405,6 +386,179 @@ namespace jutil JUTIL_PUBLIC_ {
     String hash(const String&);
 
     ByteString makeByteString(const Byte[], size_t);
+
+
+    template <typename T>
+    bool regexMatch(const StringBase<T> &str, const StringBase<T> &regex) {
+      return false;
+    }
+
+    namespace cstr_conversion {
+        long long strToLL(const char *c) {
+            return strtoll(c, NULL, 10);
+        }
+        long long strToLL(const wchar_t *w) {
+            return wcstoll(w, NULL, 10);
+        }
+
+        unsigned long long strToULL(const char *c) {
+            return strtoull(c, NULL, 10);
+        }
+        unsigned long long strToULL(const wchar_t *w) {
+            return wcstoull(w, NULL, 10);
+        }
+
+        long strToL(const char *c) {
+            return strtol(c, NULL, 10);
+        }
+        long strToL(const wchar_t *w) {
+            return wcstol(w, NULL, 10);
+        }
+
+        unsigned long strToUL(const char *c) {
+            return strtoul(c, NULL, 10);
+        }
+        unsigned long strToUL(const wchar_t *w) {
+            return wcstoul(w, NULL, 10);
+        }
+
+        int strToI(const char *c) {
+            return atoi(c);
+        }
+        int strToI(const wchar_t *w) {
+            return (int)strToL(w);
+        }
+
+        unsigned int strToUI(const char *c) {
+            return atoi(c);
+        }
+        unsigned int strToUI(const wchar_t *w) {
+            return (unsigned int)strToUL(w);
+        }
+
+        short strToS(const char *c) {
+            return atoi(c);
+        }
+        short strToS(const wchar_t *w) {
+            return (short)strToL(w);
+        }
+
+        unsigned short strToUS(const char *c) {
+            return atoi(c);
+        }
+        unsigned short strToUS(const wchar_t *w) {
+            return (unsigned short)strToL(w);
+        }
+
+        float strToF(const char *c) {
+            return strtof(c, NULL);
+        }
+        float strToF(const wchar_t *w) {
+            return wcstof(w, NULL);
+        }
+
+        double strToD(const char *c) {
+            return strtod(c, NULL);
+        }
+        double strToD(const wchar_t *w) {
+            return wcstod(w, NULL);
+        }
+
+        long double strToLD(const char *c) {
+            return strtold(c, NULL);
+        }
+        long double strToLD(const wchar_t *w) {
+            return wcstold(w, NULL);
+        }
+    }
+
+    int toCString(char *c, size_t s, const char *m, ...) {
+        va_list list;
+        va_start(list, m);
+        return vsnprintf(c, s, m, list);
+    }
+
+    int toCString(wchar_t *c, size_t s, const wchar_t *m, ...) {
+        va_list list;
+        va_start(list, m);
+        #ifdef JUTIL_MINGW
+            return vswprintf(c, m, list);
+        #else
+            return vswprintf(c, s, m, list);
+        #endif
+    }
+
+    #if (defined(__GNUC__) && defined(__i386__)) || defined(__WATCOMC__) \
+      || defined(_MSC_VER) || defined (__BORLANDC__) || defined (__TURBOC__)
+    #define get16bits(d) (*((const uint16_t *) (d)))
+    #endif
+
+    #if !defined (get16bits)
+    #define get16bits(d) ((((uint32_t)(((const uint8_t *)(d))[1])) << 8)\
+                           +(uint32_t)(((const uint8_t *)(d))[0]) )
+    #endif
+
+    String hash(const String &str) {
+        char *cstr = new char[str.size() + 1];
+        str.array(cstr);
+
+        char *data = cstr;
+
+        int len = str.size();
+
+        uint32_t hashr = len, tmp;
+        int rem;
+
+        if (len <= 0 || data == NULL) return String();
+
+        rem = len & 3;
+        len >>= 2;
+
+        /* Main loop */
+        for (;len > 0; len--) {
+            hashr  += get16bits (data);
+            tmp    = (get16bits (data+2) << 11) ^ hashr;
+            hashr   = (hashr << 16) ^ tmp;
+            data  += 2*sizeof (uint16_t);
+            hashr  += hashr >> 11;
+        }
+
+        /* Handle end cases */
+        switch (rem) {
+            case 3: hashr += get16bits (data);
+                    hashr ^= hashr << 16;
+                    hashr ^= ((signed char)data[sizeof (uint16_t)]) << 18;
+                    hashr += hashr >> 11;
+                    break;
+            case 2: hashr += get16bits (data);
+                    hashr ^= hashr << 11;
+                    hashr += hashr >> 17;
+                    break;
+            case 1: hashr += (signed char)*data;
+                    hashr ^= hashr << 10;
+                    hashr += hashr >> 1;
+        }
+
+        /* Force "avalanching" of final 127 bits */
+        hashr ^= hashr << 3;
+        hashr += hashr >> 5;
+        hashr ^= hashr << 4;
+        hashr += hashr >> 17;
+        hashr ^= hashr << 25;
+        hashr += hashr >> 6;
+
+		delete[] cstr;
+
+        return String(hashr);
+    }
+
+    ByteString makeByteString(const Byte arr[], size_t len) {
+        ByteString r;
+        for (size_t i = 0; i < len; ++i) {
+            r.insert(arr[i]);
+        }
+        return r;
+    }
 }
 
 template <typename T, typename U>
@@ -460,23 +614,18 @@ bool operator!=(const jutil::StringBase<T> &l, const T *r) {
 }
 
 template <typename T>
-jutil::StringBase<T> operator+(const T *r, const jutil::StringBase<T> &l) {
-    return l + jutil::StringBase<T>(r);
+jutil::StringBase<T> operator+(const T *l, const jutil::StringBase<T> &r) {
+    return jutil::StringBase<T>(l) + r;
 }
 
 template <typename T>
-jutil::StringBase<T> &operator+=(const T *r, jutil::StringBase<T> &l) {
-    return l += jutil::StringBase<T>(r);
+bool operator==(const T *l, const jutil::StringBase<T> &r) {
+    return r == jutil::StringBase<T>(l);
 }
 
 template <typename T>
-bool operator==(const T *r, const jutil::StringBase<T> &l) {
-    return l == jutil::StringBase<T>(r);
-}
-
-template <typename T>
-bool operator!=(const T *r, const jutil::StringBase<T> &l) {
-    return l != jutil::StringBase<T>(r);
+bool operator!=(const T *l, const jutil::StringBase<T> &r) {
+    return r != jutil::StringBase<T>(l);
 }
 
 template <typename T, typename A> jutil::Queue<T, A>::operator jutil::StringBase<char>() {
@@ -499,6 +648,16 @@ template <typename T, typename A> jutil::Queue<T, A>::operator const jutil::Stri
     if (str.size() > 1) str.erase(str.size() - 1);
     str += "}";
     return str;
+}
+
+jutil::StringBase<char> operator "" _str(const char*, size_t);
+
+jutil::StringBase<char> operator "" _str(const char *cstr, size_t) {
+    return jutil::StringBase<char>(cstr);
+}
+
+jutil::StringBase<wchar_t> operator "" _wstr(const wchar_t *cstr, size_t) {
+    return jutil::StringBase<wchar_t>(cstr);
 }
 
 #ifdef STRINGERR

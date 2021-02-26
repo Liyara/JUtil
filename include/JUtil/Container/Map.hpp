@@ -9,19 +9,6 @@
 #include "JUtil/Core/Pair.hpp"
 #include "NonContiguousContainer.hpp"
 
-#define MAP_ERR_INDEX 0x04
-
-#ifdef JUTIL_ERR
-
-    #define MAPERR JUTIL_ERR_MAP
-
-    #define MAPERR_OUTER ((CONTAINER_ERR_INDEX << 4) | MAP_ERR_INDEX)
-
-#else
-    #define LISTERR_INDEX_INVOKE
-    #define LISTERR_ITERATOR_INVOKE
-#endif
-
 namespace jutil JUTIL_PUBLIC_ {
 
     JUTIL_FORWARD_TEMPLATE_2
@@ -45,7 +32,7 @@ namespace jutil JUTIL_PUBLIC_ {
         JUTIL_CX_ __MapInternalIterator(const Type &i) : BaseType(i) {}
         JUTIL_CX_ __MapInternalIterator() : BaseType() {}
         #ifdef JUTIL_CPP11
-            JUTIL_CX_ __MapInternalIterator(Type&& i) : BaseType(move(i)) {}
+            JUTIL_CX_ __MapInternalIterator(Type&& i) : BaseType(jutil::move(i)) {}
         #endif
 
         K &key() const noexcept {return element->key;}

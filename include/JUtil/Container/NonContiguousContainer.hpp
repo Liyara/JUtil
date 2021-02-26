@@ -3,21 +3,6 @@
 
 #include "Container.hpp"
 
-#define NONCONTIGUOUS_CONTAINER_ERR_INDEX 0x02
-
-#ifdef JUTIL_ERR
-
-    #define NCCERR JUTIL_ERR_NCC
-
-    #define NCCERR_OUTER               ((CONTAINER_ERR_INDEX << 4) | NONCONTIGUOUS_CONTAINER_ERR_INDEX)
-    #define NCCERR_INNER_DUPLICATE     0x0000
-    #define NCCERR_DUPLICATE_MSG       "Duplicate key"
-    #define NCCERR_DUPLICATE_INVOKE    JUTIL_INVOKE_ERR(NCCERR_OUTER, NCCERR_INNER_DUPLICATE, JUTIL_ERR_MSG(NCCERR_DUPLICATE_MSG))
-
-#else
-    #define NCCERR_DUPLCATE_INVOKE
-#endif
-
 #define JUTIL_NCCII __NonContiguousContainerInternalIterator
 #define JUTIL_NCCIN __NonContiguousContainerInternalNode
 
@@ -107,7 +92,6 @@ namespace jutil JUTIL_PUBLIC_ {
 
         virtual DerivedType &insert(const ValueType &value, const KeyType &key) JUTIL_OVERRIDE_ {
             if (seek(key)) {
-                NCCERR_DUPLICATE_INVOKE;
             } else {
                 if (length == 0) {
                     seekToFirst();
@@ -224,8 +208,10 @@ namespace jutil JUTIL_PUBLIC_ {
             Node *e = head;
             if (e) {
                 while (e && (e->previous)) {
+                    if (e->key == key) return e;
                     e = e->previous;
                 }
+                e = head->next;
                 while (e && (e->key != key)) {
                     e = e->next;
                 }
