@@ -26,11 +26,17 @@ namespace jutil JUTIL_PUBLIC_ {
 
     class JUTIL_PUBLIC_ __QueueInternalAllocator : public Allocator {
     protected:
-        void *alloc(size_t);
-        void *realloc(void*, size_t);
-        bool free(void*);
-
-        virtual ~__QueueInternalAllocator();
+        void *alloc(size_t c) {
+            return malloc(c);
+        }
+        void *realloc(void *p, size_t c) {
+            return ::realloc(p, c);
+        }
+        bool free(void *p) {
+            if (p) ::free(p);
+            return p;
+        }
+        ~__QueueInternalAllocator() {}
     };
 
     template <
@@ -805,17 +811,7 @@ namespace jutil JUTIL_PUBLIC_ {
         size_t allocated;
     };
 
-    void *__QueueInternalAllocator::alloc(size_t c) {
-        return malloc(c);
-    }
-    void *__QueueInternalAllocator::realloc(void *p, size_t c) {
-        return ::realloc(p, c);
-    }
-    bool __QueueInternalAllocator::free(void *p) {
-        if (p) ::free(p);
-        return p;
-    }
-    __QueueInternalAllocator::~__QueueInternalAllocator() {}
+    
 }
 
 #endif // JUTIL_QUEUE_H

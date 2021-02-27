@@ -27,6 +27,10 @@
 #define THREAD_EXEC(a) yield(); (a)
 #define THREAD_PAUSE(n) tellPause(n); yield()
 
+#define JUTIL_THREAD_IMPL \
+    jutil::Queue<jutil::Thread*> runningThreads; \
+    jutil::Mutex jutil::globalMutex = jutil::createMutexObject();
+
 namespace jutil JUTIL_PUBLIC_ {
 
     #ifdef JUTIL_WINDOWS
@@ -41,82 +45,10 @@ namespace jutil JUTIL_PUBLIC_ {
 
     class Thread;
 
-    class JUTIL_PUBLIC_ ThreadGroup JUTIL_NONCOPYABLE {
-    public:
-        ThreadGroup();
+    extern Queue<Thread*> runningThreads;
+    extern Mutex globalMutex;
 
-        bool addMember(Thread*);
-        bool revokeMember(Thread*);
-        bool isMember(Thread*);
-
-        jutil::Queue<Thread*> getMembers();
-
-        Mutex* const getMutex();
-
-    private:
-        Queue<Thread*> members;
-        Mutex mutex;
-    };
-
-    class JUTIL_PUBLIC_ Thread JUTIL_NONCOPYABLE {
-    public:
-
-        Thread(ThreadGroup* = JUTIL_NULLPTR);
-
-        bool start();
-        bool join();
-
-        bool tellPause(long = -1);
-        bool tellUnpause();
-        bool tellStop();
-
-        ThreadID getID() const;
-
-        bool pausedOrWaiting() const;
-
-        static ThreadID getCurrentThreadID();
-        static Thread *getCurrentThread();
-
-        ThreadGroup *const getGroup();
-        bool setGroup(ThreadGroup*);
-
-        bool running();
-
-        static bool requestGroupWait();
-        static bool requestGroupResume();
-
-        virtual ~Thread();
-
-    private:
-        ThreadHandle handle;
-        ThreadID id;
-        ThreadGroup *group;
-
-        #ifdef JUTIL_WINDOWS
-            static unsigned long __stdcall connector(void*);
-        #elif defined JUTIL_LINUX
-            static void *connector(void*);
-        #endif
-
-        bool shouldPause, paused, waiting, shouldStop;
-        long pauseLength;
-
-        Mutex mutex;
-
-    protected:
-
-        static void yield();
-
-        virtual void onPause() = 0;
-        virtual void onUnpause() = 0;
-        virtual void onStop() = 0;
-
-        virtual void main() = 0;
-    };
-
-    jutil::Queue<Thread*> runningThreads;
-
-    Mutex createMutexObject() {
+    inline Mutex createMutexObject() {
         #ifdef JUTIL_WINDOWS
             return CreateMutex(NULL, FALSE, NULL);
         #elif defined JUTIL_LINUX
@@ -126,42 +58,7 @@ namespace jutil JUTIL_PUBLIC_ {
         #endif
     }
 
-    Mutex globalMutex = createMutexObject();
-
-    ThreadGroup::ThreadGroup() : mutex(createMutexObject()) {}
-
-    bool ThreadGroup::addMember(Thread *t) {
-        if (!(t->getGroup()) && (members.empty() || !members.find(t))) {
-            members.insert(t);
-            t->setGroup(this);
-            return true;
-        } else return false;
-    }
-
-    bool ThreadGroup::revokeMember(Thread *t) {
-        size_t index;
-        if (!t->getGroup() || t->getGroup() != this || members.empty() || !members.find(t, &index)) {
-            return false;
-        } else {
-            t->setGroup(JUTIL_NULLPTR);
-            members.erase(index);
-            return true;
-        }
-    }
-
-    bool ThreadGroup::isMember(Thread *t) {
-        return (!members.empty() && members.find(t));
-    }
-
-    jutil::Queue<Thread*> ThreadGroup::getMembers() {
-        return members;
-    }
-
-    Mutex * const ThreadGroup::getMutex() {
-        return &mutex;
-    }
-
-    bool mutexLock(Mutex *const mut) {
+    inline bool mutexLock(Mutex *const mut) {
         #ifdef JUTIL_WINDOWS
             DWORD result;
             while (true) {
@@ -175,7 +72,7 @@ namespace jutil JUTIL_PUBLIC_ {
         #endif
     }
 
-    bool mutexUnlock(Mutex *const mut) {
+    inline bool mutexUnlock(Mutex *const mut) {
         #ifdef JUTIL_WINDOWS
             return ReleaseMutex(*mut);
         #elif defined JUTIL_LINUX
@@ -183,191 +80,269 @@ namespace jutil JUTIL_PUBLIC_ {
         #endif
     }
 
-    Thread::Thread(ThreadGroup *g) : handle(0), id(0), group(g), shouldPause(false), paused(false), waiting(false), shouldStop(false), pauseLength(-1), mutex(createMutexObject()) {}
+    class JUTIL_PUBLIC_ ThreadGroup JUTIL_NONCOPYABLE {
+    public:
+        ThreadGroup();
 
-    bool Thread::start() {
-        bool r;
-        mutexLock(&mutex);
-        if (!running()) {
-            #ifdef JUTIL_WINDOWS
-                handle = CreateThread(NULL, 0, Thread::connector, static_cast<void*>(this), 0, &id);
-                r = handle;
-            #elif defined JUTIL_LINUX
-                r =  (!(pthread_create(&handle, NULL, Thread::connector, static_cast<void*>(this))));
-            #endif
-            if (r) {
-                mutexLock(&globalMutex);
-                runningThreads.insert(this);
-                mutexUnlock(&globalMutex);
-            }
-        } else r = false;
-        mutexUnlock(&mutex);
-        return r;
-    }
+        bool addMember(Thread*);
 
-    #ifdef JUTIL_WINDOWS
-        DWORD WINAPI Thread::connector(LPVOID object) {
-    #elif defined JUTIL_LINUX
-        void *Thread::connector(void *object) {
-    #endif
-        Thread *obj = static_cast<Thread*>(object);
-        #ifdef JUTIL_LINUX
-            obj->id = pthread_self();
-        #endif
-        obj->main();
-        obj->shouldStop = true;
-        yield();
-        #ifdef JUTIL_WINDOWS
-            return 0;
-        #elif defined JUTIL_LINUX
-            return NULL;
-        #endif
-    }
+        bool revokeMember(Thread*);
 
-    ThreadID Thread::getCurrentThreadID() {
-        #ifdef JUTIL_WINDOWS
-            return GetCurrentThreadId();
-        #elif defined JUTIL_LINUX
-            return pthread_self();
-        #endif
-    }
+        bool isMember(Thread*);
 
-    Thread *Thread::getCurrentThread() {
-        ThreadID id = getCurrentThreadID();
-        for (auto &i: runningThreads) if (i->id == id) return i;
-        return JUTIL_NULLPTR;
-    }
+        jutil::Queue<Thread*> getMembers();
 
-    ThreadGroup *const Thread::getGroup() {
-        return group;
-    }
+        Mutex * const getMutex();
 
-    bool Thread::setGroup(ThreadGroup *g) {
-        bool r;
-        mutexLock(&mutex);
-        if (!group && g) {
-            group = g;
-            r = true;
-        } else if (group && !g) {
-            group = JUTIL_NULLPTR;
-            r = true;
-        } else r = false;
-        mutexUnlock(&mutex);
-        return r;
-    }
+    private:
+        Queue<Thread*> members;
+        Mutex mutex;
+    };
 
-    bool Thread::join() {
-        if (getCurrentThreadID() == id) return false;
-        else {
-            #ifdef JUTIL_WINDOWS
-                WaitForSingleObject(handle, INFINITE);
-            #elif defined JUTIL_LINUX
-                pthread_join(handle, NULL);
-            #endif
-            return true;
+    class JUTIL_PUBLIC_ Thread JUTIL_NONCOPYABLE {
+    public:
+
+        Thread(ThreadGroup *g) : handle(0), id(0), group(g), shouldPause(false), paused(false), waiting(false), shouldStop(false), pauseLength(-1), mutex(createMutexObject()) {}
+
+        bool start() {
+            bool r;
+            mutexLock(&mutex);
+            if (!running()) {
+                #ifdef JUTIL_WINDOWS
+                    handle = CreateThread(NULL, 0, Thread::connector, static_cast<void*>(this), 0, &id);
+                    r = handle;
+                #elif defined JUTIL_LINUX
+                    r =  (!(pthread_create(&handle, NULL, Thread::connector, static_cast<void*>(this))));
+                #endif
+                if (r) {
+                    mutexLock(&globalMutex);
+                    runningThreads.insert(this);
+                    mutexUnlock(&globalMutex);
+                }
+            } else r = false;
+            mutexUnlock(&mutex);
+            return r;
         }
-    }
 
-    bool Thread::tellPause(long l) {
-        bool r;
-        mutexLock(&mutex);
-        if (!shouldPause) {
-            pauseLength = l;
-            shouldPause = true;
-            r = true;
-        } else r = false;
-        mutexUnlock(&mutex);
-        return r;
-    }
+        static ThreadID getCurrentThreadID() {
+            #ifdef JUTIL_WINDOWS
+                return GetCurrentThreadId();
+            #elif defined JUTIL_LINUX
+                return pthread_self();
+            #endif
+        }
 
-    bool Thread::tellUnpause() {
-        bool r;
-        mutexLock(&mutex);
-        if (shouldPause) {
-            shouldPause = false;
-            pauseLength = -1;
-            r = true;
-        } else r = false;
-        mutexUnlock(&mutex);
-        return r;
-    }
+        static Thread *getCurrentThread() {
+            ThreadID id = getCurrentThreadID();
+            for (auto &i: runningThreads) if (i->id == id) return i;
+            return JUTIL_NULLPTR;
+        }
 
-    bool Thread::tellStop() {
-        if (!shouldStop) {
-            shouldStop = true;
+        ThreadGroup *const getGroup() {
+            return group;
+        }
+
+        bool setGroup(ThreadGroup *g) {
+            bool r;
+            mutexLock(&mutex);
+            if (!group && g) {
+                group = g;
+                r = true;
+            } else if (group && !g) {
+                group = JUTIL_NULLPTR;
+                r = true;
+            } else r = false;
+            mutexUnlock(&mutex);
+            return r;
+        }
+
+        bool join() {
+            if (getCurrentThreadID() == id) return false;
+            else {
+                #ifdef JUTIL_WINDOWS
+                    WaitForSingleObject(handle, INFINITE);
+                #elif defined JUTIL_LINUX
+                    pthread_join(handle, NULL);
+                #endif
+                return true;
+            }
+        }
+
+        bool tellPause(long l) {
+            bool r;
+            mutexLock(&mutex);
+            if (!shouldPause) {
+                pauseLength = l;
+                shouldPause = true;
+                r = true;
+            } else r = false;
+            mutexUnlock(&mutex);
+            return r;
+        }
+
+        bool tellUnpause() {
+            bool r;
+            mutexLock(&mutex);
+            if (shouldPause) {
+                shouldPause = false;
+                pauseLength = -1;
+                r = true;
+            } else r = false;
+            mutexUnlock(&mutex);
+            return r;
+        }
+
+        bool tellStop() {
+            if (!shouldStop) {
+                shouldStop = true;
+                return true;
+            } else return false;
+        }
+
+        static bool requestGroupWait() {
+            Thread *requestingThread = getCurrentThread();
+            if (requestingThread) {
+                ThreadGroup *requestedGroup = requestingThread->group;
+                if (requestedGroup) {
+                    return mutexLock(requestedGroup->getMutex());
+                } else {
+                    return mutexLock(&globalMutex);
+                }
+            } else {
+                return mutexLock(&globalMutex);
+            }
+        }
+
+        bool running() {
+            return !runningThreads.empty() && runningThreads.find(this);
+        }
+
+        static bool requestGroupResume() {
+            Thread *requestingThread = getCurrentThread();
+            if (requestingThread) {
+                ThreadGroup *requestedGroup = requestingThread->group;
+                if (requestedGroup) {
+                    return mutexUnlock(requestedGroup->getMutex());
+                } else {
+                    return mutexUnlock(&globalMutex);
+                }
+            } else {
+                return mutexUnlock(&globalMutex);
+            }
+        }
+
+        bool pausedOrWaiting() const {
+            return paused || waiting;
+        }
+
+        ~Thread() {
+            if (running()) {
+                shouldStop = true;
+                yield();
+            }
+        }
+
+    private:
+        ThreadHandle handle;
+        ThreadID id;
+        ThreadGroup *group;
+        
+        #ifdef JUTIL_WINDOWS
+            static DWORD WINAPI connector(LPVOID object) {
+        #elif defined JUTIL_LINUX
+            static void *connector(void *object) {
+        #endif
+            Thread *obj = static_cast<Thread*>(object);
+            #ifdef JUTIL_LINUX
+                obj->id = pthread_self();
+            #endif
+            obj->main();
+            obj->shouldStop = true;
+            yield();
+            #ifdef JUTIL_WINDOWS
+                return 0;
+            #elif defined JUTIL_LINUX
+                return NULL;
+            #endif
+        }
+
+        bool shouldPause, paused, waiting, shouldStop;
+        long pauseLength;
+
+        Mutex mutex;
+
+    protected:
+
+        static void yield() {
+            Thread *thread = getCurrentThread();
+            if (thread) {
+                if (thread->shouldStop) {
+                    thread->onStop();
+                    #ifdef JUTIL_WINDOWS
+                        ExitThread(0);
+                    #elif defined JUTIL_LINUX
+                        pthread_exit(NULL);
+                    #endif
+                    thread->handle = 0;
+                    thread->id = 0;
+                    size_t i;
+                    mutexLock(&globalMutex);
+                    if (!runningThreads.empty() && runningThreads.find(thread, &i)) runningThreads.erase(i);
+                    mutexUnlock(&globalMutex);
+                } else if (thread->shouldPause) {
+                    thread->onPause();
+                    Timer timer;
+                    timer.start();
+                    while (thread->shouldPause && (thread->pauseLength <= 0 || timer.get(MILLISECONDS) < thread->pauseLength)) thread->paused = true;
+                    thread->paused = false;
+                    thread->onUnpause();
+                }
+            }
+        }
+
+        virtual void onPause() = 0;
+        virtual void onUnpause() = 0;
+        virtual void onStop() = 0;
+
+        virtual void main() = 0;
+    };
+        
+        
+    inline ThreadGroup::ThreadGroup() : mutex(createMutexObject()) {}
+
+    inline bool ThreadGroup::addMember(Thread *t) {
+        if (!(t->getGroup()) && (members.empty() || !members.find(t))) {
+            members.insert(t);
+            t->setGroup(this);
             return true;
         } else return false;
     }
 
-    void Thread::yield() {
-        Thread *thread = getCurrentThread();
-        if (thread) {
-            if (thread->shouldStop) {
-                thread->onStop();
-                #ifdef JUTIL_WINDOWS
-                    ExitThread(0);
-                #elif defined JUTIL_LINUX
-                    pthread_exit(NULL);
-                #endif
-                thread->handle = 0;
-                thread->id = 0;
-                size_t i;
-                mutexLock(&globalMutex);
-                if (!runningThreads.empty() && runningThreads.find(thread, &i)) runningThreads.erase(i);
-                mutexUnlock(&globalMutex);
-            } else if (thread->shouldPause) {
-                thread->onPause();
-                Timer timer;
-                timer.start();
-                while (thread->shouldPause && (thread->pauseLength <= 0 || timer.get(MILLISECONDS) < thread->pauseLength)) thread->paused = true;
-                thread->paused = false;
-                thread->onUnpause();
-            }
-        }
-    }
-
-    bool Thread::requestGroupWait() {
-        Thread *requestingThread = getCurrentThread();
-        if (requestingThread) {
-            ThreadGroup *requestedGroup = requestingThread->group;
-            if (requestedGroup) {
-                return mutexLock(requestedGroup->getMutex());
-            } else {
-                return mutexLock(&globalMutex);
-            }
+    inline bool ThreadGroup::revokeMember(Thread *t) {
+        size_t index;
+        if (!t->getGroup() || t->getGroup() != this || members.empty() || !members.find(t, &index)) {
+            return false;
         } else {
-            return mutexLock(&globalMutex);
+            t->setGroup(JUTIL_NULLPTR);
+            members.erase(index);
+            return true;
         }
     }
 
-    bool Thread::running() {
-        return !runningThreads.empty() && runningThreads.find(this);
+    inline bool ThreadGroup::isMember(Thread *t) {
+        return (!members.empty() && members.find(t));
     }
 
-    bool Thread::requestGroupResume() {
-        Thread *requestingThread = getCurrentThread();
-        if (requestingThread) {
-            ThreadGroup *requestedGroup = requestingThread->group;
-            if (requestedGroup) {
-                return mutexUnlock(requestedGroup->getMutex());
-            } else {
-                return mutexUnlock(&globalMutex);
-            }
-        } else {
-            return mutexUnlock(&globalMutex);
-        }
+    inline jutil::Queue<Thread*> ThreadGroup::getMembers() {
+        return members;
     }
 
-    bool Thread::pausedOrWaiting() const {
-        return paused || waiting;
+    inline Mutex * const ThreadGroup::getMutex() {
+        return &mutex;
     }
 
-    Thread::~Thread() {
-        if (running()) {
-            shouldStop = true;
-            yield();
-        }
-    }
+
+    
 }
 
 #endif // JUTIL_THREAD_H

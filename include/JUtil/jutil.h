@@ -47,6 +47,10 @@
 
 #endif // _WIN32
 
+#define JUTIL_IMPL \
+    JUTIL_IO_IMPL \
+    JUTIL_THREAD_IMPL 
+
 namespace jutil JUTIL_PUBLIC_ {
     char readCharacter();
     void cls(size_t  = 1);
@@ -56,7 +60,7 @@ namespace jutil JUTIL_PUBLIC_ {
         HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
     #endif // _WIN32
 
-    char readCharacter() {
+    inline char readCharacter() {
         char c = 0;
         #ifdef _WIN32
             HANDLE conin = CreateFileW(L"CONIN$", GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, JUTIL_NULLPTR, OPEN_EXISTING, 0, JUTIL_NULLPTR);
@@ -77,7 +81,7 @@ namespace jutil JUTIL_PUBLIC_ {
         return c;
     }
 
-    void cls(size_t pauseFor) {
+    inline void cls(size_t pauseFor) {
         #ifdef _WIN32
             Sleep(pauseFor);
             COORD coord = {0, 0};
@@ -95,7 +99,7 @@ namespace jutil JUTIL_PUBLIC_ {
         #endif // _WIN32
     }
 
-    void sleep(size_t t) {
+    inline void sleep(size_t t) {
         #ifdef _WIN32
             Sleep(t);
         #elif defined __linux__

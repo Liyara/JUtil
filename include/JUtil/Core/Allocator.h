@@ -15,22 +15,16 @@ namespace jutil JUTIL_PUBLIC_ {
         virtual void *realloc(void*, size_t) = 0;
         virtual bool free(void*) = 0;
 
-        virtual bool move(void*, const void*, size_t);
-        virtual bool copy(void*, const void*, size_t);
-
-        virtual ~Allocator();
-
-    };
-
-    bool Allocator::move(void *d, const void *s, size_t c) {
+        virtual bool move(void *d, const void *s, size_t c) {
         return memmove(d, s, c);
     }
-
-    bool Allocator::copy(void *d, const void *s, size_t c) {
+        virtual bool copy(void *d, const void *s, size_t c) {
         return memcpy(d, s, c);
     }
 
-    Allocator::~Allocator() {}
+        virtual ~Allocator() {}
+
+    };
 }
 
 #endif // JUTIL_ALLOCATOR_H

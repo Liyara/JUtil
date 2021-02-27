@@ -13,89 +13,7 @@
 
 namespace jutil JUTIL_PUBLIC_ {
 
-    long long queryGlobalTimer();
-
-    enum {
-        NANOSECONDS,
-        MICROSECONDS,
-        MILLISECONDS,
-        SECONDS
-    };
-
-    class JUTIL_PUBLIC_ Timer {
-    public:
-
-        Timer();
-
-        Timer(const Timer&);
-        Timer &operator=(const Timer&);
-
-        #ifdef JUTIL_CPP11
-            Timer(Timer&&);
-            Timer &operator=(Timer&&);
-        #endif
-
-        void start();
-
-        long double get(unsigned = SECONDS);
-
-        long double fastForward(long double, unsigned = SECONDS);
-
-        long double rewind(long double, unsigned = SECONDS);
-
-        long double stop(unsigned = SECONDS);
-
-        void set(long double, unsigned = SECONDS);
-
-        long double restart(unsigned = SECONDS);
-
-    private:
-        long long ct;
-        long double freq;
-    };
-
-    Timer::Timer() : ct(-1) {
-        #ifdef JUTIL_WINDOWS
-            LARGE_INTEGER i;
-            QueryPerformanceFrequency(&i);
-            freq = static_cast<long double>(i.QuadPart) / NANOS_PER_SECOND;
-        #else
-            freq = 1;
-        #endif
-    }
-    Timer::Timer(const Timer &timer)
-    #ifdef JUTIL_CPP11
-        : Timer() {
-            *this = timer;
-        }
-    #else
-        : ct(timer.ct) {
-            #ifdef JUTIL_WINDOWS
-                LARGE_INTEGER i;
-                QueryPerformanceFrequency(&i);
-                freq = static_cast<long double>(i.QuadPart) / NANOS_PER_SECOND;
-            #else
-                freq = 1;
-            #endif
-        }
-    #endif
-    
-    Timer &Timer::operator=(const Timer &timer) {
-        ct = timer.ct;
-        return *this;
-    }
-    #ifdef JUTIL_CPP11
-        Timer::Timer(Timer &&timer) : Timer() {
-            *this = jutil::move(timer);
-        }
-        Timer &Timer::operator=(Timer &&timer) {
-            ct = timer.ct;
-            timer.ct = -1;
-            return *this;
-        }
-    #endif
-
-    long long queryGlobalTimer() {
+    inline long long queryGlobalTimer() {
         #ifdef JUTIL_WINDOWS
             LARGE_INTEGER i;
             QueryPerformanceCounter(&i);
@@ -107,45 +25,103 @@ namespace jutil JUTIL_PUBLIC_ {
         #endif
     }
 
-    void Timer::start() {
-        ct = queryGlobalTimer();
-    }
-    long double Timer::get(unsigned type) {
-        long long nct = queryGlobalTimer();
-        long double transform = freq;
-        for (unsigned i = 0; i < type; ++i) {
-            transform *= 1000.L;
+    enum {
+        NANOSECONDS,
+        MICROSECONDS,
+        MILLISECONDS,
+        SECONDS
+    };
+
+    class JUTIL_PUBLIC_ Timer {
+    public:
+
+        Timer() : ct(-1) {
+            #ifdef JUTIL_WINDOWS
+                LARGE_INTEGER i;
+                QueryPerformanceFrequency(&i);
+                freq = static_cast<long double>(i.QuadPart) / NANOS_PER_SECOND;
+            #else
+                freq = 1;
+            #endif
         }
-        return static_cast<long double>(nct - ct) / transform;
-    }
-    long double Timer::stop(unsigned type) {
-        long double r = get(type);
-        ct = -1;
-        return r;
-    }
-    long double Timer::fastForward(long double t, unsigned type) {
-        for (unsigned i = 0; i < type; ++i) t *= 1000.L;
-        ct -= (t * freq);
-        return get(type);
-    }
+        Timer(const Timer &timer)
+        #ifdef JUTIL_CPP11
+            : Timer() {
+                *this = timer;
+            }
+        #else
+            : ct(timer.ct) {
+                #ifdef JUTIL_WINDOWS
+                    LARGE_INTEGER i;
+                    QueryPerformanceFrequency(&i);
+                    freq = static_cast<long double>(i.QuadPart) / NANOS_PER_SECOND;
+                #else
+                    freq = 1;
+                #endif
+            }
+        #endif
+        
+        Timer &operator=(const Timer &timer) {
+            ct = timer.ct;
+            return *this;
+        }
+        #ifdef JUTIL_CPP11
+            Timer(Timer &&timer) : Timer() {
+                *this = jutil::move(timer);
+            }
+            Timer &operator=(Timer &&timer) {
+                ct = timer.ct;
+                timer.ct = -1;
+                return *this;
+            }
+        #endif
 
-    long double Timer::rewind(long double t, unsigned type) {
-        for (unsigned i = 0; i < type; ++i) t *= 1000.L;
-        ct += (t * freq);
-        return get(type);
-    }
+       void start() {
+            ct = queryGlobalTimer();
+        }
+        long double get(unsigned type) {
+            long long nct = queryGlobalTimer();
+            long double transform = freq;
+            for (unsigned i = 0; i < type; ++i) {
+                transform *= 1000.L;
+            }
+            return static_cast<long double>(nct - ct) / transform;
+        }
+        long double stop(unsigned type) {
+            long double r = get(type);
+            ct = -1;
+            return r;
+        }
+        long double fastForward(long double t, unsigned type) {
+            for (unsigned i = 0; i < type; ++i) t *= 1000.L;
+            ct -= (t * freq);
+            return get(type);
+        }
 
-    long double Timer::restart(unsigned type) {
-        long double r = stop(type);
-        start();
-        return r;
-    }
-    void Timer::set(long double t, unsigned type) {
-        long double cur = get(type);
-        long double diff = t - cur;
-        if (diff < 0) rewind(diff * -1, type);
-        else fastForward(diff, type);
-    }
+        long double rewind(long double t, unsigned type) {
+            for (unsigned i = 0; i < type; ++i) t *= 1000.L;
+            ct += (t * freq);
+            return get(type);
+        }
+
+        long double restart(unsigned type) {
+            long double r = stop(type);
+            start();
+            return r;
+        }
+        void set(long double t, unsigned type) {
+            long double cur = get(type);
+            long double diff = t - cur;
+            if (diff < 0) rewind(diff * -1, type);
+            else fastForward(diff, type);
+        }
+
+    private:
+        long long ct;
+        long double freq;
+    };
+
+    
 }
 
 #endif // JUTIL_TIMER_H

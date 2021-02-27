@@ -28,13 +28,33 @@
 
 #ifdef JUTIL_WINDOWS
 	#include <windows.h>
-    char __sep__[2] = "\\";
+    extern char __sep__[2];
+    #define _JUTIL_IO_IMPL char __sep__[2] = "\\";
 	#ifndef PATH_MAX
 		#define PATH_MAX MAX_PATH
 	#endif
 #elif defined JUTIL_LINUX
-    char __sep__[2] = "/";
+    extern char __sep__[2];
+    #define _JUTIL_IO_IMPL char __sep__[2] = "/";
 #endif
+
+#define JUTIL_IO_IMPL _JUTIL_IO_IMPL \
+    namespace jutil { \
+        IOTarget *_stdout_ = makeIOTarget((IOBuffer)stdout); \
+        IOTarget *_stderr_ = makeIOTarget((IOBuffer)stderr); \
+        IOTarget *_stdin_ = makeIOTarget((IOBuffer)stdin); \
+        OutputStream           out(_stdout_); \
+        WideOutputStream       wout(_stdout_); \
+        DataOutputStream       dout(_stdout_); \
+        ErrorOutputStream      err(_stderr_); \
+        WideErrorOutputStream  werr(_stderr_); \
+        InputStream            in(_stdin_); \
+        WideInputStream        win(_stdin_); \
+        const IOCommand     endl(COMMAND_NEWLINE); \
+        const IOCommand     flush(COMMAND_FLUSH); \
+    }
+
+
 
 /**
     @section DESCRIPTION
@@ -301,7 +321,7 @@ namespace jutil JUTIL_PUBLIC_ {
 
     //built-in IO streams for interacting with the shell.
 
-    /*extern IOTarget
+    extern IOTarget
         *_stdout_,
         *_stderr_,
         *_stdin_
@@ -316,7 +336,7 @@ namespace jutil JUTIL_PUBLIC_ {
     extern WideInputStream        win;
 
     extern const IOCommand     endl;
-    extern const IOCommand     flush;*/
+    extern const IOCommand     flush;
 
     template <typename T>
     struct PutFunc {
@@ -347,7 +367,7 @@ namespace jutil JUTIL_PUBLIC_ {
     #define LEN_FUNC        typename LenFunc<T>::Definition
 
     template<typename T>
-    int putBuffer(StringBase<T> data, IOTarget *target, PUT_FUNC putfunc, PRINT_FUNC printfunc, LEN_FUNC lenfunc, const T *format) {
+    inline int putBuffer(StringBase<T> data, IOTarget *target, PUT_FUNC putfunc, PRINT_FUNC printfunc, LEN_FUNC lenfunc, const T *format) {
         T *str = new T[data.size() + 1];
         data.array(str);
         if (target->getTargetType() == IOTarget::BUFFER_TARGET) {
@@ -369,7 +389,7 @@ namespace jutil JUTIL_PUBLIC_ {
     }
 
     template<typename T>
-    void defaultCommandHandler(const io_base::OutputHandler<T>* caller, IOCommand command) {
+    inline void defaultCommandHandler(const io_base::OutputHandler<T>* caller, IOCommand command) {
         switch(command.value) {
 
         case COMMAND_NEWLINE:
@@ -387,66 +407,50 @@ namespace jutil JUTIL_PUBLIC_ {
         }
     }
 
-    IOTarget::IOTarget() : stringIndex(0) {
+    inline IOTarget::IOTarget() : stringIndex(0) {
 
     }
 
-    IOTarget::TargetType IOTarget::getTargetType() const {
+    inline IOTarget::TargetType IOTarget::getTargetType() const {
         return targetType;
     }
 
-    void *const IOTarget::buffer() const {
+    inline void *const IOTarget::buffer() const {
         return realTarget;
     }
 
-    IOTarget *makeIOTarget(IOBuffer f) {
+    inline IOTarget *makeIOTarget(IOBuffer f) {
         IOTarget *r = new IOTarget();
         r->realTarget = f;
         r->targetType = IOTarget::BUFFER_TARGET;
         return r;
     }
 
-    IOTarget *_stdout_ = makeIOTarget((IOBuffer)stdout);
-    IOTarget *_stderr_ = makeIOTarget((IOBuffer)stderr);
-    IOTarget *_stdin_ = makeIOTarget((IOBuffer)stdin);
-
-     OutputStream           out(_stdout_);
-     WideOutputStream       wout(_stdout_);
-     DataOutputStream       dout(_stdout_);
-     ErrorOutputStream      err(_stderr_);
-     WideErrorOutputStream  werr(_stderr_);
-     InputStream            in(_stdin_);
-     WideInputStream        win(_stdin_);
-
-     const IOCommand     endl(COMMAND_NEWLINE);
-     const IOCommand     flush(COMMAND_FLUSH);
-
-
-    OutputStream::OutputStream(IOTarget *t) : OutputHandler(defaultCommandHandler<char>, t) {
+    inline OutputStream::OutputStream(IOTarget *t) : OutputHandler(defaultCommandHandler<char>, t) {
 
     }
 
-    void OutputStream::put(const String &data) const {
+    inline void OutputStream::put(const String &data) const {
         putBuffer<char>(data, otarget, fputs, snprintf, strlen, "%s");
     }
 
 
-    WideOutputStream::WideOutputStream(IOTarget *t) : OutputHandler(defaultCommandHandler<wchar_t>, t) {
+    inline WideOutputStream::WideOutputStream(IOTarget *t) : OutputHandler(defaultCommandHandler<wchar_t>, t) {
 
     }
 
-    void WideOutputStream::put(const WideString &data) const {
+    inline void WideOutputStream::put(const WideString &data) const {
         #ifndef JUTIL_MINGW_32
             putBuffer<wchar_t>(data, otarget, fputws, swprintf, wcslen, L"%ls");
         #endif
     }
 
 
-    DataOutputStream::DataOutputStream(IOTarget *t) : OutputHandler(defaultCommandHandler<Byte>, t) {
+    inline DataOutputStream::DataOutputStream(IOTarget *t) : OutputHandler(defaultCommandHandler<Byte>, t) {
 
     }
 
-    void DataOutputStream::put(const ByteString &data) const {
+    inline void DataOutputStream::put(const ByteString &data) const {
 		Byte *str = new Byte[data.size()];
         data.array(str);
         char *hex = (char*)malloc(data.size() * 2);
@@ -461,30 +465,30 @@ namespace jutil JUTIL_PUBLIC_ {
     }
 
 
-    ErrorOutputStream::ErrorOutputStream(IOTarget *t) : OutputHandler(defaultCommandHandler<char>, t) {
+    inline ErrorOutputStream::ErrorOutputStream(IOTarget *t) : OutputHandler(defaultCommandHandler<char>, t) {
 
     }
 
-    void ErrorOutputStream::put(const String &data) const {
+    inline void ErrorOutputStream::put(const String &data) const {
         putBuffer<char>(data, otarget, fputs, snprintf, strlen, "%s");
     }
 
 
-    WideErrorOutputStream::WideErrorOutputStream(IOTarget *t) : OutputHandler(defaultCommandHandler<wchar_t>, t) {
+    inline WideErrorOutputStream::WideErrorOutputStream(IOTarget *t) : OutputHandler(defaultCommandHandler<wchar_t>, t) {
 
     }
 
-    void WideErrorOutputStream::put(const WideString &data) const {
+    inline void WideErrorOutputStream::put(const WideString &data) const {
         #ifndef JUTIL_MINGW_32
             putBuffer<wchar_t>(data, otarget, fputws, swprintf, wcslen, L"%ls");
         #endif
     }
 
-    InputStream::InputStream(IOTarget *t) : InputHandler(t) {
+    inline InputStream::InputStream(IOTarget *t) : InputHandler(t) {
 
     }
 
-    String InputStream::scan(size_t) const {
+    inline String InputStream::scan(size_t) const {
 		char *cstr = new char[BUFFER_LENGTH];
         fgets(cstr, BUFFER_LENGTH, (FILE*)(itarget->buffer()));
         cstr[strcspn(cstr, "\r\n")] = 0;
@@ -493,11 +497,11 @@ namespace jutil JUTIL_PUBLIC_ {
         return r;
     }
 
-    WideInputStream::WideInputStream(IOTarget *t) : InputHandler(t) {
+    inline WideInputStream::WideInputStream(IOTarget *t) : InputHandler(t) {
 
     }
 
-    WideString WideInputStream::scan(size_t) const {
+    inline WideString WideInputStream::scan(size_t) const {
 		wchar_t *cstr = new wchar_t[BUFFER_LENGTH];
         fgetws(cstr, BUFFER_LENGTH, (FILE*)(itarget->buffer()));
         cstr[wcscspn(cstr, L"\r\n")] = 0;
@@ -510,7 +514,7 @@ namespace jutil JUTIL_PUBLIC_ {
         err << "Could not find file \"" << String(cfpath) << "\"!" << endl;
     }
 
-    bool fileExists(char *cfpath) {
+    inline bool fileExists(char *cfpath) {
         bool r = false;
         FILE *temp = fopen(cfpath, "r");
         if (temp) {
@@ -520,12 +524,12 @@ namespace jutil JUTIL_PUBLIC_ {
         return r;
     }
 
-    void emptyFile(char *cfpath) {
+    inline void emptyFile(char *cfpath) {
         FILE *temp = fopen(cfpath, "w");
         if (temp) fclose(temp);
     }
 
-    bool handleFileInitialization(char *cfpath, unsigned openMode) {
+   inline bool handleFileInitialization(char *cfpath, unsigned openMode) {
         if (openMode & CREATE) {
             FILE *temp = fopen(cfpath, "a");
             if (temp) fclose(temp);
@@ -546,7 +550,7 @@ namespace jutil JUTIL_PUBLIC_ {
     }
 
 
-    FileBase::FileBase(const String &fpath, unsigned openMode) : path(fpath), accessMode(openMode), m((char*)malloc(8)), fileOpen(false) {
+    inline FileBase::FileBase(const String &fpath, unsigned openMode) : path(fpath), accessMode(openMode), m((char*)malloc(8)), fileOpen(false) {
         char *cfpath = new char[fpath.size() + 1];
         fpath.array(cfpath);
 
@@ -581,17 +585,17 @@ namespace jutil JUTIL_PUBLIC_ {
 		delete[] cfpath;
     }
 
-    FileBase::~FileBase() {
+    inline FileBase::~FileBase() {
         if (target && target->buffer()) fclose((FILE*)(target->buffer()));
     }
 
-    unsigned FileBase::mode() const {
+    inline unsigned FileBase::mode() const {
         return accessMode;
     }
-    size_t FileBase::getPosition() const {
+    inline size_t FileBase::getPosition() const {
         return ftell((FILE*)(target->buffer()));
     }
-    bool FileBase::setPosition(size_t p) {
+    inline bool FileBase::setPosition(size_t p) {
         FILE *file = (FILE*)(target->buffer());
         if (p >= 0) {
             if (fseek(file, p, SEEK_SET)) return false;
@@ -601,17 +605,17 @@ namespace jutil JUTIL_PUBLIC_ {
         return true;
     }
 
-    bool File::eof() const {
+    inline bool File::eof() const {
         FILE *file = (FILE*)(target->buffer());
         int c = ungetc(fgetc(file), file);
         return c == EOF;
     }
 
-    File::File(const String &fpath, unsigned openMode) : FileBase(fpath, openMode), OutputHandler(JUTIL_NULLPTR, JUTIL_NULLPTR), InputHandler(JUTIL_NULLPTR) {
+    inline File::File(const String &fpath, unsigned openMode) : FileBase(fpath, openMode), OutputHandler(JUTIL_NULLPTR, JUTIL_NULLPTR), InputHandler(JUTIL_NULLPTR) {
         openFile();
     }
 
-    bool File::openFile() {
+    inline bool File::openFile() {
         char *cpath = new char[path.size() + 1];
         path.array(cpath);
         target = makeIOTarget((IOBuffer)fopen(cpath, m));
@@ -640,7 +644,7 @@ namespace jutil JUTIL_PUBLIC_ {
         return true;
     }
 
-    String File::scan(size_t) const {
+    inline String File::scan(size_t) const {
         if (accessMode & READ) {
             char buf[BUFFER_LENGTH];
             if (fgets(buf, sizeof(buf), (FILE*)(target->buffer()))) {
@@ -654,7 +658,7 @@ namespace jutil JUTIL_PUBLIC_ {
         }
     }
 
-    void File::dump(String *dest) const {
+    inline void File::dump(String *dest) const {
         if (accessMode & READ) {
             String line;
             size_t fpos = ftell((FILE*)(target->buffer()));
@@ -667,7 +671,7 @@ namespace jutil JUTIL_PUBLIC_ {
         }
     }
 
-    void File::put(const String &data) const {
+    inline void File::put(const String &data) const {
         if (accessMode & WRITE) {
             FILE *file = (FILE*)(target->buffer());
             size_t fpos = ftell(file);
@@ -717,7 +721,7 @@ namespace jutil JUTIL_PUBLIC_ {
         }
     }
 
-    size_t File::length() const {
+    inline size_t File::length() const {
         FILE *file = (FILE*)(target->buffer());
         size_t cpos = ftell(file);
         fseek(file, 0L, SEEK_END);
@@ -730,17 +734,17 @@ namespace jutil JUTIL_PUBLIC_ {
 
 
 
-    bool WideFile::eof() const {
+    inline bool WideFile::eof() const {
         FILE *file = (FILE*)(target->buffer());
         int c = ungetwc(fgetwc(file), file);
         return c == EOF;
     }
 
-    WideFile::WideFile(const String &fpath, unsigned openMode) : FileBase(fpath, openMode), OutputHandler(JUTIL_NULLPTR, JUTIL_NULLPTR), InputHandler(JUTIL_NULLPTR) {
+    inline WideFile::WideFile(const String &fpath, unsigned openMode) : FileBase(fpath, openMode), OutputHandler(JUTIL_NULLPTR, JUTIL_NULLPTR), InputHandler(JUTIL_NULLPTR) {
         openFile();
     }
 
-    bool WideFile::openFile() {
+    inline bool WideFile::openFile() {
         char *cpath = new char[path.size() + 1];
         path.array(cpath);
         target = makeIOTarget((IOBuffer)fopen(cpath, m));
@@ -769,7 +773,7 @@ namespace jutil JUTIL_PUBLIC_ {
         return true;
     }
 
-    WideString WideFile::scan(size_t) const {
+    inline WideString WideFile::scan(size_t) const {
         if (accessMode & READ) {
             wchar_t buf[BUFFER_LENGTH];
             if (fgetws(buf, sizeof(buf), (FILE*)(target->buffer()))) {
@@ -783,7 +787,7 @@ namespace jutil JUTIL_PUBLIC_ {
         }
     }
 
-    void WideFile::dump(WideString *dest) const {
+    inline void WideFile::dump(WideString *dest) const {
         if (accessMode & READ) {
             WideString line;
             size_t fpos = ftell((FILE*)(target->buffer()));
@@ -796,7 +800,7 @@ namespace jutil JUTIL_PUBLIC_ {
         }
     }
 
-    void WideFile::put(const WideString &data) const {
+    inline void WideFile::put(const WideString &data) const {
         if (accessMode & WRITE) {
             FILE *file = (FILE*)(target->buffer());
             size_t fpos = ftell(file);
@@ -844,7 +848,7 @@ namespace jutil JUTIL_PUBLIC_ {
         }
     }
 
-    size_t WideFile::length() const {
+    inline size_t WideFile::length() const {
         FILE *file = (FILE*)(target->buffer());
         size_t cpos = ftell(file);
         fseek(file, 0L, SEEK_END);
@@ -858,17 +862,17 @@ namespace jutil JUTIL_PUBLIC_ {
 
 
 
-    bool BinaryFile::eof() const {
+    inline bool BinaryFile::eof() const {
         FILE *file = (FILE*)(target->buffer());
         int c = ungetc(fgetc(file), file);
         return c == EOF;
     }
 
-    BinaryFile::BinaryFile(const String &fpath, size_t cs, unsigned openMode) : FileBase(fpath, openMode), OutputHandler(JUTIL_NULLPTR, JUTIL_NULLPTR), InputHandler(JUTIL_NULLPTR), chunkSize(cs) {
+    inline BinaryFile::BinaryFile(const String &fpath, size_t cs, unsigned openMode) : FileBase(fpath, openMode), OutputHandler(JUTIL_NULLPTR, JUTIL_NULLPTR), InputHandler(JUTIL_NULLPTR), chunkSize(cs) {
         openFile();
     }
 
-    bool BinaryFile::openFile() {
+    inline bool BinaryFile::openFile() {
         char *cpath = new char[path.size() + 1];
         path.array(cpath);
 
@@ -905,7 +909,7 @@ namespace jutil JUTIL_PUBLIC_ {
         return true;
     }
 
-    ByteString BinaryFile::scan(size_t) const {
+    inline ByteString BinaryFile::scan(size_t) const {
         if (accessMode & READ) {
             Byte *buf = new Byte[chunkSize];
 			ByteString r;
@@ -923,7 +927,7 @@ namespace jutil JUTIL_PUBLIC_ {
         }
     }
 
-    void BinaryFile::dump(ByteString *dest) const {
+    inline void BinaryFile::dump(ByteString *dest) const {
         if (accessMode & READ) {
             ByteString line;
             size_t fpos = ftell((FILE*)(target->buffer()));
@@ -936,7 +940,7 @@ namespace jutil JUTIL_PUBLIC_ {
         }
     }
 
-    void BinaryFile::put(const ByteString &data) const {
+    inline void BinaryFile::put(const ByteString &data) const {
         if (accessMode & WRITE) {
             FILE *file = (FILE*)(target->buffer());
             size_t fpos = ftell(file);
@@ -985,7 +989,7 @@ namespace jutil JUTIL_PUBLIC_ {
         }
     }
 
-    size_t BinaryFile::length() const {
+    inline size_t BinaryFile::length() const {
         FILE *file = (FILE*)(target->buffer());
         size_t cpos = ftell(file);
         fseek(file, 0L, SEEK_END);
@@ -994,11 +998,11 @@ namespace jutil JUTIL_PUBLIC_ {
         return result;
     }
 
-    DirectoryEntry::DirectoryEntry(const String &n, const String &d, Type t) : name(n), directory(d), fullPath(d + __sep__ + n), type(t) {
+    inline DirectoryEntry::DirectoryEntry(const String &n, const String &d, Type t) : name(n), directory(d), fullPath(d + __sep__ + n), type(t) {
 
     }
 
-    Directory::Directory(const String &str) {
+    inline Directory::Directory(const String &str) {
         char *cstr = new char[str.size() + 1];
         char *rpath = new char[PATH_MAX + 1];
         str.array(cstr);
@@ -1034,14 +1038,14 @@ namespace jutil JUTIL_PUBLIC_ {
         }
     }
 
-    bool Directory::valid() const {
+    inline bool Directory::valid() const {
         return _success;
     }
-    const Queue<DirectoryEntry> &Directory::entries() const {
+    inline const Queue<DirectoryEntry> &Directory::entries() const {
         return _entries;
     }
 
-    Directory::~Directory() {
+    inline Directory::~Directory() {
         if (handle) closedir((DIR*)handle);
     }
 

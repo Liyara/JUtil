@@ -84,79 +84,180 @@ namespace jutil JUTIL_PUBLIC_ {
         StringBase(const T *c, size_t l = 0) {}
     };
 
-    int toCString(char*, size_t, const char*, ...);
-    int toCString(wchar_t*, size_t, const wchar_t*, ...);
-    int toCString(unsigned char*, size_t, const unsigned char*, ...);
+    template <typename T>
+    StringBase<char> convert_char(T, const char*);
 
     template <typename T>
-    StringBase<char> convert_char(T t, const char *p);
+    inline StringBase<wchar_t> convert_wchar_t(T, const wchar_t*);
 
-    template <typename T>
-    StringBase<wchar_t> convert_wchar_t(T t, const wchar_t *p);
-
-    template <typename T>
-    StringBase<Byte> convert_Byte(T t, const Byte *p);
-
-    //Wrappers for cstd string conversion functions (e.g. strtoll, atoi, etc.)
     namespace JUTIL_PRIVATE_ cstr_conversion {
-        long long strToLL(const char*);
-        long long strToLL(const wchar_t*);
-        long long strToLL(const unsigned char*);
+        inline long long strToLL(const char *c) {
+            return strtoll(c, NULL, 10);
+        }
+        inline long long strToLL(const wchar_t *w) {
+            return wcstoll(w, NULL, 10);
+        }
 
-        unsigned long long strToULL(const char*);
-        unsigned long long strToULL(const wchar_t*);
-        unsigned long long strToULL(const unsigned char*);
+        inline unsigned long long strToULL(const char *c) {
+            return strtoull(c, NULL, 10);
+        }
+        inline unsigned long long strToULL(const wchar_t *w) {
+            return wcstoull(w, NULL, 10);
+        }
 
-        long strToL(const char*);
-        long strToL(const wchar_t*);
-        long strToL(const unsigned char*);
+        inline long strToL(const char *c) {
+            return strtol(c, NULL, 10);
+        }
+        inline long strToL(const wchar_t *w) {
+            return wcstol(w, NULL, 10);
+        }
 
-        unsigned long strToUL(const char*);
-        unsigned long strToUL(const wchar_t*);
-        unsigned long strToUL(const unsigned char*);
+        inline unsigned long strToUL(const char *c) {
+            return strtoul(c, NULL, 10);
+        }
+        inline unsigned long strToUL(const wchar_t *w) {
+            return wcstoul(w, NULL, 10);
+        }
 
-        int strToI(const char*);
-        int strToI(const wchar_t*);
-        int strToI(const unsigned char*);
+        inline int strToI(const char *c) {
+            return atoi(c);
+        }
+        inline int strToI(const wchar_t *w) {
+            return (int)strToL(w);
+        }
 
-        short strToS(const char*);
-        short strToS(const wchar_t*);
-        short strToS(const unsigned char*);
+        inline unsigned int strToUI(const char *c) {
+            return atoi(c);
+        }
+        inline unsigned int strToUI(const wchar_t *w) {
+            return (unsigned int)strToUL(w);
+        }
 
-        float strToF(const char*);
-        float strToF(const wchar_t*);
-        float strToF(const unsigned char*);
+        inline short strToS(const char *c) {
+            return atoi(c);
+        }
+        inline short strToS(const wchar_t *w) {
+            return (short)strToL(w);
+        }
 
-        double strToD(const char*);
-        double strToD(const wchar_t*);
-        double strToD(const unsigned char*);
+        inline unsigned short strToUS(const char *c) {
+            return atoi(c);
+        }
+        inline unsigned short strToUS(const wchar_t *w) {
+            return (unsigned short)strToL(w);
+        }
 
-        long double strToLD(const char*);
-        long double strToLD(const wchar_t*);
-        long double strToLD(const unsigned char*);
+        inline float strToF(const char *c) {
+            return strtof(c, NULL);
+        }
+        inline float strToF(const wchar_t *w) {
+            return wcstof(w, NULL);
+        }
 
-        unsigned int strToUI(const char*);
-        unsigned int strToUI(const wchar_t*);
-        unsigned int strToUI(const unsigned char*);
+        inline double strToD(const char *c) {
+            return strtod(c, NULL);
+        }
+        inline double strToD(const wchar_t *w) {
+            return wcstod(w, NULL);
+        }
 
-        unsigned short strToUS(const char*);
-        unsigned short strToUS(const wchar_t*);
-        unsigned short strToUS(const unsigned char*);
+        inline long double strToLD(const char *c) {
+            return strtold(c, NULL);
+        }
+        inline long double strToLD(const wchar_t *w) {
+            return wcstold(w, NULL);
+        }
     }
 
-    template <typename T> StringBase<T> substr(const StringBase<T> &th, int s, int e);
-    template <typename T> StringBase<T> substr(const StringBase<T> &th, int s);
+    inline int toCString(char *c, size_t s, const char *m, ...) {
+        va_list list;
+        va_start(list, m);
+        return vsnprintf(c, s, m, list);
+    }
 
-    template<typename T> StringBase<T> &ltrim(StringBase<T> &str);
-    template<typename T> StringBase<T> &rtrim(StringBase<T> &str);
-    template<typename T> StringBase<T> &trim(StringBase<T> &str);
+    inline int toCString(wchar_t *c, size_t s, const wchar_t *m, ...) {
+        va_list list;
+        va_start(list, m);
+        #ifdef JUTIL_MINGW
+            return vswprintf(c, m, list);
+        #else
+            return vswprintf(c, s, m, list);
+        #endif
+    }
 
-    template<typename T> StringBase<T> upperCase(StringBase<T> str);
-    template<typename T> StringBase<T> lowerCase(StringBase<T> str);
-    template<typename T> StringBase<T> ToggleCase(StringBase<T> str);
+    template <typename T> 
+    inline StringBase<T> substr(const StringBase<T> &th, int s, int e) {
+        StringBase<T> str;
+        size_t r = (s > 0 && e > 0? e - s : (s > 0 && e < 0? (th.size() + e) - s : (s < 0 && e > 0? e - (th.size() + s) : (s < 0 && e < 0? (th.size() + e) - (th.size() + s) : 0) ) ) );
+        str.reserve(r);
+        for (size_t i = (s >= 0? s : th.size() + s); i <= (e >= 0? e : th.size() + e); ++i) {
+            str.insert((th)[i]);
+        }
+        return str;
+    }
+    template <typename T> 
+    inline StringBase<T> substr(const StringBase<T> &th, int s) {
+        return substr(th, s, th.size() - 1);
+    }
 
-    template <typename T> Queue<StringBase<T> > split(const StringBase<T> &str, T delim);
-    template <typename T> Queue<StringBase<T> > split(const StringBase<T> &str, const StringBase<T> &delim);
+    template<typename T> 
+    inline StringBase<T> &ltrim(StringBase<T> &str) {
+        for (typename StringBase<T>::Iterator i = str.begin(); i != str.end(); ++i) {
+            if (*i == ' ' || *i == '\t') str.erase(i);
+            else break;
+        }
+        return str;
+    }
+    template<typename T> 
+    inline StringBase<T> &rtrim(StringBase<T> &str) {
+        for (typename StringBase<T>::Iterator i = str.end() - 1; i; --i) {
+            if (*i == ' ' || *i == '\t') str.erase(i);
+            else break;
+        }
+        return str;
+    }
+    template<typename T> 
+    inline StringBase<T> &trim(StringBase<T> &str) {
+        rtrim(ltrim(str));
+        return str;
+    }
+
+    template<typename T> 
+    inline StringBase<T> upperCase(StringBase<T> str) {
+        for (typename Queue<T>::Iterator it = str.begin(); it != str.end(); ++it) if (*it >= 97 && *it <= 122) *it -= 32;
+        return str;
+    }
+    template<typename T> 
+    inline StringBase<T> lowerCase(StringBase<T> str) {
+        for (typename Queue<T>::Iterator it = str.begin(); it != str.end(); ++it) if (*it >= 65 && *it <= 90) *it += 32;
+        return str;
+    }
+    template<typename T> 
+    inline StringBase<T> ToggleCase(StringBase<T> str) {
+        for (typename Queue<T>::Iterator it = str.begin(); it != str.end(); ++it) {
+            if (*it >= 65 && *it <= 90) *it += 32;
+            else if (*it >= 97 && *it <= 122) *it -= 32;
+        }
+        return str;
+    }
+
+    template <typename T> 
+    inline Queue<StringBase<T> > split(const StringBase<T> &str, T delim) {
+        return split(str, StringBase<T>(delim));
+    }
+    template <typename T> 
+    inline Queue<StringBase<T> > split(const StringBase<T> &str, const StringBase<T> &delim) {
+        size_t start = 0;
+        Queue<StringBase<T> > r;
+        for (size_t i = 0; i < str.size() - (delim.size() - 1); ++i) {
+            if (substr(str, i, i + (delim.size() - 1)) == delim) {
+                if (i > start) r.insert(substr(str, start, i - 1));
+                start = i + delim.size();
+            }
+        }
+        if (start < str.size()) r.insert(substr(str, start));
+        return r;
+    }
 
     //Character String
 
@@ -301,10 +402,8 @@ namespace jutil JUTIL_PUBLIC_ {
         }
     };
 
-    typedef StringBase<Byte> ByteString;
-
     template <typename T>
-    StringBase<char> convert_char(T t, const char *p) {
+    inline StringBase<char> convert_char(T t, const char *p) {
         char cstr[__STRING_BUFFER__];
         toCString(cstr, sizeof(cstr), p, t);
         StringBase<char> str(cstr);
@@ -312,180 +411,22 @@ namespace jutil JUTIL_PUBLIC_ {
     }
 
     template <typename T>
-    StringBase<wchar_t> convert_wchar_t(T t, const wchar_t *p) {
+    inline StringBase<wchar_t> convert_wchar_t(T t, const wchar_t *p) {
         wchar_t cstr[__STRING_BUFFER__];
         toCString(cstr, sizeof(cstr), p, t);
         StringBase<wchar_t> str(cstr);
         return str;
     }
 
-    template <typename T> StringBase<T> substr(const StringBase<T> &th, int s, int e) {
-        StringBase<T> str;
-        size_t r = (s > 0 && e > 0? e - s : (s > 0 && e < 0? (th.size() + e) - s : (s < 0 && e > 0? e - (th.size() + s) : (s < 0 && e < 0? (th.size() + e) - (th.size() + s) : 0) ) ) );
-        str.reserve(r);
-        for (size_t i = (s >= 0? s : th.size() + s); i <= (e >= 0? e : th.size() + e); ++i) {
-            str.insert((th)[i]);
-        }
-        return str;
-    }
-    template <typename T> StringBase<T> substr(const StringBase<T> &th, int s) {
-        return substr(th, s, th.size() - 1);
-    }
+    
 
-    template<typename T> StringBase<T> &ltrim(StringBase<T> &str) {
-        for (typename StringBase<T>::Iterator i = str.begin(); i != str.end(); ++i) {
-            if (*i == ' ' || *i == '\t') str.erase(i);
-            else break;
-        }
-        return str;
-    }
-    template<typename T> StringBase<T> &rtrim(StringBase<T> &str) {
-        for (typename StringBase<T>::Iterator i = str.end() - 1; i; --i) {
-            if (*i == ' ' || *i == '\t') str.erase(i);
-            else break;
-        }
-        return str;
-    }
-    template<typename T> StringBase<T> &trim(StringBase<T> &str) {
-        rtrim(ltrim(str));
-        return str;
-    }
+    
 
-    template<typename T> StringBase<T> upperCase(StringBase<T> str) {
-        for (typename Queue<T>::Iterator it = str.begin(); it != str.end(); ++it) if (*it >= 97 && *it <= 122) *it -= 32;
-        return str;
-    }
-    template<typename T> StringBase<T> lowerCase(StringBase<T> str) {
-        for (typename Queue<T>::Iterator it = str.begin(); it != str.end(); ++it) if (*it >= 65 && *it <= 90) *it += 32;
-        return str;
-    }
-    template<typename T> StringBase<T> ToggleCase(StringBase<T> str) {
-        for (typename Queue<T>::Iterator it = str.begin(); it != str.end(); ++it) {
-            if (*it >= 65 && *it <= 90) *it += 32;
-            else if (*it >= 97 && *it <= 122) *it -= 32;
-        }
-        return str;
-    }
-
-    template <typename T> Queue<StringBase<T> > split(const StringBase<T> &str, T delim) {
-        return split(str, StringBase<T>(delim));
-    }
-    template <typename T> Queue<StringBase<T> > split(const StringBase<T> &str, const StringBase<T> &delim) {
-        size_t start = 0;
-        Queue<StringBase<T> > r;
-        for (size_t i = 0; i < str.size() - (delim.size() - 1); ++i) {
-            if (substr(str, i, i + (delim.size() - 1)) == delim) {
-                if (i > start) r.insert(substr(str, start, i - 1));
-                start = i + delim.size();
-            }
-        }
-        if (start < str.size()) r.insert(substr(str, start));
-        return r;
-    }
-
-    String hash(const String&);
-
-    ByteString makeByteString(const Byte[], size_t);
-
+    typedef StringBase<Byte> ByteString;
 
     template <typename T>
-    bool regexMatch(const StringBase<T> &str, const StringBase<T> &regex) {
+    inline bool regexMatch(const StringBase<T> &str, const StringBase<T> &regex) {
       return false;
-    }
-
-    namespace cstr_conversion {
-        long long strToLL(const char *c) {
-            return strtoll(c, NULL, 10);
-        }
-        long long strToLL(const wchar_t *w) {
-            return wcstoll(w, NULL, 10);
-        }
-
-        unsigned long long strToULL(const char *c) {
-            return strtoull(c, NULL, 10);
-        }
-        unsigned long long strToULL(const wchar_t *w) {
-            return wcstoull(w, NULL, 10);
-        }
-
-        long strToL(const char *c) {
-            return strtol(c, NULL, 10);
-        }
-        long strToL(const wchar_t *w) {
-            return wcstol(w, NULL, 10);
-        }
-
-        unsigned long strToUL(const char *c) {
-            return strtoul(c, NULL, 10);
-        }
-        unsigned long strToUL(const wchar_t *w) {
-            return wcstoul(w, NULL, 10);
-        }
-
-        int strToI(const char *c) {
-            return atoi(c);
-        }
-        int strToI(const wchar_t *w) {
-            return (int)strToL(w);
-        }
-
-        unsigned int strToUI(const char *c) {
-            return atoi(c);
-        }
-        unsigned int strToUI(const wchar_t *w) {
-            return (unsigned int)strToUL(w);
-        }
-
-        short strToS(const char *c) {
-            return atoi(c);
-        }
-        short strToS(const wchar_t *w) {
-            return (short)strToL(w);
-        }
-
-        unsigned short strToUS(const char *c) {
-            return atoi(c);
-        }
-        unsigned short strToUS(const wchar_t *w) {
-            return (unsigned short)strToL(w);
-        }
-
-        float strToF(const char *c) {
-            return strtof(c, NULL);
-        }
-        float strToF(const wchar_t *w) {
-            return wcstof(w, NULL);
-        }
-
-        double strToD(const char *c) {
-            return strtod(c, NULL);
-        }
-        double strToD(const wchar_t *w) {
-            return wcstod(w, NULL);
-        }
-
-        long double strToLD(const char *c) {
-            return strtold(c, NULL);
-        }
-        long double strToLD(const wchar_t *w) {
-            return wcstold(w, NULL);
-        }
-    }
-
-    int toCString(char *c, size_t s, const char *m, ...) {
-        va_list list;
-        va_start(list, m);
-        return vsnprintf(c, s, m, list);
-    }
-
-    int toCString(wchar_t *c, size_t s, const wchar_t *m, ...) {
-        va_list list;
-        va_start(list, m);
-        #ifdef JUTIL_MINGW
-            return vswprintf(c, m, list);
-        #else
-            return vswprintf(c, s, m, list);
-        #endif
     }
 
     #if (defined(__GNUC__) && defined(__i386__)) || defined(__WATCOMC__) \
@@ -498,7 +439,7 @@ namespace jutil JUTIL_PUBLIC_ {
                            +(uint32_t)(((const uint8_t *)(d))[0]) )
     #endif
 
-    String hash(const String &str) {
+    inline String hash(const String &str) {
         char *cstr = new char[str.size() + 1];
         str.array(cstr);
 
@@ -552,7 +493,7 @@ namespace jutil JUTIL_PUBLIC_ {
         return String(hashr);
     }
 
-    ByteString makeByteString(const Byte arr[], size_t len) {
+    inline ByteString makeByteString(const Byte arr[], size_t len) {
         ByteString r;
         for (size_t i = 0; i < len; ++i) {
             r.insert(arr[i]);
@@ -562,20 +503,20 @@ namespace jutil JUTIL_PUBLIC_ {
 }
 
 template <typename T, typename U>
-jutil::StringBase<T> operator+(const jutil::StringBase<T> &l, const jutil::StringBase<U> &r) {
+inline jutil::StringBase<T> operator+(const jutil::StringBase<T> &l, const jutil::StringBase<U> &r) {
     jutil::StringBase<T> n(l);
     n.insert(static_cast<jutil::StringBase<T> >(r));
     return n;
 }
 
 template <typename T, typename U>
-jutil::StringBase<T> &operator+=(jutil::StringBase<T> &l, const jutil::StringBase<U> &r) {
+inline jutil::StringBase<T> &operator+=(jutil::StringBase<T> &l, const jutil::StringBase<U> &r) {
     l.insert(static_cast<jutil::StringBase<T> >(r));
     return l;
 }
 
 template <typename T, typename U>
-bool operator==(const jutil::StringBase<T> &l, const jutil::StringBase<U> &r) {
+inline bool operator==(const jutil::StringBase<T> &l, const jutil::StringBase<U> &r) {
     if (l.size() == r.size()) {
         for (size_t i = 0; i < l.size(); ++i) if (l[i] != static_cast<T>(r[i])) return false;
         return true;
@@ -583,52 +524,53 @@ bool operator==(const jutil::StringBase<T> &l, const jutil::StringBase<U> &r) {
 }
 
 template <typename T, typename U>
-bool operator!=(const jutil::StringBase<T> &l, const jutil::StringBase<U> &r) {
+inline bool operator!=(const jutil::StringBase<T> &l, const jutil::StringBase<U> &r) {
     return !(l == r);
 }
 
 template <typename T>
-jutil::StringBase<T> operator+(const jutil::StringBase<T> &l, const T *r) {
+inline jutil::StringBase<T> operator+(const jutil::StringBase<T> &l, const T *r) {
     return l + jutil::StringBase<T>(r);
 }
 
 template <typename T>
-jutil::StringBase<T> &operator+=(jutil::StringBase<T> &l, const T *r) {
+inline jutil::StringBase<T> &operator+=(jutil::StringBase<T> &l, const T *r) {
     return l += jutil::StringBase<T>(r);
 }
 
 template <typename T>
-jutil::StringBase<T> &operator+=(jutil::StringBase<T> &l, const T r) {
+inline jutil::StringBase<T> &operator+=(jutil::StringBase<T> &l, const T r) {
     l.insert(r);
     return l;
 }
 
 template <typename T>
-bool operator==(const jutil::StringBase<T> &l, const T *r) {
+inline bool operator==(const jutil::StringBase<T> &l, const T *r) {
     return l == jutil::StringBase<T>(r);
 }
 
 template <typename T>
-bool operator!=(const jutil::StringBase<T> &l, const T *r) {
+inline bool operator!=(const jutil::StringBase<T> &l, const T *r) {
     return l != jutil::StringBase<T>(r);
 }
 
 template <typename T>
-jutil::StringBase<T> operator+(const T *l, const jutil::StringBase<T> &r) {
+inline jutil::StringBase<T> operator+(const T *l, const jutil::StringBase<T> &r) {
     return jutil::StringBase<T>(l) + r;
 }
 
 template <typename T>
-bool operator==(const T *l, const jutil::StringBase<T> &r) {
+inline bool operator==(const T *l, const jutil::StringBase<T> &r) {
     return r == jutil::StringBase<T>(l);
 }
 
 template <typename T>
-bool operator!=(const T *l, const jutil::StringBase<T> &r) {
+inline bool operator!=(const T *l, const jutil::StringBase<T> &r) {
     return r != jutil::StringBase<T>(l);
 }
 
-template <typename T, typename A> jutil::Queue<T, A>::operator jutil::StringBase<char>() {
+template <typename T, typename A> 
+inline jutil::Queue<T, A>::operator jutil::StringBase<char>() {
     jutil::String str = '{';
     for (size_t i = 0; i < this->size(); ++i) {
         str += jutil::String((*this)[i]);
@@ -639,7 +581,8 @@ template <typename T, typename A> jutil::Queue<T, A>::operator jutil::StringBase
     return str;
 }
 
-template <typename T, typename A> jutil::Queue<T, A>::operator const jutil::StringBase<char>() const {
+template <typename T, typename A> 
+inline jutil::Queue<T, A>::operator const jutil::StringBase<char>() const {
     jutil::String str = '{';
     for (size_t i = 0; i < this->size(); ++i) {
         str += jutil::String((*this)[i]);
@@ -650,13 +593,13 @@ template <typename T, typename A> jutil::Queue<T, A>::operator const jutil::Stri
     return str;
 }
 
-jutil::StringBase<char> operator "" _str(const char*, size_t);
+inline jutil::StringBase<char> operator "" _str(const char*, size_t);
 
-jutil::StringBase<char> operator "" _str(const char *cstr, size_t) {
+inline jutil::StringBase<char> operator "" _str(const char *cstr, size_t) {
     return jutil::StringBase<char>(cstr);
 }
 
-jutil::StringBase<wchar_t> operator "" _wstr(const wchar_t *cstr, size_t) {
+inline jutil::StringBase<wchar_t> operator "" _wstr(const wchar_t *cstr, size_t) {
     return jutil::StringBase<wchar_t>(cstr);
 }
 
