@@ -150,7 +150,7 @@ namespace jutil JUTIL_PUBLIC_ {
             Default constructor. Queue is empty.
         */
 
-        JUTIL__ Queue() JUTIL_N_ : allocated(0), is(BOUNDED), BaseType() {
+        JUTIL__ Queue() JUTIL_N_ : BaseType(), is(BOUNDED), allocated(0) {
             reserve(2);
         }
 
@@ -811,7 +811,7 @@ namespace jutil JUTIL_PUBLIC_ {
         size_t allocated;
     };
 
-    
+
 }
 
 #endif // JUTIL_QUEUE_H

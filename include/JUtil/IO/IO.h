@@ -350,7 +350,7 @@ namespace jutil JUTIL_PUBLIC_ {
 
     template <typename T>
     struct PrintFunc_MINGW32 {
-        typedef int (*Definition)(T*, const T*, ...);
+        typedef int (*Definition)(T*, size_t, const T*, ...);
     };
 
     template <typename T>
@@ -876,8 +876,8 @@ namespace jutil JUTIL_PUBLIC_ {
         char *cpath = new char[path.size() + 1];
         path.array(cpath);
 
-        size_t epos = 0;
-        for (epos; epos < strlen(m); ++epos) {
+        size_t epos;
+        for (epos = 0; epos < strlen(m); ++epos) {
             if (m[epos] == 0) break;
         }
 
@@ -914,7 +914,7 @@ namespace jutil JUTIL_PUBLIC_ {
             Byte *buf = new Byte[chunkSize];
 			ByteString r;
             size_t cread = 0;
-            if (cread = fread(buf, 1, chunkSize, (FILE*)(target->buffer()))) {
+            if ((cread = fread(buf, 1, chunkSize, (FILE*)(target->buffer())))) {
                 r = makeByteString(buf, (cread < chunkSize? cread : chunkSize));
             } else {
                 r = ByteString(0);
@@ -1017,7 +1017,7 @@ namespace jutil JUTIL_PUBLIC_ {
             #endif
             path = rpath;
             struct dirent *entry;
-            while (entry = readdir(dir)) {
+            while ((entry = readdir(dir))) {
                 if (strcmp(entry->d_name, ".") && strcmp(entry->d_name, "..")) {
                     bool isFile = true;
                     char fname[PATH_MAX + 1];
