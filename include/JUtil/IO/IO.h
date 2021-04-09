@@ -9,6 +9,8 @@
 #include <wchar.h>
 #include <dirent.h>
 #include <JUtil/Traits/TypeManipulators.hpp>
+#include <sys/stat.h>
+#include <sys/types.h>
 
 #define IO_ERR_INDEX 0x02
 
@@ -191,6 +193,7 @@ namespace jutil JUTIL_PUBLIC_ {
         size_t getPosition() const;
         bool setPosition(size_t);
         bool open() const;
+        const String &getPath() const;
         virtual bool eof() const = 0;
         virtual size_t length() const = 0;
     protected:
@@ -241,15 +244,15 @@ namespace jutil JUTIL_PUBLIC_ {
     };
 
     struct JUTIL_PUBLIC_ DirectoryEntry {
-            enum Type {
-                FILE,
-                DIRECTORY
-            };
-            String name;
-            String directory;
-            String fullPath;
-            Type type;
-            DirectoryEntry(const String&, const String&, Type t);
+        enum Type {
+            FILE,
+            DIRECTORY
+        };
+        String name;
+        String directory;
+        String fullPath;
+        Type type;
+        DirectoryEntry(const String&, const String&, Type t);
     };
 
     class JUTIL_PUBLIC_ Directory {
@@ -257,6 +260,7 @@ namespace jutil JUTIL_PUBLIC_ {
         Directory(const String&);
         bool valid() const;
         const Queue<DirectoryEntry> &entries() const;
+        const jutil::String &getPath();
         virtual ~Directory();
     private:
         bool _success;
@@ -585,6 +589,10 @@ namespace jutil JUTIL_PUBLIC_ {
 		delete[] cfpath;
     }
 
+    const String &FileBase::getPath() const {
+        return path;
+    }
+
     inline FileBase::~FileBase() {
         if (target && target->buffer()) fclose((FILE*)(target->buffer()));
     }
@@ -603,6 +611,10 @@ namespace jutil JUTIL_PUBLIC_ {
             if (fseek(file, p, SEEK_END)) return false;
         }
         return true;
+    }
+    
+    inline bool FileBase::open() const {
+        return fileOpen;
     }
 
     inline bool File::eof() const {
@@ -1007,34 +1019,47 @@ namespace jutil JUTIL_PUBLIC_ {
         char *rpath = new char[PATH_MAX + 1];
         str.array(cstr);
         DIR *dir = opendir(cstr);
-        if (dir) {
-            _success = true;
-            handle = (void*)dir;
+        if (!dir) {
             #ifdef JUTIL_LINUX
-            	realpath(cstr, rpath);
+                int r = mkdir(cstr, 0777);
             #elif defined JUTIL_WINDOWS
-            	_fullpath(rpath, cstr, PATH_MAX);
+                int r = mkdir(cstr);
             #endif
-            path = rpath;
-            struct dirent *entry;
-            while ((entry = readdir(dir))) {
-                if (strcmp(entry->d_name, ".") && strcmp(entry->d_name, "..")) {
-                    bool isFile = true;
-                    char fname[PATH_MAX + 1];
-                    strcpy(fname, rpath);
-                    strcat(fname, __sep__);
-                    strcat(fname, entry->d_name);
-                    DIR *tdir = opendir(fname);
-                    if (tdir) {
-                        closedir(tdir);
-                        isFile = false;
-                    }
-                    _entries.insert(DirectoryEntry(String(entry->d_name), path, (isFile? DirectoryEntry::Type::FILE : DirectoryEntry::Type::DIRECTORY)));
-                }
+            if (r == -1) {
+                _success = false;
+                handle = JUTIL_NULLPTR;
+                return;
             }
-        } else {
-            _success = false;
-            handle = JUTIL_NULLPTR;
+            dir = opendir(cstr);
+            if (!dir) {
+                _success = false;
+                handle = JUTIL_NULLPTR;
+                return;
+            }
+        }
+        _success = true;
+        handle = (void*)dir;
+        #ifdef JUTIL_LINUX
+            realpath(cstr, rpath);
+        #elif defined JUTIL_WINDOWS
+            _fullpath(rpath, cstr, PATH_MAX);
+        #endif
+        path = rpath;
+        struct dirent *entry;
+        while ((entry = readdir(dir))) {
+            if (strcmp(entry->d_name, ".") && strcmp(entry->d_name, "..")) {
+                bool isFile = true;
+                char fname[PATH_MAX + 1];
+                strcpy(fname, rpath);
+                strcat(fname, __sep__);
+                strcat(fname, entry->d_name);
+                DIR *tdir = opendir(fname);
+                if (tdir) {
+                    closedir(tdir);
+                    isFile = false;
+                }
+                _entries.insert(DirectoryEntry(String(entry->d_name), path, (isFile? DirectoryEntry::Type::FILE : DirectoryEntry::Type::DIRECTORY)));
+            }
         }
     }
 
@@ -1047,6 +1072,10 @@ namespace jutil JUTIL_PUBLIC_ {
 
     inline Directory::~Directory() {
         if (handle) closedir((DIR*)handle);
+    }
+
+    inline const jutil::String &Directory::getPath() {
+        return path;
     }
 
 }

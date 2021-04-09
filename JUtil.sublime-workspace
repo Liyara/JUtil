@@ -1,0 +1,1827 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"siz",
+				"size_t"
+			],
+			[
+				"tm_",
+				"tm_year"
+			],
+			[
+				"min",
+				"minute"
+			],
+			[
+				"Time",
+				"TimeAspect"
+			],
+			[
+				"DateT",
+				"DateTimeDict"
+			],
+			[
+				"NO_",
+				"NO_WEEKDAY"
+			],
+			[
+				"get",
+				"getUniversalTime"
+			],
+			[
+				"Date",
+				"DateTime"
+			],
+			[
+				"print",
+				"printTime"
+			],
+			[
+				"Value",
+				"ValueType"
+			],
+			[
+				"alloc",
+				"allocated"
+			],
+			[
+				"rea",
+				"reallocate"
+			],
+			[
+				"request",
+				"requestGroupWait"
+			],
+			[
+				"should",
+				"shouldStop"
+			],
+			[
+				"pthread_mu",
+				"pthread_mutex_t"
+			],
+			[
+				"Di",
+				"Directory"
+			],
+			[
+				"D",
+				"DirectoryEntry"
+			],
+			[
+				"Directory",
+				"DirectoryEntry"
+			],
+			[
+				"MAIN",
+				"MAIN_SOURCE"
+			],
+			[
+				"M",
+				"MAIN_OBJECT"
+			],
+			[
+				"N",
+				"JUTIL_NULLPTR"
+			],
+			[
+				"temp",
+				"tempFile"
+			],
+			[
+				"handle",
+				"handleFileInitialization"
+			],
+			[
+				"BUFFER",
+				"BUFFER_LENGTH"
+			],
+			[
+				"SEEK",
+				"SEEK_SET"
+			],
+			[
+				"In",
+				"InputStream"
+			],
+			[
+				"defau",
+				"defaultCommandHandler"
+			],
+			[
+				"Byte",
+				"ByteString"
+			],
+			[
+				"def",
+				"defaultCommandHandler"
+			],
+			[
+				"command",
+				"commandHandler"
+			],
+			[
+				"IO",
+				"IOTarget"
+			],
+			[
+				"JUTI",
+				"JUTIL_LINUX"
+			],
+			[
+				"JUTIL",
+				"JUTIL_WINDOWS"
+			],
+			[
+				"JUTIL_",
+				"JUTIL_LINUX"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "src/RNG.cpp",
+			"settings":
+			{
+				"buffer_size": 2455,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "include/JUtil/jutil.h",
+			"settings":
+			{
+				"buffer_size": 1045,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/jutil.cpp",
+			"settings":
+			{
+				"buffer_size": 2207,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "include/JUtil/Core/Thread.h",
+			"settings":
+			{
+				"buffer_size": 2244,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Thread.cpp",
+			"settings":
+			{
+				"buffer_size": 7792,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/IO.cpp",
+			"settings":
+			{
+				"buffer_size": 22463,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "include/JUtil/IO/IO.h",
+			"settings":
+			{
+				"buffer_size": 8414,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "main.cpp",
+			"settings":
+			{
+				"buffer_size": 1167,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "include/JUtil/Core/limits.hpp",
+			"settings":
+			{
+				"buffer_size": 1678,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"settings":
+			{
+				"buffer_size": 0,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "include/JUtil/Core/Clock.h",
+			"settings":
+			{
+				"buffer_size": 4525,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Clock.cpp",
+			"settings":
+			{
+				"buffer_size": 10534,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/home/liyara/Downloads/pthread.h",
+			"settings":
+			{
+				"buffer_size": 42499,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "include/JUtil/Container/Queue.hpp",
+			"settings":
+			{
+				"buffer_size": 29437,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "Searching 60 files for \"initializer_list\"\n\n/home/liyara/Programming/JUtil/README.md:\n    4  ## Dependencies\n    5  The C standard Library  \n    6: <initializer_list> when building under C++11 (recommended)  \n    7  dirent.h\n    8  \n\n1 match in 1 file\n",
+			"settings":
+			{
+				"buffer_size": 251,
+				"line_ending": "Unix",
+				"name": "Find Results",
+				"scratch": true
+			}
+		},
+		{
+			"file": "README.md",
+			"settings":
+			{
+				"buffer_size": 307,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "push.sh",
+			"settings":
+			{
+				"buffer_size": 160,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/home/liyara/Programming/JWin/main.cpp",
+			"settings":
+			{
+				"buffer_size": 2319,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "include/JUtil/Core/Pair.hpp",
+			"settings":
+			{
+				"buffer_size": 1303,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "include/JUtil/Container/Map.hpp",
+			"settings":
+			{
+				"buffer_size": 6132,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "#ifndef JUTIL_STRING_H\n#define JUTIL_STRING_H\n\n#include \"JUtil/Core/Tuple.hpp\"\n#include \"JUtil/Container/Queue.hpp\"\n\n#define STRING_ERR_INDEX   0x0A\n\n#ifdef JUTIL_ERR\n\n    #define STRINGERR JUTIL_ERR_STRING\n\n    #define STRINGERR_OUTER             ((CORE_ERR_INDEX << 4) | STRING_ERR_INDEX)\n    #define STRINGERR_INNER_CHARACTER   0x0000\n    #define STRINGERR_INNER_CONVERSION  0x0001\n    #define STRINGERR_INNER_BASE        0x0002\n    #define STRINGERR_CHARACTER_MSG     \"Invalid character\"\n    #define STRINGERR_CONVERSION_MSG    \"Conversion failed\"\n    #define STRINGERR_BASE_MSG          \"Attempt to instantiate invalid String type\"\n    #define STRINGERR_CHARACTER_INVOKE  JUTIL_INVOKE_ERR(STRINGERR_OUTER, STRINGERR_INNER_CHARACTER, JUTIL_ERR_MSG(STRINGERR_CHARACTER_MSG))\n    #define STRINGERR_CONVERSION_INVOKE JUTIL_INVOKE_ERR(STRINGERR_OUTER, STRINGERR_INNER_CONVERSION, JUTIL_ERR_MSG(STRINGERR_CONVERSION_MSG))\n    #define STRINGERR_BASE_INVOKE       JUTIL_INVOKE_ERR(STRINGERR_OUTER, STRINGERR_INNER_BASE, JUTIL_ERR_MSG(STRINGERR_BASE_MSG))\n\n#else\n    #define STRINGERR_CHARACTER_INVOKE\n    #define STRINGERR_CONVERSION_INVOKE\n#endif\n\n#if defined(JUTIL_TRAITS_H) && defined(JUTIL_CPP11)\n    #define JUTIL_TRAITS_ENABLED\n#endif\n\n#ifdef JUTIL_TRAITS_ENABLED\n    #define JUTIL_ENFORCE_TYPE_STRING_CONVERSION(T) = typename jutil::Enable<jutil::Convert<T, jutil::String>::Value, T>::Type\n    #define JUTIL_ENFORCE_STRING_TYPE_CONVERSION(T) = typename jutil::Enable<jutil::Convert<jutil::String, T>::Value, T>::Type\n    #define JUTIL_ENFORCE_STRING_CONVERSION_(T)     = JUTIL_ENFORCE_TYPE_STRING_CONVERSION(T)\n    #define JUTIL_ENFORCE_STRING_CONVERSION(T)      JUTIL_ENFORCE_TYPE_STRING_CONVERSION(T),\\\n                                                    typename JUTIL_ENFORCE_STRING_TYPE_CONVERSION(T)\n\n    #define __J_ETSC    , typename JUTIL_ENFORCE_TYPE_STRING_CONVERSION(T)\n    #define __J_ESTC    , typename JUTIL_ENFORCE_STRING_TYPE_CONVERSION(T)\n    #define __J_ESC     , typename JUTIL_ENFORCE_STRING_CONVERSION(T)\n\n#else\n    #define __J_ETSC\n    #define __J_ESTC\n    #define __J_ESC\n#endif\n\n#define __STRING_BUFFER__ ((8 * sizeof(long long) - 1) / 3 + 2)\n\n#define __STRING_BASE_ERR__ {STRINGERR_BASE_INVOKE;}\n\n#define __STRING_CAST_CONSTRUCTORS__(type) \\\n\n\n#define __STRING_CONSTRUCTORS__(type)\\\n    StringBase() {}\\\n    StringBase(const StringBase<type> &str) {\\\n        insert(str);\\\n    }\\\n    StringBase(type c) {\\\n        insert(c);\\\n    }\\\n    template <size_t l>\\\n    StringBase(const type (&c)[l]) {\\\n        this->reserve(l);\\\n        for (JUTIL_INIT(const type *i, c); (*i) && (*i != '\\0'); ++i) insert(*i);\\\n    }\\\n    StringBase(const type *c, size_t l = 0) {\\\n        this->reserve(l);\\\n        for (JUTIL_INIT(const type *i, c); (*i) && (*i != '\\0'); ++i) insert(*i);\\\n    }\n\n#define __STRING_DO_CONVERSION__(type, func, ret) type *__arr__ = new type[size() + 1];array(__arr__);ret __val__ = cstr_conversion::strTo##func(__arr__);delete[] __arr__;return __val__\n\n#define __STRING_CONVERSION_OPERATORS__(type)\\\n    JUTIL_EXPL_ operator signed long long() JUTIL_CN_   {__STRING_DO_CONVERSION__(type, LL, signed long long);}\\\n    JUTIL_EXPL_ operator unsigned long long() JUTIL_CN_ {__STRING_DO_CONVERSION__(type, ULL, unsigned long long);}\\\n    JUTIL_EXPL_ operator signed long() JUTIL_CN_        {__STRING_DO_CONVERSION__(type, L, signed long);}\\\n    JUTIL_EXPL_ operator unsigned long() JUTIL_CN_      {__STRING_DO_CONVERSION__(type, UL, unsigned long);}\\\n    JUTIL_EXPL_ operator signed int() JUTIL_CN_         {__STRING_DO_CONVERSION__(type, I, signed int);}\\\n    JUTIL_EXPL_ operator unsigned int() JUTIL_CN_       {__STRING_DO_CONVERSION__(type, UI, unsigned int);}\\\n    JUTIL_EXPL_ operator signed short() JUTIL_CN_       {__STRING_DO_CONVERSION__(type, S, signed short);}\\\n    JUTIL_EXPL_ operator unsigned short() JUTIL_CN_     {__STRING_DO_CONVERSION__(type, US, unsigned short);}\\\n    JUTIL_EXPL_ operator double() JUTIL_CN_             {__STRING_DO_CONVERSION__(type, D, double);}\\\n    JUTIL_EXPL_ operator long double() JUTIL_CN_        {__STRING_DO_CONVERSION__(type, LD, long double);}\\\n    JUTIL_EXPL_ operator float() JUTIL_CN_              {__STRING_DO_CONVERSION__(type, F, float);}\n#define JUTIL_BYTE_STRING_ (unsigned char*)\n\n#ifndef CONCAT\n    #define CONCAT + (jutil::String)\n#endif\n\nnamespace jutil JUTIL_PUBLIC_ {\n\n    typedef unsigned char Byte;\n\n    template <typename T>\n    class JUTIL_PRIVATE_ StringBase : public Queue<T> {\n    public:\n        StringBase()                                            __STRING_BASE_ERR__\n        StringBase(const Queue<T>&)                             __STRING_BASE_ERR__\n        template <typename U> StringBase(const StringBase<U>&)  __STRING_BASE_ERR__\n        StringBase(T)                                           __STRING_BASE_ERR__\n        template <size_t l> StringBase(const T (&c)[l])         __STRING_BASE_ERR__\n        StringBase(const T *c, size_t l = 0)                    __STRING_BASE_ERR__\n    };\n\n    int toCString(char*, size_t, const char*, ...);\n    int toCString(wchar_t*, size_t, const wchar_t*, ...);\n    int toCString(unsigned char*, size_t, const unsigned char*, ...);\n\n    template <typename T>\n    StringBase<char> convert_char(T t, const char *p);\n\n    template <typename T>\n    StringBase<wchar_t> convert_wchar_t(T t, const wchar_t *p);\n\n    template <typename T>\n    StringBase<Byte> convert_Byte(T t, const Byte *p);\n\n    //Wrappers for cstd string conversion functions (e.g. strtoll, atoi, etc.)\n    namespace JUTIL_PRIVATE_ cstr_conversion {\n        long long strToLL(const char*);\n        long long strToLL(const wchar_t*);\n        long long strToLL(const unsigned char*);\n\n        unsigned long long strToULL(const char*);\n        unsigned long long strToULL(const wchar_t*);\n        unsigned long long strToULL(const unsigned char*);\n\n        long strToL(const char*);\n        long strToL(const wchar_t*);\n        long strToL(const unsigned char*);\n\n        unsigned long strToUL(const char*);\n        unsigned long strToUL(const wchar_t*);\n        unsigned long strToUL(const unsigned char*);\n\n        int strToI(const char*);\n        int strToI(const wchar_t*);\n        int strToI(const unsigned char*);\n\n        short strToS(const char*);\n        short strToS(const wchar_t*);\n        short strToS(const unsigned char*);\n\n        float strToF(const char*);\n        float strToF(const wchar_t*);\n        float strToF(const unsigned char*);\n\n        double strToD(const char*);\n        double strToD(const wchar_t*);\n        double strToD(const unsigned char*);\n\n        long double strToLD(const char*);\n        long double strToLD(const wchar_t*);\n        long double strToLD(const unsigned char*);\n\n        unsigned int strToUI(const char*);\n        unsigned int strToUI(const wchar_t*);\n        unsigned int strToUI(const unsigned char*);\n\n        unsigned short strToUS(const char*);\n        unsigned short strToUS(const wchar_t*);\n        unsigned short strToUS(const unsigned char*);\n    }\n\n    template <typename T> StringBase<T> substr(const StringBase<T> &th, int s, int e);\n    template <typename T> StringBase<T> substr(const StringBase<T> &th, int s);\n\n    template<typename T> StringBase<T> &ltrim(StringBase<T> &str);\n    template<typename T> StringBase<T> &rtrim(StringBase<T> &str);\n    template<typename T> StringBase<T> &trim(StringBase<T> &str);\n\n    template<typename T> StringBase<T> upperCase(StringBase<T> str);\n    template<typename T> StringBase<T> lowerCase(StringBase<T> str);\n    template<typename T> StringBase<T> ToggleCase(StringBase<T> str);\n\n    template <typename T> Queue<StringBase<T> > split(const StringBase<T> &str, T delim);\n    template <typename T> Queue<StringBase<T> > split(const StringBase<T> &str, const StringBase<T> &delim);\n\n    //Character String\n\n    template<>\n    class JUTIL_PUBLIC_ StringBase<char> : public Queue<char> {\n    public:\n\n        __STRING_CONSTRUCTORS__(char);\n\n        JUTIL_EXPL_ StringBase(bool num) JUTIL_N_ {*this = convert_char(num, \"%u\");}\n        JUTIL_EXPL_ StringBase(signed long long num) JUTIL_N_ {*this = convert_char(num, \"%I64d\");}\n        JUTIL_EXPL_ StringBase(unsigned long long num) JUTIL_N_ {*this = convert_char(num, \"%I64u\");}\n        JUTIL_EXPL_ StringBase(signed long num) JUTIL_N_ {*this = convert_char(num, \"%ld\");}\n        JUTIL_EXPL_ StringBase(unsigned long num) JUTIL_N_ {*this = convert_char(num, \"%lu\");}\n        JUTIL_EXPL_ StringBase(signed int num) JUTIL_N_ {*this = convert_char(num, \"%d\");}\n        JUTIL_EXPL_ StringBase(unsigned int num) JUTIL_N_ {*this = convert_char(num, \"%u\");}\n        JUTIL_EXPL_ StringBase(signed short num) JUTIL_N_ {*this = convert_char(num, \"%hd\");}\n        JUTIL_EXPL_ StringBase(unsigned short num) JUTIL_N_ {*this = convert_char(num, \"%hu\");}\n        JUTIL_EXPL_ StringBase(double num) JUTIL_N_ {*this = convert_char(num, \"%f\");}\n        JUTIL_EXPL_ StringBase(long double num) JUTIL_N_ {*this = convert_char(num, \"%Lf\");}\n        JUTIL_EXPL_ StringBase(float num) JUTIL_N_ {*this = convert_char(num, \"%f\");}\n\n        __STRING_CONVERSION_OPERATORS__(char);\n\n        JUTIL_EXPL_ operator bool() JUTIL_CN_ {\n            StringBase<char> o(*this);\n            jutil::upperCase(jutil::trim(o));\n            if (o == StringBase<char>(\"FALSE\") || o == StringBase<char>(\"0\")) return false;\n            else return true;\n        }\n\n        void array(char arr[]) const {\n            size_t i = 0;\n            for (Queue<char>::Iterator it = this->begin(); it != this->end(); ++it) {\n                arr[i] = *it;\n                ++i;\n            }\n            arr[size()] = 0;\n        }\n\n        template <typename U>\n        StringBase<char> &operator=(const StringBase<U> &str) {\n            clear();\n            insert(static_cast<StringBase<char> >(str));\n            return *this;\n        }\n    };\n\n    typedef StringBase<char> String;\n\n    //Wide Character String\n\n    template<>\n    class JUTIL_PUBLIC_ StringBase<wchar_t> : public Queue<wchar_t> {\n    public:\n        __STRING_CONSTRUCTORS__(wchar_t);\n\n        JUTIL_EXPL_ StringBase(bool num) JUTIL_N_ {*this = convert_wchar_t(num, L\"%u\");}\n        JUTIL_EXPL_ StringBase(signed long long num) JUTIL_N_ {*this = convert_wchar_t(num, L\"%I64d\");}\n        JUTIL_EXPL_ StringBase(unsigned long long num) JUTIL_N_ {*this = convert_wchar_t(num, L\"%I64u\");}\n        JUTIL_EXPL_ StringBase(signed long num) JUTIL_N_ {*this = convert_wchar_t(num, L\"%ld\");}\n        JUTIL_EXPL_ StringBase(unsigned long num) JUTIL_N_ {*this = convert_wchar_t(num, L\"%lu\");}\n        JUTIL_EXPL_ StringBase(signed int num) JUTIL_N_ {*this = convert_wchar_t(num, L\"%d\");}\n        JUTIL_EXPL_ StringBase(unsigned int num) JUTIL_N_ {*this = convert_wchar_t(num, L\"%u\");}\n        JUTIL_EXPL_ StringBase(signed short num) JUTIL_N_ {*this = convert_wchar_t(num, L\"%hd\");}\n        JUTIL_EXPL_ StringBase(unsigned short num) JUTIL_N_ {*this = convert_wchar_t(num, L\"%hu\");}\n        JUTIL_EXPL_ StringBase(double num) JUTIL_N_ {*this = convert_wchar_t(num, L\"%f\");}\n        JUTIL_EXPL_ StringBase(long double num) JUTIL_N_ {*this = convert_wchar_t(num, L\"%Lf\");}\n        JUTIL_EXPL_ StringBase(float num) JUTIL_N_ {*this = convert_wchar_t(num, L\"%f\");}\n\n        __STRING_CONVERSION_OPERATORS__(wchar_t);\n\n        JUTIL_EXPL_ operator bool() JUTIL_CN_ {\n            StringBase<wchar_t> o(*this);\n            jutil::upperCase(jutil::trim(o));\n            if (o == StringBase<wchar_t>(L\"FALSE\") || o == StringBase<wchar_t>(L\"0\")) return false;\n            else return true;\n        }\n\n        void array(wchar_t arr[]) const {\n            size_t i = 0;\n            for (Queue<wchar_t>::Iterator it = this->begin(); it != this->end(); ++it) {\n                arr[i] = *it;\n                ++i;\n            }\n            arr[size()] = 0;\n        }\n\n        StringBase<wchar_t> &operator=(const StringBase<wchar_t> &str) {\n            clear();\n            insert(str);\n            return *this;\n        }\n    };\n\n    typedef StringBase<wchar_t> WideString;\n\n    //Unsigned Character String\n\n    template<>\n    class JUTIL_PUBLIC_ StringBase<Byte> : public Queue<Byte> {\n    public:\n        StringBase() {}\n        StringBase(const Queue<Byte> &q) {\n            insert(q);\n        }\n        StringBase(const StringBase<Byte> &str) {\n            insert(str);\n        }\n        StringBase(Byte c) {\n            insert(c);\n        }\n\n        template <size_t l>\n        StringBase(const Byte (&c)[l]) {\n            this->reserve(l);\n            for (JUTIL_INIT(const Byte *i, c); (unsigned)(i - c) < l; ++i) insert(*i);\n        }\n        StringBase(const Byte *c, size_t l) {\n            this->reserve(l);\n            for (JUTIL_INIT(const Byte *i, c); (unsigned)(i - c) < l; ++i) insert(*i);\n        }\n\n\n        #ifdef JUTIL_CPP11\n            template <typename X, typename... Y>\n            StringBase(X head, Y... tail) : Queue{static_cast<Byte>(head), static_cast<Byte>(tail)...} {}\n        #endif\n\n        void array(Byte arr[]) const {\n            size_t i = 0;\n            for (Queue<Byte>::Iterator it = this->begin(); it != this->end(); ++it) {\n                arr[i] = *it;\n                ++i;\n            }\n        }\n\n        StringBase<Byte> &operator=(const StringBase<Byte> &str) {\n            clear();\n            insert(str);\n            return *this;\n        }\n    };\n\n    typedef StringBase<Byte> ByteString;\n\n    template <typename T>\n    StringBase<char> convert_char(T t, const char *p) {\n        char cstr[__STRING_BUFFER__];\n        toCString(cstr, sizeof(cstr), p, t);\n        StringBase<char> str(cstr);\n        return str;\n    }\n\n    template <typename T>\n    StringBase<wchar_t> convert_wchar_t(T t, const wchar_t *p) {\n        wchar_t cstr[__STRING_BUFFER__];\n        toCString(cstr, sizeof(cstr), p, t);\n        StringBase<wchar_t> str(cstr);\n        return str;\n    }\n\n    template <typename T> StringBase<T> substr(const StringBase<T> &th, int s, int e) {\n        StringBase<T> str;\n        size_t r = (s > 0 && e > 0? e - s : (s > 0 && e < 0? (th.size() + e) - s : (s < 0 && e > 0? e - (th.size() + s) : (s < 0 && e < 0? (th.size() + e) - (th.size() + s) : 0) ) ) );\n        str.reserve(r);\n        for (size_t i = (s >= 0? s : th.size() + s); i <= (e >= 0? e : th.size() + e); ++i) {\n            str.insert((th)[i]);\n        }\n        return str;\n    }\n    template <typename T> StringBase<T> substr(const StringBase<T> &th, int s) {\n        return substr(th, s, th.size() - 1);\n    }\n\n    template<typename T> StringBase<T> &ltrim(StringBase<T> &str) {\n        for (typename StringBase<T>::Iterator i = str.begin(); i != str.end(); ++i) {\n            if (*i == ' ' || *i == '\\t') str.erase(i);\n            else break;\n        }\n        return str;\n    }\n    template<typename T> StringBase<T> &rtrim(StringBase<T> &str) {\n        for (typename StringBase<T>::Iterator i = str.end() - 1; i; --i) {\n            if (*i == ' ' || *i == '\\t') str.erase(i);\n            else break;\n        }\n        return str;\n    }\n    template<typename T> StringBase<T> &trim(StringBase<T> &str) {\n        rtrim(ltrim(str));\n        return str;\n    }\n\n    template<typename T> StringBase<T> upperCase(StringBase<T> str) {\n        for (typename Queue<T>::Iterator it = str.begin(); it != str.end(); ++it) if (*it >= 97 && *it <= 122) *it -= 32;\n        return str;\n    }\n    template<typename T> StringBase<T> lowerCase(StringBase<T> str) {\n        for (typename Queue<T>::Iterator it = str.begin(); it != str.end(); ++it) if (*it >= 65 && *it <= 90) *it += 32;\n        return str;\n    }\n    template<typename T> StringBase<T> ToggleCase(StringBase<T> str) {\n        for (typename Queue<T>::Iterator it = str.begin(); it != str.end(); ++it) {\n            if (*it >= 65 && *it <= 90) *it += 32;\n            else if (*it >= 97 && *it <= 122) *it -= 32;\n        }\n        return str;\n    }\n\n    template <typename T> Queue<StringBase<T> > split(const StringBase<T> &str, T delim) {\n        return split(str, StringBase<T>(delim));\n    }\n    template <typename T> Queue<StringBase<T> > split(const StringBase<T> &str, const StringBase<T> &delim) {\n        size_t start = 0;\n        Queue<StringBase<T> > r;\n        for (size_t i = 0; i < str.size() - (delim.size() - 1); ++i) {\n            if (substr(str, i, i + (delim.size() - 1)) == delim) {\n                if (i > start) r.insert(substr(str, start, i - 1));\n                start = i + delim.size();\n            }\n        }\n        if (start < str.size()) r.insert(substr(str, start));\n        return r;\n    }\n\n    String hash(const String&);\n\n    ByteString makeByteString(const Byte[], size_t);\n}\n\ntemplate <typename T, typename U>\njutil::StringBase<T> operator+(const jutil::StringBase<T> &l, const jutil::StringBase<U> &r) {\n    jutil::StringBase<T> n(l);\n    n.insert(static_cast<jutil::StringBase<T> >(r));\n    return n;\n}\n\ntemplate <typename T, typename U>\njutil::StringBase<T> &operator+=(jutil::StringBase<T> &l, const jutil::StringBase<U> &r) {\n    l.insert(static_cast<jutil::StringBase<T> >(r));\n    return l;\n}\n\ntemplate <typename T, typename U>\nbool operator==(const jutil::StringBase<T> &l, const jutil::StringBase<U> &r) {\n    if (l.size() == r.size()) {\n        for (size_t i = 0; i < l.size(); ++i) if (l[i] != static_cast<T>(r[i])) return false;\n        return true;\n    } else return false;\n}\n\ntemplate <typename T, typename U>\nbool operator!=(const jutil::StringBase<T> &l, const jutil::StringBase<U> &r) {\n    return !(l == r);\n}\n\ntemplate <typename T>\njutil::StringBase<T> operator+(const jutil::StringBase<T> &l, const T *r) {\n    return l + jutil::StringBase<T>(r);\n}\n\ntemplate <typename T>\njutil::StringBase<T> &operator+=(jutil::StringBase<T> &l, const T *r) {\n    return l += jutil::StringBase<T>(r);\n}\n\ntemplate <typename T>\njutil::StringBase<T> &operator+=(jutil::StringBase<T> &l, const T r) {\n    l.insert(r);\n    return l;\n}\n\ntemplate <typename T>\nbool operator==(const jutil::StringBase<T> &l, const T *r) {\n    return l == jutil::StringBase<T>(r);\n}\n\ntemplate <typename T>\nbool operator!=(const jutil::StringBase<T> &l, const T *r) {\n    return l != jutil::StringBase<T>(r);\n}\n\ntemplate <typename T>\njutil::StringBase<T> operator+(const T *l, const jutil::StringBase<T> &r) {\n    return jutil::StringBase<T>(l) + r;\n}\n\ntemplate <typename T>\nbool operator==(const T *l, const jutil::StringBase<T> &r) {\n    return r == jutil::StringBase<T>(l);\n}\n\ntemplate <typename T>\nbool operator!=(const T *l, const jutil::StringBase<T> &r) {\n    return r != jutil::StringBase<T>(l);\n}\n\ntemplate <typename T, typename A> jutil::Queue<T, A>::operator jutil::StringBase<char>() {\n    jutil::String str = '{';\n    for (size_t i = 0; i < this->size(); ++i) {\n        str += jutil::String((*this)[i]);\n        str += \",\";\n    }\n    if (str.size() > 1) str.erase(str.size() - 1);\n    str += \"}\";\n    return str;\n}\n\ntemplate <typename T, typename A> jutil::Queue<T, A>::operator const jutil::StringBase<char>() const {\n    jutil::String str = '{';\n    for (size_t i = 0; i < this->size(); ++i) {\n        str += jutil::String((*this)[i]);\n        str += \",\";\n    }\n    if (str.size() > 1) str.erase(str.size() - 1);\n    str += \"}\";\n    return str;\n}\n\njutil::StringBase<char> operator \"\" _str(const char*, size_t);\njutil::StringBase<wchar_t> operator \"\" _wstr(const wchar_t*, size_t);\n\n#ifdef STRINGERR\n    #undef STRINGERR\n#endif\n\n#undef __J_ETSC\n#undef __J_ESTC\n#undef __J_ESC\n#undef JUTIL_STRING_DC\n\n#endif // JUTIL_STRING_H\n",
+			"file": "include/JUtil/Core/String.h",
+			"file_size": 19409,
+			"file_write_time": 132098086652567614,
+			"settings":
+			{
+				"buffer_size": 19479,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "makefile",
+			"settings":
+			{
+				"buffer_size": 799,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/String.cpp",
+			"settings":
+			{
+				"buffer_size": 11764,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "include/JUtil/Core/NonCopyable.h",
+			"settings":
+			{
+				"buffer_size": 751,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/usr/include/sys/types.h",
+			"settings":
+			{
+				"buffer_size": 5712,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/usr/include/bits/stdint-intn.h",
+			"settings":
+			{
+				"buffer_size": 1036,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "include/JUtil/Container/Set.hpp",
+			"settings":
+			{
+				"buffer_size": 1762,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "include/JUtil/Core/integers.h",
+			"settings":
+			{
+				"buffer_size": 3949,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/usr/include/bits/types.h",
+			"settings":
+			{
+				"buffer_size": 8560,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Queue.cpp",
+			"settings":
+			{
+				"buffer_size": 451,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "include/JUtil/Core/RNG.h",
+			"settings":
+			{
+				"buffer_size": 2791,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "include/JUtil/Core/Macro.h",
+			"settings":
+			{
+				"buffer_size": 9490,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/Allocator.cpp",
+			"settings":
+			{
+				"buffer_size": 326,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		}
+	],
+	"build_system": "Packages/User/cpp-make.sublime-build",
+	"build_system_choices":
+	[
+		[
+			[
+				[
+					"Packages/C++ Starting Kit/C++ - Starting Kit.sublime-build",
+					""
+				],
+				[
+					"Packages/C++ Starting Kit/C++ - Starting Kit.sublime-build",
+					"Run"
+				]
+			],
+			[
+				"Packages/C++ Starting Kit/C++ - Starting Kit.sublime-build",
+				""
+			]
+		],
+		[
+			[
+				[
+					"Packages/User/cpp-make.sublime-build",
+					""
+				],
+				[
+					"Packages/User/cpp-make.sublime-build",
+					"Clean"
+				],
+				[
+					"Packages/User/cpp-make.sublime-build",
+					"Run"
+				]
+			],
+			[
+				"Packages/User/cpp-make.sublime-build",
+				""
+			]
+		]
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"AUTO",
+				"Toggle AutoSave: all files"
+			],
+			[
+				"auto",
+				"Toggle AutoSave: all files"
+			],
+			[
+				"autosav",
+				"Toggle AutoSave: all files"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"disa",
+				"Package Control: Disable Package"
+			],
+			[
+				"package",
+				"Package Control: Disable Package"
+			],
+			[
+				"prv",
+				"PackageResourceViewer: Extract Package"
+			],
+			[
+				"inst",
+				"Package Control: Install Package"
+			],
+			[
+				"ins",
+				"Package Control: Install Package"
+			],
+			[
+				"vmen",
+				"View: Toggle Menu"
+			],
+			[
+				"package control: in",
+				"Package Control: Install Package"
+			],
+			[
+				"pack",
+				"Install Package Control"
+			]
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/home/liyara/Programming/JUtil",
+		"/home/liyara/Programming/JUtil/include",
+		"/home/liyara/Programming/JUtil/include/JUtil",
+		"/home/liyara/Programming/JUtil/include/JUtil/Container",
+		"/home/liyara/Programming/JUtil/include/JUtil/Core",
+		"/home/liyara/Programming/JUtil/include/JUtil/IO",
+		"/home/liyara/Programming/JUtil/include/JUtil/Network",
+		"/home/liyara/Programming/JUtil/include/JUtil/Traits",
+		"/home/liyara/Programming/JUtil/obj",
+		"/home/liyara/Programming/JUtil/src"
+	],
+	"file_history":
+	[
+		"/home/liyara/review2.txt",
+		"/home/liyara/Programming/JUtil/pushwin.sh",
+		"/home/liyara/Programming/JUtil/src/Timer.cpp",
+		"/home/liyara/.config/sublime-text-3/Packages/User/cpp-make.sublime-build",
+		"/home/liyara/Programming/JML/makefile",
+		"/home/liyara/Programming/JUtil/makefile",
+		"/home/liyara/Programming/JUtil/makefile_debug",
+		"/home/liyara/Programming/JUtil/makefile_release",
+		"/home/liyara/test.txt",
+		"/home/liyara/Programming/JUtil/3011968230.tmp",
+		"/usr/include/bits/stdint-intn.h",
+		"/usr/include/bits/types.h",
+		"/usr/include/sys/types.h",
+		"/home/liyara/.config/sublime-text-3/Packages/C++ Starting Kit/C++.sublime-settings",
+		"/home/liyara/.config/sublime-text-3/Packages/C++ Starting Kit/C++.tmLanguage",
+		"/home/liyara/.config/sublime-text-3/Packages/C++/C++ Standard Includes.sublime-completions",
+		"/home/liyara/.config/sublime-text-3/Packages/C++/C Single File.sublime-build",
+		"/home/liyara/.config/sublime-text-3/Packages/C++/C.sublime-syntax",
+		"/home/liyara/.config/sublime-text-3/Packages/C++/C++.sublime-settings",
+		"/home/liyara/Programming/JUtil/include/JUtil/Container/Stack.hpp",
+		"/home/liyara/Programming/JUtil/include/JUtil/Container/Set.hpp",
+		"/home/liyara/Programming/JUtil/include/JUtil/Core/NonCopyable.h",
+		"/home/liyara/Programming/JUtil/include/JUtil/Core/StringInterface.hpp",
+		"/home/liyara/Programming/JUtil/include/JUtil/Container/NonContiguousContainer.hpp",
+		"/home/liyara/Programming/JUtil/main.cpp",
+		"/home/liyara/Programming/JUtil/include/JUtil/Container/Queue.hpp",
+		"/home/liyara/Programming/JUtil/include/JUtil/jutil.h",
+		"/home/liyara/Programming/JUtil/include/JUtil/Core/limits.hpp",
+		"/home/liyara/Programming/JUtil/include/JUtil/Core/integers.h",
+		"/home/liyara/Programming/JUtil/include/JUtil/Container/LIFO.hpp",
+		"/home/liyara/Programming/JUtil/include/JUtil/Container/Container.hpp",
+		"/home/liyara/Programming/JUtil/include/JUtil/Core/RNG.h",
+		"/home/liyara/Programming/JUtil/include/JUtil/Container/Map.hpp",
+		"/home/liyara/Programming/JUtil/include/JUtil/Core/size_t.h",
+		"/home/liyara/Programming/JUtil/src/RNG.cpp",
+		"/home/liyara/Programming/JUtil/include/JUtil/Traits/declval.hpp",
+		"/home/liyara/Programming/JUtil/src/Allocator.cpp",
+		"/home/liyara/Programming/JUtil/include/JUtil/Traits/Validator.hpp",
+		"/home/liyara/Programming/JUtil/include/JUtil/Traits/Traits.hpp",
+		"/home/liyara/Programming/JUtil/include/JUtil/Traits/IsArray.hpp",
+		"/home/liyara/Programming/JUtil/include/JUtil/Core/Tuple.hpp",
+		"/home/liyara/Programming/JUtil/include/JUtil/IO/IO.h",
+		"/home/liyara/Programming/JUtil/src/Thread.cpp",
+		"/home/liyara/Programming/JUtil/src/Queue.cpp",
+		"/home/liyara/Programming/JUtil/include/JUtil/Core/Thread.h",
+		"/home/liyara/Programming/JUtil/include/JUtil/Core/String.h",
+		"/home/liyara/Programming/JUtil/include/JUtil/Core/Pair.hpp",
+		"/home/liyara/Programming/JUtil/include/JUtil/Core/Timer.h",
+		"/home/liyara/Programming/JUtil/include/JUtil/Core/Allocator.h",
+		"/home/liyara/Programming/JUtil/src/String.cpp",
+		"/home/liyara/Programming/JUtil/src/MemoryBlock.cpp",
+		"/home/liyara/Programming/JUtil/src/jutil.cpp",
+		"/home/liyara/Programming/JUtil/src/IO.cpp",
+		"/home/liyara/Programming/JUtil/src/Error.cpp",
+		"/home/liyara/Programming/JUtil/src/test.cpp",
+		"/home/liyara/Programming/JUtil/include/hello.h",
+		"/home/liyara/Programming/JUtil/src/hello.cpp",
+		"/home/liyara/osu/stop.sh",
+		"/home/liyara/osu/start.sh",
+		"/home/liyara/osu/osu!.liyara.cfg",
+		"/run/media/liyara/M.2/Games/p.txt",
+		"/home/liyara/.config/fcitx/conf/fcitx-keyboard.config",
+		"/home/liyara/brother/brother-hll8360cdw-lpr-bin/PKGBUILD",
+		"/home/liyara/brother/brother-hll8360cdw-cups-bin/PKGBUILD",
+		"/home/liyara/.minecraft/versions/1.14.1/1.14.1.json",
+		"/home/liyara/lockTablet.sh",
+		"/home/liyara/Downloads/ePSXe205linux_x64/docs/epsxe_linux_en.txt",
+		"/home/liyara/Redshift.sh",
+		"/run/media/liyara/External/vitalsource.txt",
+		"/home/liyara/.minecraft/versions/1.12/1.12.json",
+		"/home/liyara/Downloads/brother.sh",
+		"/home/liyara/Programming/JUtil/Makefile",
+		"/home/liyara/.wine_osu/winetricks.log",
+		"/home/liyara/Downloads/linux-brprinter-installer-2.2.1-1",
+		"/run/media/liyara/External/New Text Document.txt",
+		"/run/media/liyara/External/github.txt",
+		"/run/media/liyara/External/MAL.txt",
+		"/run/media/liyara/External/Crunchyroll.txt",
+		"/run/media/liyara/External/Wanikani.txt",
+		"/run/media/liyara/External/Gelbooru.txt",
+		"/run/media/liyara/External/Twitter.txt",
+		"/home/liyara/Text File"
+	],
+	"find":
+	{
+		"height": 39.0
+	},
+	"find_in_files":
+	{
+		"height": 121.0,
+		"where_history":
+		[
+			"<open folders>"
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"wait",
+			"off",
+			"defau",
+			"outputs",
+			"operator+",
+			"scan",
+			"move",
+			"hour",
+			"size_t",
+			"strat",
+			"initializer_list",
+			"realloc",
+			"hand",
+			"real",
+			"unlock",
+			"stop",
+			"initializer_list",
+			"literal",
+			"initializer_list",
+			"initia",
+			"init",
+			"int64",
+			"OVERRIDE;",
+			"override",
+			"+=",
+			"put",
+			"hash",
+			"ootarget->",
+			"target->",
+			"int64",
+			"JUtil/Jutil/",
+			"Core/",
+			"Traits/",
+			"IO/",
+			"Container/",
+			"Core/",
+			"macro.h",
+			"error.h",
+			"thread.h",
+			"limits.h",
+			"integers.h",
+			"size_t.h",
+			"Macro.h",
+			"integers.h",
+			"frame",
+			"staging",
+			"frame",
+			"!important !important",
+			";",
+			"full",
+			"message122"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"int",
+			"OVERRIDE_;",
+			"JUTIL_OVERRIDE",
+			"hashr",
+			"cstr",
+			"otarget->",
+			"JUtil/",
+			"JUtil/Core/",
+			"JUtil/Traits/",
+			"JUtil/IO/",
+			"JUtil/Container/",
+			"!important",
+			" !important;"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 4,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "src/RNG.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2455,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++ Starting Kit/C++.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 27,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "include/JUtil/jutil.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1045,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								622,
+								622
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++ Starting Kit/C++.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "src/jutil.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2207,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1158,
+								1158
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++ Starting Kit/C++.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 530.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 25,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "include/JUtil/Core/Thread.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2244,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1731,
+								1712
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++ Starting Kit/C++.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1170.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "src/Thread.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 7792,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								160,
+								160
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++ Starting Kit/C++.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "src/IO.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 22463,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5388,
+								5388
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++ Starting Kit/C++.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 3391.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "include/JUtil/IO/IO.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 8414,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								6260,
+								6260
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++ Starting Kit/C++.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 3813.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "main.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1167,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								309,
+								309
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++ Starting Kit/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "include/JUtil/Core/limits.hpp",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 1678,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++ Starting Kit/C++.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 0,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"default_dir": "/home/liyara/Programming/JUtil/include/JUtil/Network",
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 10,
+					"file": "include/JUtil/Core/Clock.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4525,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3061,
+								3061
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++ Starting Kit/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 4161.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 13,
+					"type": "text"
+				},
+				{
+					"buffer": 11,
+					"file": "src/Clock.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 10534,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								47,
+								47
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++ Starting Kit/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 12,
+					"type": "text"
+				},
+				{
+					"buffer": 12,
+					"file": "/home/liyara/Downloads/pthread.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 42499,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								17877,
+								17877
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++ Starting Kit/C++.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 10147.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 26,
+					"type": "text"
+				},
+				{
+					"buffer": 13,
+					"file": "include/JUtil/Container/Queue.hpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 29437,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								23875,
+								23875
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++ Starting Kit/C++.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 12313.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 17,
+					"type": "text"
+				},
+				{
+					"buffer": 14,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 251,
+						"regions":
+						{
+							"match":
+							{
+								"flags": 112,
+								"regions":
+								[
+									[
+										148,
+										164
+									]
+								],
+								"scope": ""
+							}
+						},
+						"selection":
+						[
+							[
+								107,
+								107
+							]
+						],
+						"settings":
+						{
+							"detect_indentation": false,
+							"line_numbers": false,
+							"output_tag": 1,
+							"result_base_dir": "",
+							"result_file_regex": "^([^ \t].*):$",
+							"result_line_regex": "^ +([0-9]+):",
+							"scroll_past_end": true,
+							"syntax": "Packages/Default/Find Results.hidden-tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 22,
+					"type": "text"
+				},
+				{
+					"buffer": 15,
+					"file": "README.md",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 307,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								208,
+								208
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Markdown/Markdown.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 21,
+					"type": "text"
+				},
+				{
+					"buffer": 16,
+					"file": "push.sh",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 160,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								68,
+								68
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/ShellScript/Bash.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 11,
+					"type": "text"
+				},
+				{
+					"buffer": 17,
+					"file": "/home/liyara/Programming/JWin/main.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2319,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++ Starting Kit/C++.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 24,
+					"type": "text"
+				},
+				{
+					"buffer": 18,
+					"file": "include/JUtil/Core/Pair.hpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1303,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								990,
+								990
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++ Starting Kit/C++.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 162.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 28,
+					"type": "text"
+				},
+				{
+					"buffer": 19,
+					"file": "include/JUtil/Container/Map.hpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 6132,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1571,
+								1571
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++ Starting Kit/C++.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 552.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 23,
+					"type": "text"
+				},
+				{
+					"buffer": 20,
+					"file": "include/JUtil/Core/String.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 19479,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								19000,
+								19000
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++ Starting Kit/C++.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 9057.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 9,
+					"type": "text"
+				},
+				{
+					"buffer": 21,
+					"file": "makefile",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 799,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								799,
+								799
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Makefile/Makefile.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 16,
+					"type": "text"
+				},
+				{
+					"buffer": 22,
+					"file": "src/String.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 11764,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5303,
+								5303
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++ Starting Kit/C++.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 3219.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 10,
+					"type": "text"
+				},
+				{
+					"buffer": 23,
+					"file": "include/JUtil/Core/NonCopyable.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 751,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++ Starting Kit/C++.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 29,
+					"type": "text"
+				},
+				{
+					"buffer": 24,
+					"file": "/usr/include/sys/types.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5712,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++ Starting Kit/C++.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 2137.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 30,
+					"type": "text"
+				},
+				{
+					"buffer": 25,
+					"file": "/usr/include/bits/stdint-intn.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1036,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++ Starting Kit/C++.tmLanguage",
+							"tab_size": 3,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 31,
+					"type": "text"
+				},
+				{
+					"buffer": 26,
+					"file": "include/JUtil/Container/Set.hpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1762,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1519,
+								1519
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++ Starting Kit/C++.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 14,
+					"type": "text"
+				},
+				{
+					"buffer": 27,
+					"file": "include/JUtil/Core/integers.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3949,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1037,
+								1037
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++ Starting Kit/C++.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 504.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 28,
+					"file": "/usr/include/bits/types.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 8560,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++ Starting Kit/C++.tmLanguage",
+							"tab_size": 3,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 108.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 32,
+					"type": "text"
+				},
+				{
+					"buffer": 29,
+					"file": "src/Queue.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 451,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								75,
+								75
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++ Starting Kit/C++.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 18,
+					"type": "text"
+				},
+				{
+					"buffer": 30,
+					"file": "include/JUtil/Core/RNG.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2791,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								471,
+								471
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++ Starting Kit/C++.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1026.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 20,
+					"type": "text"
+				},
+				{
+					"buffer": 31,
+					"file": "include/JUtil/Core/Macro.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 9490,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								137,
+								137
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++ Starting Kit/C++.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 3990.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 19,
+					"type": "text"
+				},
+				{
+					"buffer": 32,
+					"file": "src/Allocator.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 326,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								291,
+								291
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++ Starting Kit/C++.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 15,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 29.0
+	},
+	"input":
+	{
+		"height": 40.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 126.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "Packages/User/cpp-make.sublime-build",
+	"project": "JUtil.sublime-project",
+	"replace":
+	{
+		"height": 54.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 276.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
