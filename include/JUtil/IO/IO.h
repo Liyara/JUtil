@@ -554,7 +554,7 @@ namespace jutil  {
     }
 
 
-    inline FileBase::FileBase(const String &fpath, unsigned openMode) : path(fpath), accessMode(openMode), m((char*)malloc(8)), fileOpen(false) {
+    inline FileBase::FileBase(const String &fpath, unsigned openMode) : path(fpath), accessMode(openMode), m((char*)malloc(8)) {
         char *cfpath = new char[fpath.size() + 1];
         fpath.array(cfpath);
 
@@ -597,6 +597,10 @@ namespace jutil  {
         if (target && target->buffer()) fclose((FILE*)(target->buffer()));
     }
 
+    inline bool FileBase::open() const {
+        return this->fileOpen;
+    }
+
     inline unsigned FileBase::mode() const {
         return accessMode;
     }
@@ -624,7 +628,7 @@ namespace jutil  {
     }
 
     inline File::File(const String &fpath, unsigned openMode) : FileBase(fpath, openMode), OutputHandler(JUTIL_NULLPTR, JUTIL_NULLPTR), InputHandler(JUTIL_NULLPTR) {
-        openFile();
+        this->fileOpen = openFile();
     }
 
     inline bool File::openFile() {
@@ -644,9 +648,7 @@ namespace jutil  {
 
 		delete[] cpath;
 
-        if (target->buffer()) {
-            fileOpen = true;
-        } else {
+        if (!target->buffer()) {
             err << "Unable to open file \"" << path << "\"!" << endl;
             return false;
         }
@@ -753,7 +755,7 @@ namespace jutil  {
     }
 
     inline WideFile::WideFile(const String &fpath, unsigned openMode) : FileBase(fpath, openMode), OutputHandler(JUTIL_NULLPTR, JUTIL_NULLPTR), InputHandler(JUTIL_NULLPTR) {
-        openFile();
+        this->fileOpen = openFile();
     }
 
     inline bool WideFile::openFile() {
@@ -773,9 +775,7 @@ namespace jutil  {
 
 		delete[] cpath;
 
-        if (target->buffer()) {
-            fileOpen = true;
-        } else {
+        if (!target->buffer()) {
             err << "Unable to open file \"" << path << "\"!" << endl;
             return false;
         }
@@ -881,7 +881,7 @@ namespace jutil  {
     }
 
     inline BinaryFile::BinaryFile(const String &fpath, size_t cs, unsigned openMode) : FileBase(fpath, openMode), OutputHandler(JUTIL_NULLPTR, JUTIL_NULLPTR), InputHandler(JUTIL_NULLPTR), chunkSize(cs) {
-        openFile();
+        this->fileOpen = openFile();
     }
 
     inline bool BinaryFile::openFile() {
@@ -909,9 +909,7 @@ namespace jutil  {
 
 		delete[] cpath;
 
-        if (target->buffer()) {
-            fileOpen = true;
-        } else {
+        if (!target->buffer()) {
             err << "Unable to open file \"" << path << "\"!" << endl;
             return false;
         }
