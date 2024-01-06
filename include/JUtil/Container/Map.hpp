@@ -9,16 +9,16 @@
 #include "JUtil/Core/Pair.hpp"
 #include "NonContiguousContainer.hpp"
 
-namespace jutil JUTIL_PUBLIC_ {
+namespace jutil  {
 
     JUTIL_FORWARD_TEMPLATE_2
-    class JUTIL_PUBLIC_ Map;
+    class  Map;
 
     template<
         typename K,
         typename T
     >
-    class JUTIL_PRIVATE_ __MapInternalIterator : public __NonContiguousContainerInternalIterator<K, T, Map<K, T>, __MapInternalIterator<K, T> > {
+    class  __MapInternalIterator : public __NonContiguousContainerInternalIterator<K, T, Map<K, T>, __MapInternalIterator<K, T> > {
     public:
 
         typedef __MapInternalIterator<K, T> Type;
@@ -32,7 +32,7 @@ namespace jutil JUTIL_PUBLIC_ {
         JUTIL_CX_ __MapInternalIterator(const Type &i) : BaseType(i) {}
         JUTIL_CX_ __MapInternalIterator() : BaseType() {}
         #ifdef JUTIL_CPP11
-            JUTIL_CX_ __MapInternalIterator(Type&& i) : BaseType(jutil::move(i)) {}
+            JUTIL_CX_ __MapInternalIterator(Type&& i) : BaseType(move(i)) {}
         #endif
 
         K &key() const noexcept {return element->key;}
@@ -51,7 +51,7 @@ namespace jutil JUTIL_PUBLIC_ {
         typename K,
         typename T
     >
-    class JUTIL_PUBLIC_ Map : public NonContiguousContainer<K, T, Map<K, T>, __MapInternalIterator<K, T> > {
+    class  Map : public NonContiguousContainer<K, T, Map<K, T>, __MapInternalIterator<K, T> > {
     public:
 
         /** =========================================================================================================================================
@@ -93,7 +93,7 @@ namespace jutil JUTIL_PUBLIC_ {
             @param dat  Map to move.
         */
         /*Map(Literal &&dat) {
-            for (jutil::Pair<K, T> i: dat) {
+            for (Pair<K, T> i: dat) {
                 insert(i.first(), i.second());
             }
         }*/

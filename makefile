@@ -1,31 +1,47 @@
 CXX := g++
-INCLUDE_PATHS := -I./include/
-CXXFLAGS := -std=gnu++17 $(INCLUDE_PATHS) -lpthread -Wfatal-errors
+INCLUDE_PATHS := -I./include/ -I/usr/include/
+LIB_PATHS := -lpthread 
+CXXFLAGS := -std=gnu++17 $(INCLUDE_PATHS) -Wfatal-errors
 MODULES := $(basename $(notdir $(shell find src/ -name '*.cpp')))
 SOURCES := $(addsuffix .cpp,$(addprefix src/,$(MODULES)))
 OBJECTS := $(addsuffix .o,$(addprefix obj/,$(MODULES)))
 INCLUDES := includes/%.h includes/%.hpp
-CXX_LIB := ar rvs
-DEBUG_TARGET := ./bin/jutil
-RELEASE_TARGET := ./bin/libjutil.a
-MAIN_OBJECT :=	obj/main.o
-MAIN_SOURCE := main.cpp
+TARGET := ./bin/JUtil
+MAIN_OBJECT := obj/main.o
+MAIN_SRC := main.cpp
+STATIC_LIB := ./lib/libjutil.a
 
-debug: $(MAIN_OBJECT) $(OBJECTS)
-	$(CXX) $(CXXFLAGS) -o $(DEBUG_TARGET) $(MAIN_OBJECT) $(OBJECTS)
+.PHONY: all debug release clean run
 
-release: $(OBJECTS)
-	$(CXX_LIB) $(RELEASE_TARGET) $(OBJECTS)
+all: debug
 
-obj/main.o: $(MAIN_SOURCE)
-	$(CXX) $(CXXFLAGS) -c -o $(MAIN_OBJECT) $(MAIN_SOURCE)
+debug: $(TARGET)
+
+drun: debug run
+
+gdb:
+	gdb $(TARGET)
+
+release: $(STATIC_LIB)
+
+$(TARGET): clean $(MAIN_OBJECT) $(OBJECTS)
+	$(CXX) $(CXXFLAGS) $(MAIN_OBJECT) $(OBJECTS) $(LIB_PATHS) -o $(TARGET)
+
+$(STATIC_LIB): $(OBJECTS)
+	ar rcs $(STATIC_LIB) $(OBJECTS)
+
+obj/main.o: $(MAIN_SRC)
+	$(CXX) $(CXXFLAGS) -c -o $(MAIN_OBJECT) $(MAIN_SRC)
 
 obj/%.o: src/%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 clean:
 	rm -f obj/*.o
-	rm -f bin/*
+	rm -f $(TARGET)
+	rm -f $(STATIC_LIB)
+	rm -f winobj/*.o
+	rm -f $(WIN_TARGET)
 
 run:
-	$(DEBUG_TARGET)
+	$(TARGET)

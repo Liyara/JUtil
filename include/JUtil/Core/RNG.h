@@ -20,7 +20,7 @@
 #define _JUTIL_RNG_MAX_FLT long double
 #define _JUTIL_RNG_MIN_FLT long double
 
-namespace jutil JUTIL_PUBLIC_ {
+namespace jutil  {
 
     inline int64_t queryEntropicSources(void** time) {
         #ifdef JUTIL_WINDOWS
@@ -34,7 +34,7 @@ namespace jutil JUTIL_PUBLIC_ {
         #endif
     }
 
-    class JUTIL_PUBLIC_ RNG {
+    class  RNG {
     public:
 
         RNG() 
@@ -60,7 +60,7 @@ namespace jutil JUTIL_PUBLIC_ {
 
         #ifdef JUTIL_CPP11
         RNG(RNG &&o) {
-            (*this) = jutil::move(o);
+            (*this) = move(o);
         }
         RNG &operator=(RNG &&o) {
             floor = o.floor;
@@ -75,7 +75,7 @@ namespace jutil JUTIL_PUBLIC_ {
 
         #ifdef JUTIL_CPP11
             template <typename T>
-            void get(T *v, typename jutil::Enable<IsInteger<T>::Value>::Type* = 0) {
+            void get(T *v, typename Enable<IsInteger<T>::Value>::Type* = 0) {
                 shake();
                 _JUTIL_RNG_MAX_INT up = upperLimit<T>();
                 _JUTIL_RNG_MIN_INT down = lowerLimit<T>();
@@ -89,7 +89,7 @@ namespace jutil JUTIL_PUBLIC_ {
             }
 
             template <typename T>
-            void get(T *v, typename jutil::Enable<IsFloatingPoint<T>::Value>::Type* = 0) {
+            void get(T *v, typename Enable<IsFloatingPoint<T>::Value>::Type* = 0) {
                 shake();
                 _JUTIL_RNG_MIN_INT up = upperLimit<T>();
                 _JUTIL_RNG_MIN_INT down = lowerLimit<T>();

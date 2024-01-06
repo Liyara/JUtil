@@ -7,10 +7,10 @@
 
 namespace jutil {
     template <bool b, typename T>
-    struct JUTIL_PUBLIC_ Enable {};
+    struct  Enable {};
 
     template <typename T>
-    struct JUTIL_PUBLIC_ Enable<true, T> {typedef T Type;};
+    struct  Enable<true, T> {typedef T Type;};
 
     typedef char (&Valid)[1];
     typedef char (&Invalid)[2];

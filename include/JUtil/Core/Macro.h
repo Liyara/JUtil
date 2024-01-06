@@ -20,91 +20,83 @@
 
 #define JUTIL__
 
-#ifdef JUTIL_GCC
-    #define JUTIL_PUBLIC_
-    #define JUTIL_PRIVATE_
-#else
-    #define JUTIL_PUBLIC_   JUTIL__
-    #define JUTIL_PRIVATE_  JUTIL__
-#endif
-
 #define JUTIL_INTERNAL_  JUTIL__ __
 
-namespace jutil JUTIL_PUBLIC_ {
+namespace jutil  {
 
     #ifndef JUTIL_CONTAINER_H
         template <typename>
-        class JUTIL_PUBLIC_ Iterator;
+        class  Iterator;
         template <typename, typename, typename, typename>
-        class JUTIL_PUBLIC_ Container;
+        class  Container;
     #endif
     #ifndef JUTIL_CONTIGUOUS_CONTAINER_H
         template<typename, typename, typename>
-        class JUTIL_PUBLIC_ ContiguousContainer;
+        class  ContiguousContainer;
     #endif
     #ifndef JUTIL_NON_CONTIGUOUS_CONTAINER_H
         template <typename, typename, typename, typename>
-        class JUTIL_PRIVATE_ __NonContiguousContainerInternalIterator;
+        class  __NonContiguousContainerInternalIterator;
         template <typename, typename, typename, typename>
-        struct JUTIL_PRIVATE_ __NonContiguousContainerInternalNode;
+        struct  __NonContiguousContainerInternalNode;
     #endif
     #ifndef JUTIL_QUEUE_H
         template <typename, typename>
-        class JUTIL_PUBLIC_ Queue;
+        class  Queue;
     #endif
     #ifndef JUTIL_MAP_H
         template<typename, typename>
-        class JUTIL_PRIVATE_ __MapInternalIterator;
+        class  __MapInternalIterator;
         template <typename, typename>
-        class JUTIL_PUBLIC_ Map;
+        class  Map;
     #endif
     #ifndef JUTIL_PAIR_H
         template <typename, typename>
-        class JUTIL_PUBLIC_ Pair;
+        class  Pair;
     #endif
     #ifdef JUTIL_CPP11
         #ifndef JUTIL_TUPLE_H
             template <typename...>
-            class JUTIL_PUBLIC_ Tuple;
+            class  Tuple;
         #endif
     #endif
     #ifndef JUTIL_NON_COPYABLE_H
-        class JUTIL_PUBLIC_ NonCopyable;
+        class  NonCopyable;
     #endif
     #ifndef JUTIL_STRING_H
         template <typename>
-        class JUTIL_PRIVATE_ StringBase;
-        struct JUTIL_PUBLIC_ StringInterface;
+        class  StringBase;
+        struct  StringInterface;
     #endif
     #ifndef JUTIL_ERROR_H
-        class JUTIL_PUBLIC_ Error;
+        class  Error;
     #endif
     #ifndef JUTIL_TIMER_H
-        class JUTIL_PUBLIC_ Timer;
+        class  Timer;
     #endif
     #ifndef JUTIL_THREAD_H
-        class JUTIL_PUBLIC_ ThreadGroup;
-        class JUTIL_PUBLIC_ Thread;
+        class  ThreadGroup;
+        class  Thread;
     #endif
     #ifndef JUTIL_RNG_H
-        class JUTIL_PUBLIC_ RNG;
+        class  RNG;
     #endif
     #ifndef JUTIL_IO_H
-        namespace io_base JUTIL_PRIVATE_ {
+        namespace io_base  {
             template <typename>
-            class JUTIL_PRIVATE_ OutputHandler;
+            class  OutputHandler;
             template <typename>
-            class JUTIL_PRIVATE_ InputHandler;
+            class  InputHandler;
         }
-        class JUTIL_PUBLIC_ File;
+        class  File;
     #endif
     #ifndef JUTIL_TRAITS_H
         template <typename T, T>
-        class JUTIL_PUBLIC_ Validator;
+        class  Validator;
         template <bool, typename = void>
-        class JUTIL_PUBLIC_ Enable;
+        class  Enable;
         template <typename, typename>
-        class JUTIL_PUBLIC_ Convert;
+        class  Convert;
     #endif
 }
 

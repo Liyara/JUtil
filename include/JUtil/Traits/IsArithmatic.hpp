@@ -7,10 +7,10 @@
 #include "Convert.hpp"
 #include "declval.hpp"
 
-#define ADD_T(a, b) decltype(jutil::declval<a>() + jutil::declval<b>())
-#define SUBTRACT_T(a, b) decltype(jutil::declval<a>() - jutil::declval<b>())
-#define MULTIPLY_T(a, b) decltype(jutil::declval<a>() * jutil::declval<b>())
-#define DIVIDE_T(a, b) decltype(jutil::declval<a>() / jutil::declval<b>())
+#define ADD_T(a, b) decltype(declval<a>() + declval<b>())
+#define SUBTRACT_T(a, b) decltype(declval<a>() - declval<b>())
+#define MULTIPLY_T(a, b) decltype(declval<a>() * declval<b>())
+#define DIVIDE_T(a, b) decltype(declval<a>() / declval<b>())
 
 namespace jutil {
 

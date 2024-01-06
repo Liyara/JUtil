@@ -8,17 +8,17 @@
 
 #ifdef JUTIL_CPP11
 
-namespace jutil JUTIL_PUBLIC_ {
+namespace jutil  {
 
     template <size_t index, typename... Types>
     using IndexedType = typename TypeAtIndex<index, Types...>::Type;
 
-    namespace tuple_base JUTIL_PRIVATE_ {
+    namespace tuple_base  {
         template<size_t index, typename T>
         struct TupleElement {
             JUTIL_GENERATE_METHODS(TupleElement, default)
             explicit constexpr TupleElement(const T &value) noexcept : Value(value) {}
-            explicit constexpr TupleElement(T&& value) noexcept : Value(jutil::move(value)) {}
+            explicit constexpr TupleElement(T&& value) noexcept : Value(move(value)) {}
             T Value;
 
             virtual ~TupleElement() {}
@@ -32,9 +32,9 @@ namespace jutil JUTIL_PUBLIC_ {
             JUTIL_GENERATE_METHODS(TupleBase, default)
             template<
                 typename... CTypes,
-                typename = typename jutil::Enable<(sizeof... (Types) == sizeof... (CTypes))>::Type
+                typename = typename Enable<(sizeof... (Types) == sizeof... (CTypes))>::Type
             >
-            explicit constexpr TupleBase(CTypes&&... values) noexcept : TupleElement<indices, Types>(jutil::rval<CTypes>(values))... {}
+            explicit constexpr TupleBase(CTypes&&... values) noexcept : TupleElement<indices, Types>(rval<CTypes>(values))... {}
 
             virtual ~TupleBase() {}
         };
@@ -53,9 +53,9 @@ namespace jutil JUTIL_PUBLIC_ {
 
         template <
             typename... CTypes,
-            typename = typename jutil::Enable<(sizeof... (Types) == sizeof... (CTypes))>::Type
+            typename = typename Enable<(sizeof... (Types) == sizeof... (CTypes))>::Type
         >
-        explicit constexpr Tuple(CTypes&&... values) noexcept : BaseType(jutil::rval<CTypes>(values)...) {}
+        explicit constexpr Tuple(CTypes&&... values) noexcept : BaseType(rval<CTypes>(values)...) {}
 
         constexpr size_t size() const noexcept {return sizeof...(Types);}
 

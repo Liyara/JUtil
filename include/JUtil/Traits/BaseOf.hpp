@@ -7,10 +7,10 @@
 
 namespace jutil {
     template <typename B, typename D>
-    class JUTIL_PUBLIC_ BaseOf final {
+    class  BaseOf final {
 
         template <typename B2, typename D2>
-        struct JUTIL_PRIVATE_ Converter final {
+        struct  Converter final {
             operator B2*() const;
             operator D2*();
         };

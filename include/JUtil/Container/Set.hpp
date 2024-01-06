@@ -6,23 +6,29 @@
 #define SET_ERR_INDEX 0x06
 
 namespace jutil {
-    template<size_t capacity, typename T>
+    template<
+        size_t capacity,
+        typename T
+    >
     class Set {
     public:
 
-        Set() {}
+        Set() {
+            
+        }
 
         #ifdef JUTIL_CPP11
             template <typename Y, typename... X>
             Set(Y val, X... vals) : data{val, vals...} {}
 
             Set(Set &&set) {
-                (*this) = jutil::move(set);
+                (*this) = move(set);
             }
 
             Set &operator=(Set &&set) {
-                data = set.data;
-                set.data = NULL;
+                memcpy(data, set.data, set.size());
+                memset(set.data, 0, set.size());
+                return *this;
             }
         #endif
 
@@ -70,15 +76,35 @@ namespace jutil {
             return data + capacity;
         }
 
-        size_t size() const {
+        virtual size_t size() const {
             return capacity;
         }
 
         virtual ~Set() {}
 
+        virtual Set<capacity, T> &destroy(size_t i) {
+            (data + i)->~T();
+            JUTIL_NEW(data + i, T());
+            return *this;
+        }
+
+        virtual Set<capacity, T> &clear() {
+            for (size_t i = 0; i < capacity; ++i) destroy(i);
+            return *this;
+        }
+
+    protected:
         T data[capacity];
 
     };
+
+    template<
+        size_t capacity,
+        typename T,
+        typename = typename Enable<IsDefaultConstructible<T>::Value>::Type,
+        typename = typename Enable<BaseOf<NonCopyable, T>::Value>::Type
+    >
+    class NonCopyableSet : public Set<capacity, T, int, int>, public NonCopyable {};
 }
 
 #endif // JUTIL_SET_H

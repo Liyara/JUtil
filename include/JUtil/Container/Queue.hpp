@@ -7,12 +7,12 @@
 #include <cstdlib>
 
 #ifdef JUTIL_CPP11
-    #define JUTIL_NULL_PROTECTOR(ot, nt) template <typename nt, typename = typename jutil::Enable<jutil::IsSame<nt, ot>::Value>::Type>
+    #define JUTIL_NULL_PROTECTOR(ot, nt) template <typename nt, typename = typename Enable<IsSame<nt, ot>::Value>::Type>
 #else
     #define JUTIL_NULL_PROTECTOR(ot, nt) template <typename nt>
 #endif
 
-namespace jutil JUTIL_PUBLIC_ {
+namespace jutil  {
 
     enum {
         DESCENDING,
@@ -24,8 +24,8 @@ namespace jutil JUTIL_PUBLIC_ {
         CYCLICAL
     };
 
-    class JUTIL_PUBLIC_ __QueueInternalAllocator : public Allocator {
-    protected:
+    class  __QueueInternalAllocator : public Allocator {
+       protected:
         void *alloc(size_t c) {
             return malloc(c);
         }
@@ -41,8 +41,8 @@ namespace jutil JUTIL_PUBLIC_ {
 
     template <
         typename,
-        typename = __QueueInternalAllocator
-    > class Queue;
+        typename = __QueueInternalAllocator>
+    class Queue;
 
     namespace queue_sort {
 
@@ -61,12 +61,12 @@ namespace jutil JUTIL_PUBLIC_ {
                 if (**array > *last) __queueSortSwap(array, &last);
                 if (*middle > *last) __queueSortSwap(&middle, &last);
                 return middle;
-            } else return *array;
+            } else
+                return *array;
         }
 
         template <typename T>
         void __queueSort(T **array, T **pivot, T **leftS, T **rightS, unsigned char mode) {
-
             __queueSortSwap(pivot, rightS);
             *pivot = *rightS;
             --*rightS;
@@ -74,12 +74,11 @@ namespace jutil JUTIL_PUBLIC_ {
             T *left = *leftS, *right = *rightS;
 
             while (true) {
-
                 if (mode) {
-                    while ((*left < **pivot  || *left == **pivot) && left < *rightS + 1) ++left;
+                    while ((*left < **pivot || *left == **pivot) && left < *rightS + 1) ++left;
                     while ((*right > **pivot || *right == **pivot) && right > *leftS) --right;
                 } else {
-                    while ((*left > **pivot  || *left == **pivot) && left < *rightS + 1) ++left;
+                    while ((*left > **pivot || *left == **pivot) && left < *rightS + 1) ++left;
                     while ((*right < **pivot || *right == **pivot) && right > *leftS) --right;
                 }
 
@@ -87,7 +86,8 @@ namespace jutil JUTIL_PUBLIC_ {
                     __queueSortSwap(&left, &right);
                     left = *leftS;
                     right = *rightS;
-                } else break;
+                } else
+                    break;
             }
 
             ++*rightS;
@@ -115,7 +115,7 @@ namespace jutil JUTIL_PUBLIC_ {
         void __queueInternalSortDescending(Queue<T> *q) {
             _queueSort(&(q->first()), q->size(), DESCENDING);
         }
-    }
+    }  // namespace queue_sort
 
     /**
 
@@ -123,8 +123,7 @@ namespace jutil JUTIL_PUBLIC_ {
     */
     template <typename T, typename A>
     class Queue : public ContiguousContainer<size_t, T, Queue<T, A> >, private A {
-    public:
-
+       public:
         /** =========================================================================================================================================
 
                 TYPES
@@ -145,7 +144,6 @@ namespace jutil JUTIL_PUBLIC_ {
          ** =========================================================================================================================================
         */
 
-
         /**
             Default constructor. Queue is empty.
         */
@@ -154,15 +152,15 @@ namespace jutil JUTIL_PUBLIC_ {
             reserve(2);
         }
 
-        #ifdef JUTIL_CPP11
-            template <typename X, typename ...Y>
-            Queue(const X &head, const Y&... tail) : Type() {
-                reserve(sizeof...(tail) + 1);
-                insert(static_cast<T>(head));
-                using et = int[];
-                et {0, (insert(static_cast<T>(tail)), 0)...};
-            }
-        #endif
+#ifdef JUTIL_CPP11
+        template <typename X, typename... Y>
+        Queue(const X &head, const Y &...tail) : Type() {
+            reserve(sizeof...(tail) + 1);
+            insert(static_cast<T>(head));
+            using et = int[];
+            et{0, (insert(static_cast<T>(tail)), 0)...};
+        }
+#endif
 
         /**
             Copy constructor.
@@ -185,17 +183,34 @@ namespace jutil JUTIL_PUBLIC_ {
             this->block = arr;
         }
 
+        Queue(const ValueType *arr, size_t arrSize) : Type() {
+            reserve(arrSize);
+            for (size_t i = 0; i < arrSize; ++i) insert(arr[i]);
+        }
+
         template <size_t len>
         Queue(ValueType arr[len])
-        #ifdef JUTIL_CPP11
-            : Queue(arr, len) {}
-        #else
+#ifdef JUTIL_CPP11
+            : Queue(arr, len) {
+        }
+#else
         {
             allocated = len;
             this->count = len;
             this->block = arr;
         }
-        #endif
+#endif
+
+        template <size_t len>
+        Queue(const ValueType (&arr)[len])
+#ifdef JUTIL_CPP11
+            : Queue(arr, len) {
+        }
+#else
+        {
+            for (size_t i = 0; i < arrSize; ++i) insert(arr[i]);
+        }
+#endif
 
         /** =========================================================================================================================================
 
@@ -228,20 +243,28 @@ namespace jutil JUTIL_PUBLIC_ {
             return *this;
         }
 
+        Type &remove(const ValueType &v) {
+            size_t pos;
+            while (find(v, &pos)) {
+                erase(pos);
+            }
+            return *this;
+        }
+
         Type &trim() {
             reallocate(this->count);
             return *this;
         }
 
-
         JUTIL_NULL_PROTECTOR(T, X)
         Type &erase(X *it) {
             if (it > this->block + this->count) {
-            } else {
-                it->~ValueType();
-                if (it + 1 != this->end()) this->move(it, it + 1, sizeof(ValueType) * (this->end() - (it + 1)));
-                --(this->count);
+                if (is == CYCLICAL) it = this->block + ((it - this->block) % this->count);
+                else return *this;
             }
+            it->~ValueType();
+            if (it + 1 != this->end()) this->move(it, it + 1, sizeof(ValueType) * (this->end() - (it + 1)));
+            --(this->count);
             return *this;
         }
 
@@ -275,7 +298,8 @@ namespace jutil JUTIL_PUBLIC_ {
             if (n > this->count) {
                 if (is == CYCLICAL) return insert(value, n % this->count);
             } else {
-                if (n == this->count) return insert(value);
+                if (n == this->count)
+                    return insert(value);
                 else {
                     ++(this->count);
                     //Copy into buffer to avoid pointer move issues
@@ -326,15 +350,13 @@ namespace jutil JUTIL_PUBLIC_ {
             if (is == CYCLICAL) {
                 start = start % this->count;
                 end = end % this->count + 1;
-            }
+            } else if (start >= this->count || end > this->count) return false;
             if (this->count == 0) return false;
-            if (start >= this->count || end > this->count) {
-            } else {
-                for (JUTIL_INIT(size_t i, start); i < end; ++i) {
-                    if (value ==  *(this->block + i)) {
-                        if (p) *p = i;
-                        return true;
-                    }
+
+            for (JUTIL_INIT(size_t i, start); i < end; ++i) {
+                if (value == *(this->block + i)) {
+                    if (p) *p = i;
+                    return true;
                 }
             }
             return false;
@@ -358,7 +380,7 @@ namespace jutil JUTIL_PUBLIC_ {
             }
 
             if (this->count == 0)
-              return false;
+                return false;
 
             if (start >= this->count || end > this->count) {
             } else {
@@ -416,10 +438,11 @@ namespace jutil JUTIL_PUBLIC_ {
                 end = end % this->count + 1;
             }
             bool found = false;
-            if (this->count == 0) return false;
+            if (this->count == 0)
+                return false;
             else {
                 for (JUTIL_INIT(size_t i, start); i < end; ++i) {
-                    if (value ==  *(this->block + i)) {
+                    if (value == *(this->block + i)) {
                         new (this->block + i) ValueType(value2);
                         found = true;
                     }
@@ -437,7 +460,7 @@ namespace jutil JUTIL_PUBLIC_ {
             if (start >= this->count || end > this->count) {
             } else {
                 for (JUTIL_INIT(size_t i, start); i < end; ++i) {
-                    if (value ==  *(this->block + i)) {
+                    if (value == *(this->block + i)) {
                         new (this->block + i) ValueType(value2);
                         return true;
                     }
@@ -495,7 +518,10 @@ namespace jutil JUTIL_PUBLIC_ {
                 }
                 size_t cursor = 0;
                 for (size_t i = 0; i < indices.size(); ++i) {
-                    for (Iterator it = value.begin(); it != value.end(); ++it) {(void)(*it); erase(indices[i] - cursor);}
+                    for (Iterator it = value.begin(); it != value.end(); ++it) {
+                        (void)(*it);
+                        erase(indices[i] - cursor);
+                    }
                     indices[i] -= cursor;
                     cursor += value.size();
                 }
@@ -548,7 +574,10 @@ namespace jutil JUTIL_PUBLIC_ {
                         ++qIndex;
                     }
                     if (confirm) {
-                        for (Iterator it = value.begin(); it != value.end(); ++it) {(void)(*it); erase(i);}
+                        for (Iterator it = value.begin(); it != value.end(); ++it) {
+                            (void)(*it);
+                            erase(i);
+                        }
                         insert(value2, i);
                         return true;
                     }
@@ -588,7 +617,7 @@ namespace jutil JUTIL_PUBLIC_ {
             if (start >= this->count || end > this->count) {
             } else {
                 for (JUTIL_INIT(size_t i, start); i < end; ++i) {
-                    if (value ==  *(this->block + i)) r.insert(i);
+                    if (value == *(this->block + i)) r.insert(i);
                 }
             }
             return r;
@@ -626,10 +655,26 @@ namespace jutil JUTIL_PUBLIC_ {
 
             @param amount   Number of elements to allocate.
         */
-        void reallocate(size_t amount) {
-            this->block = static_cast<ValueType*>(this->realloc(static_cast<void*>(this->block), sizeof(ValueType) * amount));
-            allocated = amount;
+        bool reallocate(size_t amount) {
+            void *nBlock = this->realloc(static_cast<void *>(this->block), sizeof(ValueType) * amount);
+            bool succeed = false;
+            if (nBlock) {
+                this->block = static_cast<ValueType *>(nBlock);
+                allocated = amount;
+                succeed = true;
+            } else {
+                nBlock = this->alloc(sizeof(ValueType) * amount);
+                if (nBlock) {
+                    if (this->copy(nBlock, this->block, (allocated > amount ? amount : allocated) * sizeof(ValueType))) {
+                        succeed = true;
+                        this->free(this->block);
+                        this->block = static_cast<ValueType *>(nBlock);
+                        allocated = amount;
+                    }
+                }
+            }
             if (allocated < this->count) this->count = allocated;
+            return succeed;
         }
 
         /**
@@ -654,13 +699,13 @@ namespace jutil JUTIL_PUBLIC_ {
             return this->block;
         }
 
-        Type &sort(void (*sorter)(Type*)) {
+        Type &sort(void (*sorter)(Type *)) {
             sorter(this);
             return *this;
         }
 
         Type &sort(unsigned char mode = ASCENDING) {
-            return sort(mode? queue_sort::__queueInternalSortAscending<ValueType> : queue_sort::__queueInternalSortDescending<ValueType>);
+            return sort(mode ? queue_sort::__queueInternalSortAscending<ValueType> : queue_sort::__queueInternalSortDescending<ValueType>);
         }
 
         Type &resize(size_t s) {
@@ -681,7 +726,7 @@ namespace jutil JUTIL_PUBLIC_ {
             @param q    The Queue to copy.
             @return     Reference to calling object.
         */
-       Type &operator=(const Type &q) {
+        Type &operator=(const Type &q) {
             destroy();
             insert(q);
             return *this;
@@ -696,7 +741,8 @@ namespace jutil JUTIL_PUBLIC_ {
         ValueType &operator[](const size_t &n) JUTIL_OVERRIDE_ {
             if (n >= this->count) {
                 if (is == CYCLICAL) return this->block[n % this->count];
-            } else return this->block[n];
+            } else
+                return this->block[n];
             return JUTIL_NULLREF(ValueType);
         }
 
@@ -706,7 +752,8 @@ namespace jutil JUTIL_PUBLIC_ {
         const ValueType &operator[](const size_t &n) JUTIL_CO_ {
             if (n >= this->count) {
                 if (is == CYCLICAL) return this->block[n % this->count];
-            } else return this->block[n];
+            } else
+                return this->block[n];
             return JUTIL_NULLREF(ValueType);
         }
 
@@ -718,81 +765,85 @@ namespace jutil JUTIL_PUBLIC_ {
         */
         const bool operator==(const Type &other) JUTIL_C_ {
             if (this->count == other.count) {
-                for (size_t i = 0; i < this->count; ++i) if ((*this)[i] != other[i]) return false;
+                for (size_t i = 0; i < this->count; ++i)
+                    if ((*this)[i] != other[i]) return false;
                 return true;
-            } else return false;
+            } else
+                return false;
         }
 
         /**
             Negation of @see operator==
         */
-        JUTIL_CX_ bool operator !=(const Type &other) JUTIL_C_ {
+        JUTIL_CX_ bool operator!=(const Type &other) JUTIL_C_ {
             return !((*this) == other);
         }
 
         /**
             Conversion operator to @see @class String.
         */
-        operator jutil::StringBase<char>();
+        operator StringBase<char>();
 
         /**
-            Const overload of @see operator jutil::String
+            Const overload of @see operator String
         */
-        operator const jutil::StringBase<char>() const;
+        operator const StringBase<char>() const;
 
         template <
             typename U
-            #ifdef JUTIL_CPP11
-                , typename = typename Enable<Convert<U, T>::Value>::Type
-            #endif
-        >
+#ifdef JUTIL_CPP11
+            ,
+            typename = typename Enable<Convert<U, T>::Value>::Type
+#endif
+            >
         operator Queue<U, Allocator>() {
             Queue<U, Allocator> r;
-            #ifdef JUTIL_CPP11
-                for (auto &i: *this) r.insert(static_cast<U>(i));
-            #else
-                for (size_t i = 0; i < this->count; ++i) r.insert(static_cast<U>(this->block[i]));
-            #endif
+#ifdef JUTIL_CPP11
+            for (auto &i : *this) r.insert(static_cast<U>(i));
+#else
+            for (size_t i = 0; i < this->count; ++i) r.insert(static_cast<U>(this->block[i]));
+#endif
             return r;
         }
 
-        /** =========================================================================================================================================
+/** =========================================================================================================================================
 
                 C++11 MOVE SEMANTICS
 
          ** =========================================================================================================================================
         */
-        #ifdef JUTIL_CPP11
+#ifdef JUTIL_CPP11
 
-            Type &operator=(Type &&q) {
-                this->clear();
-                insert(jutil::move(q));
-                return *this;
-            }
+        Type &operator=(Type &&q) {
+            this->clear();
+            insert(move(q));
+            return *this;
+        }
 
-            Type &insert(ValueType &&value) {
-                ++(this->count);
-                if (allocated < this->count) reallocate(this->count << 1);
-                JUTIL_NEW(this->block + (this->count - 1), ValueType(move(value)));
-                return *this;
-            }
+        Type &insert(ValueType &&value) {
+            ++(this->count);
+            if (allocated < this->count) reallocate(this->count << 1);
+            JUTIL_NEW(this->block + (this->count - 1), ValueType(move(value)));
+            return *this;
+        }
 
-            Type &insert(ValueType &&value, const size_t &n) {
-                if (n > this->count) {
-                    if (is == CYCLICAL) return insert(move(value), n % this->count);
-                } else {
-                    if (n == this->count) return insert(move(value));
-                    else {
-                        ++(this->count);
-                        if (allocated < this->count) reallocate(this->count << 1);
-                        this->move(this->block + n + 1, this->block + n, sizeof(ValueType) * (this->count - n));
-                        JUTIL_NEW(this->block + n, ValueType(move(value)));
-                    }
+        Type &insert(ValueType &&value, const size_t &n) {
+            if (n > this->count) {
+                if (is == CYCLICAL) return insert(move(value), n % this->count);
+            } else {
+                if (n == this->count)
+                    return insert(move(value));
+                else {
+                    ++(this->count);
+                    if (allocated < this->count) reallocate(this->count << 1);
+                    this->move(this->block + n + 1, this->block + n, sizeof(ValueType) * (this->count - n));
+                    JUTIL_NEW(this->block + n, ValueType(move(value)));
                 }
-                return *this;
             }
+            return *this;
+        }
 
-        #endif
+#endif
 
         void destroy() JUTIL_OVERRIDE_ {
             for (unsigned i = 0; i < this->count; ++i) (this->block + i)->~ValueType();
@@ -806,12 +857,11 @@ namespace jutil JUTIL_PUBLIC_ {
             destroy();
         }
 
-    private:
+       private:
         IndexingStrategy is;
         size_t allocated;
     };
 
+}  // namespace 
 
-}
-
-#endif // JUTIL_QUEUE_H
+#endif  // JUTIL_QUEUE_H

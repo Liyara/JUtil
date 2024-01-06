@@ -11,7 +11,7 @@
 
 #define NANOS_PER_SECOND 0x3B9ACA00.p0L
 
-namespace jutil JUTIL_PUBLIC_ {
+namespace jutil  {
 
     inline long long queryGlobalTimer() {
         #ifdef JUTIL_WINDOWS
@@ -32,7 +32,7 @@ namespace jutil JUTIL_PUBLIC_ {
         SECONDS
     };
 
-    class JUTIL_PUBLIC_ Timer {
+    class  Timer {
     public:
 
         Timer() : ct(-1) {
@@ -67,7 +67,7 @@ namespace jutil JUTIL_PUBLIC_ {
         }
         #ifdef JUTIL_CPP11
             Timer(Timer &&timer) : Timer() {
-                *this = jutil::move(timer);
+                *this = move(timer);
             }
             Timer &operator=(Timer &&timer) {
                 ct = timer.ct;
@@ -87,7 +87,7 @@ namespace jutil JUTIL_PUBLIC_ {
             }
             return static_cast<long double>(nct - ct) / transform;
         }
-        long double stop(unsigned type) {
+        long double stop(unsigned type = MILLISECONDS) {
             long double r = get(type);
             ct = -1;
             return r;

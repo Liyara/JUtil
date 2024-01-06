@@ -7,8 +7,8 @@
 
 #define ALLOCATOR_ERR_INDEX   0x08
 
-namespace jutil JUTIL_PUBLIC_ {
-    class JUTIL_PUBLIC_ Allocator {
+namespace jutil  {
+    class  Allocator {
     protected:
 
         virtual void *alloc(size_t) = 0;

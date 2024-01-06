@@ -21,8 +21,9 @@
 #include "IsFloatingPoint.hpp"
 #include "IsArithmatic.hpp"
 #include "IsInteger.hpp"
+#include "IsConstructible.hpp"
 
-namespace jutil JUTIL_PUBLIC_ {}
+namespace jutil  {}
 
 #endif
 

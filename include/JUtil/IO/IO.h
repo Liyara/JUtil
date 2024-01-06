@@ -63,7 +63,7 @@
     Contains classes used for interacting with input and output steams.
     This file is a part of JUtil. @see jutil.h.
 */
-namespace jutil JUTIL_PUBLIC_ {
+namespace jutil  {
 
     typedef void* IOBuffer;
     typedef void *const IOBuffer_const;
@@ -108,10 +108,10 @@ namespace jutil JUTIL_PUBLIC_ {
     }
 
 
-    namespace io_base JUTIL_PRIVATE_ {
+    namespace io_base  {
 
         template <typename T>
-        class JUTIL_PRIVATE_ OutputHandler {
+        class  OutputHandler {
         public:
 
             typedef T Type;
@@ -147,7 +147,7 @@ namespace jutil JUTIL_PUBLIC_ {
         };
 
         template <typename T>
-        class JUTIL_PRIVATE_ InputHandler {
+        class  InputHandler {
         public:
 
             typedef StringBase<T> LocalString;
@@ -186,7 +186,7 @@ namespace jutil JUTIL_PUBLIC_ {
         INSERT      = 0x20
     };
 
-    class JUTIL_PRIVATE_ FileBase : public jutil::NonCopyable {
+    class  FileBase : public NonCopyable {
     public:
         FileBase(const String&, unsigned =  READ | WRITE);
         unsigned mode() const;
@@ -206,7 +206,7 @@ namespace jutil JUTIL_PUBLIC_ {
         virtual ~FileBase();
     };
 
-    class JUTIL_PUBLIC_ File : public FileBase, public io_base::OutputHandler<char>, public io_base::InputHandler<char> {
+    class  File : public FileBase, public io_base::OutputHandler<char>, public io_base::InputHandler<char> {
     public:
         File(const String&, unsigned = READ | WRITE);
         bool eof() const JUTIL_OVERRIDE_;
@@ -218,7 +218,7 @@ namespace jutil JUTIL_PUBLIC_ {
         bool openFile() JUTIL_OVERRIDE_;
     };
 
-    class JUTIL_PUBLIC_ WideFile : public FileBase, public io_base::OutputHandler<wchar_t>, public io_base::InputHandler<wchar_t> {
+    class  WideFile : public FileBase, public io_base::OutputHandler<wchar_t>, public io_base::InputHandler<wchar_t> {
     public:
         WideFile(const String&, unsigned = READ | WRITE);
         bool eof() const JUTIL_OVERRIDE_;
@@ -230,7 +230,7 @@ namespace jutil JUTIL_PUBLIC_ {
         bool openFile() JUTIL_OVERRIDE_;
     };
 
-    class JUTIL_PUBLIC_ BinaryFile : public FileBase, public io_base::OutputHandler<Byte>, public io_base::InputHandler<Byte> {
+    class  BinaryFile : public FileBase, public io_base::OutputHandler<Byte>, public io_base::InputHandler<Byte> {
     public:
         BinaryFile(const String&, size_t = 1, unsigned = READ | WRITE);
         bool eof() const JUTIL_OVERRIDE_;
@@ -243,7 +243,7 @@ namespace jutil JUTIL_PUBLIC_ {
         size_t chunkSize;
     };
 
-    struct JUTIL_PUBLIC_ DirectoryEntry {
+    struct  DirectoryEntry {
         enum Type {
             FILE,
             DIRECTORY
@@ -255,12 +255,12 @@ namespace jutil JUTIL_PUBLIC_ {
         DirectoryEntry(const String&, const String&, Type t);
     };
 
-    class JUTIL_PUBLIC_ Directory {
+    class  Directory {
     public:
         Directory(const String&);
         bool valid() const;
         const Queue<DirectoryEntry> &entries() const;
-        const jutil::String &getPath();
+        const String &getPath();
         virtual ~Directory();
     private:
         bool _success;
@@ -269,14 +269,14 @@ namespace jutil JUTIL_PUBLIC_ {
         void *handle;
     };
 
-    class JUTIL_PUBLIC_ OutputStream : public io_base::OutputHandler<char>, private jutil::NonCopyable {
+    class  OutputStream : public io_base::OutputHandler<char>, private NonCopyable {
     public:
         OutputStream(IOTarget*);
     protected:
         void put(const String&) const JUTIL_OVERRIDE_;
     };
 
-    class JUTIL_PUBLIC_ WideOutputStream JUTIL_F_ : public io_base::OutputHandler<wchar_t>, private jutil::NonCopyable {
+    class  WideOutputStream JUTIL_F_ : public io_base::OutputHandler<wchar_t>, private NonCopyable {
     private:
         public:
         WideOutputStream(IOTarget*);
@@ -284,14 +284,14 @@ namespace jutil JUTIL_PUBLIC_ {
         void put(const WideString&) const JUTIL_OVERRIDE_;
     };
 
-    class JUTIL_PUBLIC_ DataOutputStream JUTIL_F_ : public io_base::OutputHandler<Byte>, private jutil::NonCopyable {
+    class  DataOutputStream JUTIL_F_ : public io_base::OutputHandler<Byte>, private NonCopyable {
         public:
         DataOutputStream(IOTarget*);
     protected:
         void put(const ByteString&) const JUTIL_OVERRIDE_;
     };
 
-    class JUTIL_PUBLIC_ ErrorOutputStream JUTIL_F_ : public io_base::OutputHandler<char>, private jutil::NonCopyable {
+    class  ErrorOutputStream JUTIL_F_ : public io_base::OutputHandler<char>, private NonCopyable {
     private:
         public:
         ErrorOutputStream(IOTarget*);
@@ -299,7 +299,7 @@ namespace jutil JUTIL_PUBLIC_ {
         void put(const String&) const JUTIL_OVERRIDE_;
     };
 
-    class JUTIL_PUBLIC_ WideErrorOutputStream JUTIL_F_ : public io_base::OutputHandler<wchar_t>, private jutil::NonCopyable {
+    class  WideErrorOutputStream JUTIL_F_ : public io_base::OutputHandler<wchar_t>, private NonCopyable {
     private:
         public:
         WideErrorOutputStream(IOTarget*);
@@ -307,7 +307,7 @@ namespace jutil JUTIL_PUBLIC_ {
         void put(const WideString&) const JUTIL_OVERRIDE_;
     };
 
-    class JUTIL_PUBLIC_ InputStream JUTIL_F_ : public io_base::InputHandler<char>, private jutil::NonCopyable {
+    class  InputStream JUTIL_F_ : public io_base::InputHandler<char>, private NonCopyable {
     private:
         public:
         InputStream(IOTarget*);
@@ -315,7 +315,7 @@ namespace jutil JUTIL_PUBLIC_ {
         String scan(size_t) const JUTIL_OVERRIDE_;
     };
 
-    class JUTIL_PUBLIC_ WideInputStream JUTIL_F_ : public io_base::InputHandler<wchar_t>, private jutil::NonCopyable {
+    class  WideInputStream JUTIL_F_ : public io_base::InputHandler<wchar_t>, private NonCopyable {
     private:
         public:
         WideInputStream(IOTarget*);
@@ -589,7 +589,7 @@ namespace jutil JUTIL_PUBLIC_ {
 		delete[] cfpath;
     }
 
-    const String &FileBase::getPath() const {
+    inline const String &FileBase::getPath() const {
         return path;
     }
 
@@ -1074,7 +1074,7 @@ namespace jutil JUTIL_PUBLIC_ {
         if (handle) closedir((DIR*)handle);
     }
 
-    inline const jutil::String &Directory::getPath() {
+    inline const String &Directory::getPath() {
         return path;
     }
 

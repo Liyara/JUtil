@@ -7,13 +7,13 @@
 
 namespace jutil {
     template <typename T>
-    struct JUTIL_PRIVATE_ JUTIL_Declval_ final {
+    struct  JUTIL_Declval_ final {
         static const bool evaluated = false;
         static typename AddRvalue<T>::Type rType();
     };
     template <typename T>
     typename AddRvalue<T>::Type declval() noexcept {
-        static_assert(JUTIL_Declval_<T>::evaluated, "jutil::declval<T>() used in evaluated context!");
+        static_assert(JUTIL_Declval_<T>::evaluated, "declval<T>() used in evaluated context!");
         return JUTIL_Declval_<T>::rType();
     }
 }

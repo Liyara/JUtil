@@ -171,10 +171,10 @@ namespace jutil {
 
 		class DateTime : public StringInterface {
 		public:
-			DateTime(jutil::Queue<TimeAspect>, jutil::Queue<int>, int = LOCAL);
-			DateTime(jutil::Queue<TimeAspect>, jutil::Queue<int>, bool, int = LOCAL);
-			DateTime(jutil::Queue<TimeAspect>, jutil::Queue<int>, Weekday, int = LOCAL);
-			DateTime(jutil::Queue<TimeAspect>, jutil::Queue<int>, bool, Weekday, int = LOCAL);
+			DateTime(Queue<TimeAspect>, Queue<int>, int = LOCAL);
+			DateTime(Queue<TimeAspect>, Queue<int>, bool, int = LOCAL);
+			DateTime(Queue<TimeAspect>, Queue<int>, Weekday, int = LOCAL);
+			DateTime(Queue<TimeAspect>, Queue<int>, bool, Weekday, int = LOCAL);
 			DateTime(int = LOCAL);
 
 			DateTime(const DateTime&);
@@ -218,13 +218,13 @@ namespace jutil {
 			int zone;
 			bool isdst;
 			Weekday weekday;
-			jutil::Set<static_cast<size_t>(__TIME_ASPECTS__), int> data;
+			Set<static_cast<size_t>(__TIME_ASPECTS__), int> data;
 
 			void determineWeekday();
 			int _max(TimeAspect) const;
 			int _min(TimeAspect) const;
-			void offset(jutil::Queue<TimeAspect>, jutil::Queue<int>);
-			void offsetback(jutil::Queue<TimeAspect>, jutil::Queue<int>);
+			void offset(Queue<TimeAspect>, Queue<int>);
+			void offsetback(Queue<TimeAspect>, Queue<int>);
 			int compare(const DateTime&) const;
 			static Queue<int> createOffset(const DateTime &dt);
 		};

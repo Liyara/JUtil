@@ -5,14 +5,14 @@
 
 #define CONTIGUOUS_CONTAINER_ERR_INDEX 0x01
 
-namespace jutil JUTIL_PUBLIC_ {
+namespace jutil  {
 
     template<
         typename K,
         typename T,
         typename D
     >
-    class JUTIL_PUBLIC_ ContiguousContainer : public Container<K, T, D, T*> {
+    class  ContiguousContainer : public Container<K, T, D, T*> {
     public:
 
         typedef K KeyType;

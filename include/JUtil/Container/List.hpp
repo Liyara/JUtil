@@ -5,9 +5,9 @@
 
 #include "NonContiguousContainer.hpp"
 
-namespace jutil JUTIL_PUBLIC_ {
+namespace jutil  {
   JUTIL_FORWARD_TEMPLATE_1
-  class JUTIL_PUBLIC_ List;
+  class  List;
 
 
 }

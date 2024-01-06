@@ -1,0 +1,10 @@
+*.cpp
+*.o
+*.a
+*.exe
+makefile
+/bin/
+/obj/
+/winobj/
+/lib/
+/include/JUtil/Network/

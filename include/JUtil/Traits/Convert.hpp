@@ -8,10 +8,10 @@
 
 namespace jutil {
     template <typename T, typename T2>
-    class JUTIL_PUBLIC_ Convert final {
+    class  Convert final {
 
         template <typename C, typename D>
-        struct JUTIL_PRIVATE_ Confirm final {};
+        struct  Confirm final {};
 
         template <typename C, typename D>
         static constexpr Valid test(

@@ -9,7 +9,7 @@
 namespace jutil {
 
     template <typename T>
-    struct IsUnsigned : Validator<bool, jutil::IsArithmatic<T>::Value && !(static_cast<T>(-1) < static_cast<T>(0))>::Type {};
+    struct IsUnsigned : Validator<bool, IsArithmatic<T>::Value && !(static_cast<T>(-1) < static_cast<T>(0))>::Type {};
 
 }
 

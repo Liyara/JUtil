@@ -9,10 +9,10 @@
 #define CONTAINER_ERR_INDEX                 0x01
 #define CONTAINER_ABSTRACT_ERR_INDEX        0x00
 
-namespace jutil JUTIL_PUBLIC_ {
+namespace jutil  {
 
     template <typename D>
-    class JUTIL_PUBLIC_ Iterator {
+    class  Iterator {
     public:
 
         typedef D DerivedType;
@@ -29,7 +29,7 @@ namespace jutil JUTIL_PUBLIC_ {
         typename D,
         typename I
     >
-    class JUTIL_PUBLIC_ Container {
+    class  Container {
     public:
 
         typedef K KeyType;

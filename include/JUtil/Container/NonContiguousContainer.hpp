@@ -6,7 +6,7 @@
 #define JUTIL_NCCII __NonContiguousContainerInternalIterator
 #define JUTIL_NCCIN __NonContiguousContainerInternalNode
 
-namespace jutil JUTIL_PUBLIC_ {
+namespace jutil  {
 
     template<
         typename K,
@@ -20,7 +20,7 @@ namespace jutil JUTIL_PUBLIC_ {
             = T
         #endif
     >
-    class JUTIL_PUBLIC_ NonContiguousContainer;
+    class  NonContiguousContainer;
 
     template<
     typename K,
@@ -28,7 +28,7 @@ namespace jutil JUTIL_PUBLIC_ {
         typename D,
         typename I
     >
-    struct JUTIL_PRIVATE_ JUTIL_NCCIN {
+    struct  JUTIL_NCCIN {
 
         typedef NonContiguousContainer<K, T, D, I> ContainerType;
         typedef JUTIL_NCCIN<K, T, D, I> Type;
@@ -65,7 +65,7 @@ namespace jutil JUTIL_PUBLIC_ {
         typename I,
         typename //Enforces that I is derivitive of JUTIL_NCCII
     >
-    class JUTIL_PUBLIC_ NonContiguousContainer :
+    class  NonContiguousContainer :
         private Container<K, T, D, I> {
 
     public:
@@ -256,7 +256,7 @@ namespace jutil JUTIL_PUBLIC_ {
         typename CD,
         typename D
     >
-    class JUTIL_PRIVATE_ JUTIL_NCCII : public Iterator<D> {
+    class  JUTIL_NCCII : public Iterator<D> {
 
         typedef D DerivedType;
         typedef JUTIL_NCCII<K, T, CD, DerivedType> Type;

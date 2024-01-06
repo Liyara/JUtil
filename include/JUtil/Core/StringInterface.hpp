@@ -6,7 +6,7 @@
 namespace jutil {
 
     template <typename>
-    class JUTIL_PRIVATE_ StringBase;
+    class  StringBase;
 
     struct StringInterface {
         virtual operator StringBase<char>() = 0;

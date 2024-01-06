@@ -5,7 +5,7 @@
 
 #define PAIR_ERR_INDEX   0x0D
 
-namespace jutil JUTIL_PUBLIC_ {
+namespace jutil  {
     template <typename A, typename B>
     class Pair : public Tuple<A, B> {
     public:
@@ -22,7 +22,7 @@ namespace jutil JUTIL_PUBLIC_ {
             typename = typename Enable<Convert<C, A>::Value>::Type,
             typename = typename Enable<Convert<D, B>::Value>::Type
         >
-        constexpr Pair(C &&c, D &&d) : Tuple<A, B>(jutil::rval<C>(c), jutil::rval<D>(d)) {}
+        constexpr Pair(C &&c, D &&d) : Tuple<A, B>(rval<C>(c), rval<D>(d)) {}
 
         A &first() noexcept {return get<0>(*this);}
         B &second() noexcept {return get<1>(*this);}

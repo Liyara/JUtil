@@ -10,7 +10,7 @@
     C++ standard library.
 
     JUtil does not depend on the C++ standard library in declaration
-    or implementatiom.
+    or implementation.
 
     JUtil does, however, depend on the C standard library,
     particularly <cstdlib>
@@ -28,10 +28,11 @@
 #include "JUtil/IO/IO.h"
 #ifdef JUTIL_CPP11
     #include "JUtil/Container/Map.hpp"
-    #include "JUtil/Core/Thread.h"
+    #include "JUtil/Thread/ThreadPool.hpp"
     #include "JUtil/Core/RNG.h"
 #endif
 #include "JUtil/Core/Timer.h"
+#include "JUtil/Network/Client.hpp"
 
 
 #ifdef _WIN32
@@ -48,10 +49,9 @@
 #endif // _WIN32
 
 #define JUTIL_IMPL \
-    JUTIL_IO_IMPL \
-    JUTIL_THREAD_IMPL 
+    JUTIL_IO_IMPL
 
-namespace jutil JUTIL_PUBLIC_ {
+namespace jutil  {
     char readCharacter();
     void cls(size_t  = 1);
     void sleep(size_t);
