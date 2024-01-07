@@ -30,11 +30,11 @@ namespace jutil  {
             return *(const_cast<DerivedType*>(static_cast<const DerivedType*>(this)));
         }
 
-        virtual const size_t size() JUTIL_CNO_ {
+        virtual size_t size() JUTIL_CNO_ {
             return count;
         }
 
-        virtual const bool empty() JUTIL_CNO_ {
+        virtual bool empty() JUTIL_CNO_ {
             return count == 0;
         }
 
@@ -46,11 +46,11 @@ namespace jutil  {
             return block + count;
         }
 
-        const Iterator begin() JUTIL_CNO_ {
+        Iterator begin() JUTIL_CNO_ {
             return block;
         }
 
-        const Iterator end() JUTIL_CNO_  {
+        Iterator end() JUTIL_CNO_  {
             return block + count;
         }
 

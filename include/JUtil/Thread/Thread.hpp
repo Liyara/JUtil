@@ -150,12 +150,13 @@ namespace jutil  {
                 threadManagerMutex().unlock();
             }
 
-            static void _run(void *data) {
+            static void* _run(void *data) {
                 Thread *thread = (Thread*)data;
                 thread->_id = getThreadID();
                 thread->_onStart();
                 thread->run();
                 thread->_onStop();
+                return data;
             }
 
             static Queue<Thread*> &runningThreads() {

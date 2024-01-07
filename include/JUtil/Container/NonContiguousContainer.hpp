@@ -82,11 +82,11 @@ namespace jutil  {
             JUTIL_INIT(endNode, head),
             JUTIL_INIT(length, 0) {}
 
-        virtual const size_t size() JUTIL_CO_ {
+        virtual size_t size() JUTIL_CO_ {
             return length;
         }
 
-        virtual const bool empty() JUTIL_CO_ {
+        virtual bool empty() JUTIL_CO_ {
             return length == 0;
         }
 
@@ -166,13 +166,13 @@ namespace jutil  {
             return Iterator(endNode);
         }
 
-        const Iterator begin() JUTIL_CO_ {
+        Iterator begin() JUTIL_CO_ {
             Node *n = head;
             while (n->previous) n = n->previous;
             return Iterator(n);
         }
 
-        const Iterator end() JUTIL_CO_ {
+        Iterator end() JUTIL_CO_ {
             return Iterator(endNode);
         }
 

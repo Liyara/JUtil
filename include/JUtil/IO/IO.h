@@ -66,7 +66,7 @@
 namespace jutil  {
 
     typedef void* IOBuffer;
-    typedef void *const IOBuffer_const;
+    typedef void * const IOBuffer_const;
 
     struct IOCommand {
         JUTIL_EXPL_ IOCommand(int v) : value(v) {}
@@ -82,7 +82,7 @@ namespace jutil  {
 
         TargetType getTargetType() const;
 
-        IOBuffer_const buffer() const;
+        IOBuffer buffer() const;
 
     private:
         IOTarget();
@@ -137,7 +137,7 @@ namespace jutil  {
                 return *this;
             }
 
-            IOTarget *const getTarget() const {
+            IOTarget *getTarget() const {
                 return otarget;
             }
         protected:
@@ -167,7 +167,7 @@ namespace jutil  {
                 itarget = target;
                 return *this;
             }
-            IOTarget *const getTarget() const {
+            IOTarget *getTarget() const {
                 return itarget;
             }
         protected:
@@ -191,7 +191,7 @@ namespace jutil  {
         FileBase(const String&, unsigned =  READ | WRITE);
         unsigned mode() const;
         size_t getPosition() const;
-        bool setPosition(size_t);
+        bool setPosition(int);
         bool open() const;
         const String &getPath() const;
         virtual bool eof() const = 0;
@@ -419,7 +419,7 @@ namespace jutil  {
         return targetType;
     }
 
-    inline void *const IOTarget::buffer() const {
+    inline void *IOTarget::buffer() const {
         return realTarget;
     }
 
@@ -607,7 +607,7 @@ namespace jutil  {
     inline size_t FileBase::getPosition() const {
         return ftell((FILE*)(target->buffer()));
     }
-    inline bool FileBase::setPosition(size_t p) {
+    inline bool FileBase::setPosition(int p) {
         FILE *file = (FILE*)(target->buffer());
         if (p >= 0) {
             if (fseek(file, p, SEEK_SET)) return false;
@@ -615,10 +615,6 @@ namespace jutil  {
             if (fseek(file, p, SEEK_END)) return false;
         }
         return true;
-    }
-    
-    inline bool FileBase::open() const {
-        return fileOpen;
     }
 
     inline bool File::eof() const {

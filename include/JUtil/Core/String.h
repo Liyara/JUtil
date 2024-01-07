@@ -32,7 +32,7 @@
 
 #define __STRING_CONSTRUCTORS__(type)                                             \
     StringBase() {}                                                               \
-    StringBase(const StringBase<type> &str) {                                     \
+    StringBase(const StringBase<type> &str) : Queue<type>() {                                     \
         insert(str);                                                              \
     }                                                                             \
     StringBase(type c) {                                                          \
@@ -293,18 +293,18 @@ namespace jutil  {
        public:
         __STRING_CONSTRUCTORS__(char);
 
-        JUTIL_EXPL_ StringBase(bool num) JUTIL_N_ { *this = convert_char(num, "%u"); }
-        JUTIL_EXPL_ StringBase(signed long long num) JUTIL_N_ { *this = convert_char(num, "%I64d"); }
-        JUTIL_EXPL_ StringBase(unsigned long long num) JUTIL_N_ { *this = convert_char(num, "%I64u"); }
-        JUTIL_EXPL_ StringBase(signed long num) JUTIL_N_ { *this = convert_char(num, "%ld"); }
-        JUTIL_EXPL_ StringBase(unsigned long num) JUTIL_N_ { *this = convert_char(num, "%lu"); }
-        JUTIL_EXPL_ StringBase(signed int num) JUTIL_N_ { *this = convert_char(num, "%d"); }
-        JUTIL_EXPL_ StringBase(unsigned int num) JUTIL_N_ { *this = convert_char(num, "%u"); }
-        JUTIL_EXPL_ StringBase(signed short num) JUTIL_N_ { *this = convert_char(num, "%hd"); }
-        JUTIL_EXPL_ StringBase(unsigned short num) JUTIL_N_ { *this = convert_char(num, "%hu"); }
-        JUTIL_EXPL_ StringBase(double num) JUTIL_N_ { *this = convert_char(num, "%f"); }
-        JUTIL_EXPL_ StringBase(long double num) JUTIL_N_ { *this = convert_char(num, "%Lf"); }
-        JUTIL_EXPL_ StringBase(float num) JUTIL_N_ { *this = convert_char(num, "%f"); }
+        JUTIL_EXPL_ StringBase(bool num) JUTIL_N_ : StringBase(convert_char(num, "%u")) {}
+        JUTIL_EXPL_ StringBase(signed long long num) JUTIL_N_ : StringBase(convert_char(num, "%I64d")) {}
+        JUTIL_EXPL_ StringBase(unsigned long long num) JUTIL_N_ : StringBase(convert_char(num, "%I64u")) {}
+        JUTIL_EXPL_ StringBase(signed long num) JUTIL_N_ : StringBase(convert_char(num, "%ld")) {}
+        JUTIL_EXPL_ StringBase(unsigned long num) JUTIL_N_ : StringBase(convert_char(num, "%lu")) {}
+        JUTIL_EXPL_ StringBase(signed int num) JUTIL_N_ : StringBase(convert_char(num, "%d")) {}
+        JUTIL_EXPL_ StringBase(unsigned int num) JUTIL_N_ : StringBase(convert_char(num, "%u")) {}
+        JUTIL_EXPL_ StringBase(signed short num) JUTIL_N_ : StringBase(convert_char(num, "%hd")) {}
+        JUTIL_EXPL_ StringBase(unsigned short num) JUTIL_N_ : StringBase(convert_char(num, "%hu")) {}
+        JUTIL_EXPL_ StringBase(double num) JUTIL_N_ : StringBase(convert_char(num, "%f")) {}
+        JUTIL_EXPL_ StringBase(long double num) JUTIL_N_ : StringBase(convert_char(num, "%Lf")) {}
+        JUTIL_EXPL_ StringBase(float num) JUTIL_N_ : StringBase(convert_char(num, "%f")) {}
 
         __STRING_CONVERSION_OPERATORS__(char);
 
@@ -326,10 +326,19 @@ namespace jutil  {
             arr[size()] = 0;
         }
 
-        template <typename U>
+        template <
+            typename U,
+            typename = typename jutil::Enable<!jutil::IsSame<U, char>::Value>::Type
+        >
         StringBase<char> &operator=(const StringBase<U> &str) {
             clear();
-            insert(static_cast<StringBase<char> >(str));
+            insert(static_cast<const StringBase<char>&>(str));
+            return *this;
+        }
+
+        StringBase<char> &operator=(const StringBase<char> &str) {
+            clear();
+            insert(str);
             return *this;
         }
 
@@ -345,18 +354,18 @@ namespace jutil  {
        public:
         __STRING_CONSTRUCTORS__(wchar_t);
 
-        JUTIL_EXPL_ StringBase(bool num) JUTIL_N_ { *this = convert_wchar_t(num, L"%u"); }
-        JUTIL_EXPL_ StringBase(signed long long num) JUTIL_N_ { *this = convert_wchar_t(num, L"%I64d"); }
-        JUTIL_EXPL_ StringBase(unsigned long long num) JUTIL_N_ { *this = convert_wchar_t(num, L"%I64u"); }
-        JUTIL_EXPL_ StringBase(signed long num) JUTIL_N_ { *this = convert_wchar_t(num, L"%ld"); }
-        JUTIL_EXPL_ StringBase(unsigned long num) JUTIL_N_ { *this = convert_wchar_t(num, L"%lu"); }
-        JUTIL_EXPL_ StringBase(signed int num) JUTIL_N_ { *this = convert_wchar_t(num, L"%d"); }
-        JUTIL_EXPL_ StringBase(unsigned int num) JUTIL_N_ { *this = convert_wchar_t(num, L"%u"); }
-        JUTIL_EXPL_ StringBase(signed short num) JUTIL_N_ { *this = convert_wchar_t(num, L"%hd"); }
-        JUTIL_EXPL_ StringBase(unsigned short num) JUTIL_N_ { *this = convert_wchar_t(num, L"%hu"); }
-        JUTIL_EXPL_ StringBase(double num) JUTIL_N_ { *this = convert_wchar_t(num, L"%f"); }
-        JUTIL_EXPL_ StringBase(long double num) JUTIL_N_ { *this = convert_wchar_t(num, L"%Lf"); }
-        JUTIL_EXPL_ StringBase(float num) JUTIL_N_ { *this = convert_wchar_t(num, L"%f"); }
+        JUTIL_EXPL_ StringBase(bool num) JUTIL_N_ : StringBase(convert_wchar_t(num, L"%u")) {}
+        JUTIL_EXPL_ StringBase(signed long long num) JUTIL_N_ : StringBase(convert_wchar_t(num, L"%I64d")) {}
+        JUTIL_EXPL_ StringBase(unsigned long long num) JUTIL_N_ : StringBase(convert_wchar_t(num, L"%I64u")) {}
+        JUTIL_EXPL_ StringBase(signed long num) JUTIL_N_ : StringBase(convert_wchar_t(num, L"%ld")) {}
+        JUTIL_EXPL_ StringBase(unsigned long num) JUTIL_N_ : StringBase(convert_wchar_t(num, L"%lu")) {}
+        JUTIL_EXPL_ StringBase(signed int num) JUTIL_N_ : StringBase(convert_wchar_t(num, L"%d")) {}
+        JUTIL_EXPL_ StringBase(unsigned int num) JUTIL_N_ : StringBase(convert_wchar_t(num, L"%u")) {}
+        JUTIL_EXPL_ StringBase(signed short num) JUTIL_N_ : StringBase(convert_wchar_t(num, L"%hd")) {}
+        JUTIL_EXPL_ StringBase(unsigned short num) JUTIL_N_ : StringBase(convert_wchar_t(num, L"%hu")) {}
+        JUTIL_EXPL_ StringBase(double num) JUTIL_N_ : StringBase(convert_wchar_t(num, L"%f")) {}
+        JUTIL_EXPL_ StringBase(long double num) JUTIL_N_ : StringBase(convert_wchar_t(num, L"%Lf")) {}
+        JUTIL_EXPL_ StringBase(float num) JUTIL_N_ : StringBase(convert_wchar_t(num, L"%f")) {}
 
         __STRING_CONVERSION_OPERATORS__(wchar_t);
 
@@ -398,7 +407,7 @@ namespace jutil  {
         StringBase(const Queue<Byte> &q) {
             insert(q);
         }
-        StringBase(const StringBase<Byte> &str) {
+        StringBase(const StringBase<Byte> &str) : Queue<Byte>() {
             insert(str);
         }
         StringBase(Byte c) {

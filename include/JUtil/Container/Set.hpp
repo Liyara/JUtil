@@ -104,7 +104,7 @@ namespace jutil {
         typename = typename Enable<IsDefaultConstructible<T>::Value>::Type,
         typename = typename Enable<BaseOf<NonCopyable, T>::Value>::Type
     >
-    class NonCopyableSet : public Set<capacity, T, int, int>, public NonCopyable {};
+    class NonCopyableSet : public Set<capacity, T>, public NonCopyable {};
 }
 
 #endif // JUTIL_SET_H

@@ -2,9 +2,12 @@
 *.o
 *.a
 *.exe
+*.d
 makefile
 /bin/
 /obj/
 /winobj/
 /lib/
+/src/
+/dep/
 /include/JUtil/Network/

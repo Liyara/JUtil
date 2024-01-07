@@ -16,7 +16,7 @@ namespace jutil  {
 
     enum {
         DESCENDING,
-        ASCENDING
+        ASCENDING,
     };
 
     enum IndexingStrategy {
@@ -763,7 +763,7 @@ namespace jutil  {
             @param other    Queue to compare against.
             @return         Wheather or not the Queues are equivelent.
         */
-        const bool operator==(const Type &other) JUTIL_C_ {
+        bool operator==(const Type &other) JUTIL_C_ {
             if (this->count == other.count) {
                 for (size_t i = 0; i < this->count; ++i)
                     if ((*this)[i] != other[i]) return false;
