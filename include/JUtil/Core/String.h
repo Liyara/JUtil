@@ -293,18 +293,20 @@ namespace jutil  {
        public:
         __STRING_CONSTRUCTORS__(char);
 
-        JUTIL_EXPL_ StringBase(bool num) JUTIL_N_ : StringBase(convert_char(num, "%u")) {}
-        JUTIL_EXPL_ StringBase(signed long long num) JUTIL_N_ : StringBase(convert_char(num, "%I64d")) {}
-        JUTIL_EXPL_ StringBase(unsigned long long num) JUTIL_N_ : StringBase(convert_char(num, "%I64u")) {}
-        JUTIL_EXPL_ StringBase(signed long num) JUTIL_N_ : StringBase(convert_char(num, "%ld")) {}
-        JUTIL_EXPL_ StringBase(unsigned long num) JUTIL_N_ : StringBase(convert_char(num, "%lu")) {}
-        JUTIL_EXPL_ StringBase(signed int num) JUTIL_N_ : StringBase(convert_char(num, "%d")) {}
-        JUTIL_EXPL_ StringBase(unsigned int num) JUTIL_N_ : StringBase(convert_char(num, "%u")) {}
-        JUTIL_EXPL_ StringBase(signed short num) JUTIL_N_ : StringBase(convert_char(num, "%hd")) {}
-        JUTIL_EXPL_ StringBase(unsigned short num) JUTIL_N_ : StringBase(convert_char(num, "%hu")) {}
-        JUTIL_EXPL_ StringBase(double num) JUTIL_N_ : StringBase(convert_char(num, "%f")) {}
-        JUTIL_EXPL_ StringBase(long double num) JUTIL_N_ : StringBase(convert_char(num, "%Lf")) {}
-        JUTIL_EXPL_ StringBase(float num) JUTIL_N_ : StringBase(convert_char(num, "%f")) {}
+        #ifdef JUTIL_CPP11
+            JUTIL_EXPL_ StringBase(bool num) JUTIL_N_ : StringBase(convert_char(num, "%u")) {}
+            JUTIL_EXPL_ StringBase(signed long long num) JUTIL_N_ : StringBase(convert_char(num, "%I64d")) {}
+            JUTIL_EXPL_ StringBase(unsigned long long num) JUTIL_N_ : StringBase(convert_char(num, "%I64u")) {}
+            JUTIL_EXPL_ StringBase(signed long num) JUTIL_N_ : StringBase(convert_char(num, "%ld")) {}
+            JUTIL_EXPL_ StringBase(unsigned long num) JUTIL_N_ : StringBase(convert_char(num, "%lu")) {}
+            JUTIL_EXPL_ StringBase(signed int num) JUTIL_N_ : StringBase(convert_char(num, "%d")) {}
+            JUTIL_EXPL_ StringBase(unsigned int num) JUTIL_N_ : StringBase(convert_char(num, "%u")) {}
+            JUTIL_EXPL_ StringBase(signed short num) JUTIL_N_ : StringBase(convert_char(num, "%hd")) {}
+            JUTIL_EXPL_ StringBase(unsigned short num) JUTIL_N_ : StringBase(convert_char(num, "%hu")) {}
+            JUTIL_EXPL_ StringBase(double num) JUTIL_N_ : StringBase(convert_char(num, "%f")) {}
+            JUTIL_EXPL_ StringBase(long double num) JUTIL_N_ : StringBase(convert_char(num, "%Lf")) {}
+            JUTIL_EXPL_ StringBase(float num) JUTIL_N_ : StringBase(convert_char(num, "%f")) {}
+        #endif
 
         __STRING_CONVERSION_OPERATORS__(char);
 
@@ -327,8 +329,10 @@ namespace jutil  {
         }
 
         template <
-            typename U,
-            typename = typename jutil::Enable<!jutil::IsSame<U, char>::Value>::Type
+            typename U
+            #ifdef JUTIL_CPP11
+                ,typename = typename jutil::Enable<!jutil::IsSame<U, char>::Value>::Type
+            #endif
         >
         StringBase<char> &operator=(const StringBase<U> &str) {
             clear();
@@ -354,18 +358,20 @@ namespace jutil  {
        public:
         __STRING_CONSTRUCTORS__(wchar_t);
 
-        JUTIL_EXPL_ StringBase(bool num) JUTIL_N_ : StringBase(convert_wchar_t(num, L"%u")) {}
-        JUTIL_EXPL_ StringBase(signed long long num) JUTIL_N_ : StringBase(convert_wchar_t(num, L"%I64d")) {}
-        JUTIL_EXPL_ StringBase(unsigned long long num) JUTIL_N_ : StringBase(convert_wchar_t(num, L"%I64u")) {}
-        JUTIL_EXPL_ StringBase(signed long num) JUTIL_N_ : StringBase(convert_wchar_t(num, L"%ld")) {}
-        JUTIL_EXPL_ StringBase(unsigned long num) JUTIL_N_ : StringBase(convert_wchar_t(num, L"%lu")) {}
-        JUTIL_EXPL_ StringBase(signed int num) JUTIL_N_ : StringBase(convert_wchar_t(num, L"%d")) {}
-        JUTIL_EXPL_ StringBase(unsigned int num) JUTIL_N_ : StringBase(convert_wchar_t(num, L"%u")) {}
-        JUTIL_EXPL_ StringBase(signed short num) JUTIL_N_ : StringBase(convert_wchar_t(num, L"%hd")) {}
-        JUTIL_EXPL_ StringBase(unsigned short num) JUTIL_N_ : StringBase(convert_wchar_t(num, L"%hu")) {}
-        JUTIL_EXPL_ StringBase(double num) JUTIL_N_ : StringBase(convert_wchar_t(num, L"%f")) {}
-        JUTIL_EXPL_ StringBase(long double num) JUTIL_N_ : StringBase(convert_wchar_t(num, L"%Lf")) {}
-        JUTIL_EXPL_ StringBase(float num) JUTIL_N_ : StringBase(convert_wchar_t(num, L"%f")) {}
+        #ifdef JUTIL_CPP11
+            JUTIL_EXPL_ StringBase(bool num) JUTIL_N_ : StringBase(convert_wchar_t(num, L"%u")) {}
+            JUTIL_EXPL_ StringBase(signed long long num) JUTIL_N_ : StringBase(convert_wchar_t(num, L"%I64d")) {}
+            JUTIL_EXPL_ StringBase(unsigned long long num) JUTIL_N_ : StringBase(convert_wchar_t(num, L"%I64u")) {}
+            JUTIL_EXPL_ StringBase(signed long num) JUTIL_N_ : StringBase(convert_wchar_t(num, L"%ld")) {}
+            JUTIL_EXPL_ StringBase(unsigned long num) JUTIL_N_ : StringBase(convert_wchar_t(num, L"%lu")) {}
+            JUTIL_EXPL_ StringBase(signed int num) JUTIL_N_ : StringBase(convert_wchar_t(num, L"%d")) {}
+            JUTIL_EXPL_ StringBase(unsigned int num) JUTIL_N_ : StringBase(convert_wchar_t(num, L"%u")) {}
+            JUTIL_EXPL_ StringBase(signed short num) JUTIL_N_ : StringBase(convert_wchar_t(num, L"%hd")) {}
+            JUTIL_EXPL_ StringBase(unsigned short num) JUTIL_N_ : StringBase(convert_wchar_t(num, L"%hu")) {}
+            JUTIL_EXPL_ StringBase(double num) JUTIL_N_ : StringBase(convert_wchar_t(num, L"%f")) {}
+            JUTIL_EXPL_ StringBase(long double num) JUTIL_N_ : StringBase(convert_wchar_t(num, L"%Lf")) {}
+            JUTIL_EXPL_ StringBase(float num) JUTIL_N_ : StringBase(convert_wchar_t(num, L"%f")) {}
+        #endif
 
         __STRING_CONVERSION_OPERATORS__(wchar_t);
 
@@ -636,15 +642,17 @@ inline jutil::Queue<T, A>::operator const jutil::StringBase<char>() const {
     return str;
 }
 
-inline jutil::StringBase<char> operator"" _str(const char *, size_t);
+#ifdef JUTIL_CPP11
+    inline jutil::StringBase<char> operator"" _str(const char *, size_t);
 
-inline jutil::StringBase<char> operator"" _str(const char *cstr, size_t) {
-    return jutil::StringBase<char>(cstr);
-}
+    inline jutil::StringBase<char> operator"" _str(const char *cstr, size_t) {
+        return jutil::StringBase<char>(cstr);
+    }
 
-inline jutil::StringBase<wchar_t> operator"" _wstr(const wchar_t *cstr, size_t) {
-    return jutil::StringBase<wchar_t>(cstr);
-}
+    inline jutil::StringBase<wchar_t> operator"" _wstr(const wchar_t *cstr, size_t) {
+        return jutil::StringBase<wchar_t>(cstr);
+    }
+#endif
 
 #ifdef STRINGERR
     #undef STRINGERR

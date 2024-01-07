@@ -208,7 +208,7 @@ namespace jutil  {
         }
 #else
         {
-            for (size_t i = 0; i < arrSize; ++i) insert(arr[i]);
+            for (size_t i = 0; i < len; ++i) insert(arr[i]);
         }
 #endif
 

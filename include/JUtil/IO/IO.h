@@ -23,39 +23,50 @@
 
 #include <JUtil/Core/Pair.hpp>
 
-#include <iostream>
-
 #define COMMAND_NEWLINE 0
 #define COMMAND_FLUSH   1
 
 #ifdef JUTIL_WINDOWS
 	#include <windows.h>
-    extern char __sep__[2];
-    #define _JUTIL_IO_IMPL char __sep__[2] = "\\";
+    #ifndef JUTIL_CPP17
+        extern char __sep__[2];
+        #define _JUTIL_IO_IMPL char __sep__[2] = "\\";
+    #else
+        inline char __sep__[2] = "\\";
+        #define _JUTIL_IO_IMPL
+    #endif
 	#ifndef PATH_MAX
 		#define PATH_MAX MAX_PATH
 	#endif
 #elif defined JUTIL_LINUX
-    extern char __sep__[2];
-    #define _JUTIL_IO_IMPL char __sep__[2] = "/";
+    #ifndef JUTIL_CPP17
+        extern char __sep__[2];
+        #define _JUTIL_IO_IMPL char __sep__[2] = "/";
+    #else
+        inline char __sep__[2] = "/";
+        #define _JUTIL_IO_IMPL
+    #endif
 #endif
 
-#define JUTIL_IO_IMPL _JUTIL_IO_IMPL \
-    namespace jutil { \
-        IOTarget *_stdout_ = makeIOTarget((IOBuffer)stdout); \
-        IOTarget *_stderr_ = makeIOTarget((IOBuffer)stderr); \
-        IOTarget *_stdin_ = makeIOTarget((IOBuffer)stdin); \
-        OutputStream           out(_stdout_); \
-        WideOutputStream       wout(_stdout_); \
-        DataOutputStream       dout(_stdout_); \
-        ErrorOutputStream      err(_stderr_); \
-        WideErrorOutputStream  werr(_stderr_); \
-        InputStream            in(_stdin_); \
-        WideInputStream        win(_stdin_); \
-        const IOCommand     endl(COMMAND_NEWLINE); \
-        const IOCommand     flush(COMMAND_FLUSH); \
-    }
-
+#ifndef JUTIL_CPP17
+    #define JUTIL_IO_IMPL _JUTIL_IO_IMPL \
+        namespace jutil { \
+            IOTarget *_stdout_ = makeIOTarget((IOBuffer)stdout); \
+            IOTarget *_stderr_ = makeIOTarget((IOBuffer)stderr); \
+            IOTarget *_stdin_ = makeIOTarget((IOBuffer)stdin); \
+            OutputStream           out(_stdout_); \
+            WideOutputStream       wout(_stdout_); \
+            DataOutputStream       dout(_stdout_); \
+            ErrorOutputStream      err(_stderr_); \
+            WideErrorOutputStream  werr(_stderr_); \
+            InputStream            in(_stdin_); \
+            WideInputStream        win(_stdin_); \
+            const IOCommand     endl(COMMAND_NEWLINE); \
+            const IOCommand     flush(COMMAND_FLUSH); \
+        }
+#else
+    #define JUTIL_IO_IMPL _JUTIL_IO_IMPL
+#endif
 
 
 /**
@@ -324,23 +335,42 @@ namespace jutil  {
     };
 
     //built-in IO streams for interacting with the shell.
+    // In using C++ version below 17, JUTIL_IMPL must be specified in one translation unit.
+    #ifndef JUTIL_CPP17
+        extern IOTarget
+            *_stdout_,
+            *_stderr_,
+            *_stdin_
+        ;
 
-    extern IOTarget
-        *_stdout_,
-        *_stderr_,
-        *_stdin_
-    ;
+        extern OutputStream           out;
+        extern WideOutputStream       wout;
+        extern DataOutputStream       dout;
+        extern ErrorOutputStream      err;
+        extern WideErrorOutputStream  werr;
+        extern InputStream            in;
+        extern WideInputStream        win;
 
-    extern OutputStream           out;
-    extern WideOutputStream       wout;
-    extern DataOutputStream       dout;
-    extern ErrorOutputStream      err;
-    extern WideErrorOutputStream  werr;
-    extern InputStream            in;
-    extern WideInputStream        win;
+        extern const IOCommand     endl;
+        extern const IOCommand     flush;
+    #else
+        inline IOTarget
+            *_stdout_(makeIOTarget((IOBuffer)stdout)),
+            *_stderr_(makeIOTarget((IOBuffer)stderr)),
+            *_stdin_(makeIOTarget((IOBuffer)stdin))
+        ;
 
-    extern const IOCommand     endl;
-    extern const IOCommand     flush;
+        inline OutputStream           out(_stdout_);
+        inline WideOutputStream       wout(_stdout_);
+        inline DataOutputStream       dout(_stdout_);
+        inline ErrorOutputStream      err(_stderr_);
+        inline WideErrorOutputStream  werr(_stderr_);
+        inline InputStream            in(_stdin_);
+        inline WideInputStream        win(_stdin_);
+
+        inline const IOCommand     endl(COMMAND_NEWLINE);
+        inline const IOCommand     flush(COMMAND_FLUSH);
+    #endif
 
     template <typename T>
     struct PutFunc {
@@ -787,7 +817,7 @@ namespace jutil  {
             if (fgetws(buf, sizeof(buf), (FILE*)(target->buffer()))) {
                 return WideString(buf);
             } else {
-                return WideString("\0");
+                return WideString(L"\0");
             }
         } else {
             err << "Illegal read request!" << endl;
@@ -1004,7 +1034,7 @@ namespace jutil  {
         return result;
     }
 
-    inline DirectoryEntry::DirectoryEntry(const String &n, const String &d, Type t) : name(n), directory(d), fullPath(d + __sep__ + n), type(t) {
+    inline DirectoryEntry::DirectoryEntry(const String &n, const String &d, Type t) : name(n), directory(d), fullPath(d + String(__sep__) + n), type(t) {
 
     }
 
@@ -1052,7 +1082,15 @@ namespace jutil  {
                     closedir(tdir);
                     isFile = false;
                 }
-                _entries.insert(DirectoryEntry(String(entry->d_name), path, (isFile? DirectoryEntry::Type::FILE : DirectoryEntry::Type::DIRECTORY)));
+
+                DirectoryEntry::Type _t;
+
+                if (isFile) _t = DirectoryEntry::FILE;
+                else _t = DirectoryEntry::DIRECTORY;
+
+                DirectoryEntry e(String(entry->d_name), path, _t);
+
+                _entries.insert(e);
             }
         }
     }

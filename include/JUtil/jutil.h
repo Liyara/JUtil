@@ -30,9 +30,9 @@
     #include "JUtil/Container/Map.hpp"
     #include "JUtil/Thread/ThreadPool.hpp"
     #include "JUtil/Core/RNG.h"
+    #include "JUtil/Network/Client.hpp"
 #endif
 #include "JUtil/Core/Timer.h"
-#include "JUtil/Network/Client.hpp"
 
 
 #ifdef _WIN32
